@@ -36,6 +36,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import AboutPage from './pages/AboutPage';
 import BlogPage from './pages/BlogPage';
 import CareersPage from './pages/CareersPage';
+import CustomerReviews from './pages/CustomerReviews';
 
 // Global Styles
 import './styles/global.css';
@@ -54,6 +55,7 @@ const AnimatedRoutes = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/careers" element={<CareersPage />} />
+        <Route path="/reviews" element={<CustomerReviews />} />
         
         {/* Auth Routes */}
         <Route path="/login" element={<LoginPage />} />

@@ -1,62 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#B45309" />
   <meta
     name="description"
-    content="ThrowbackTee - Vintage Fashion Offline"
+    content="LIKWAPU - Vintage Fashion Offline"
   />
-  <title>Offline - ThrowbackTee</title>
+  <title>Offline - LIKWAPU</title>
   <link rel="stylesheet" href="offline.css" />
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #FFFBEB;
+      color: #B45309;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .retro-border {
+      border: 3px solid #B45309;
+      padding: 2rem;
+      border-radius: 8px;
+      background-color: #FEF3C7;
+    }
+  </style>
 </head>
 <body>
-  <div class="offline-container">
-    <div class="offline-content">
-      <div class="offline-icon">
-        <svg
-          width="64"
-          height="64"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="1" y1="1" x2="23" y2="23"></line>
-          <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
-          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
-          <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
-          <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
-          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-          <line x1="12" y1="20" x2="12.01" y2="20"></line>
-        </svg>
-      </div>
-      <h1>You're Offline</h1>
-      <p class="offline-message">
-        Don't worry! You can still browse your saved items and view previously
-        loaded content.
-      </p>
-      <div class="offline-actions">
-        <button onclick="window.location.reload()" class="retry-button">
-          Try Again
-        </button>
-        <button onclick="window.history.back()" class="back-button">
-          Go Back
-        </button>
-      </div>
-      <div class="offline-tips">
-        <h2>Quick Tips</h2>
-        <ul>
-          <li>Check your internet connection</li>
-          <li>Try refreshing the page</li>
-          <li>Browse your saved items</li>
-          <li>View your order history</li>
-        </ul>
-      </div>
-    </div>
+  <div class="retro-border">
+    <h1>You're Offline</h1>
+    <p>Please check your internet connection and try again.</p>
+    <p>We'll be here when you're back online!</p>
   </div>
   <script>
     // Check for online status

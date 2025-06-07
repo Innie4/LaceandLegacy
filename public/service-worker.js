@@ -1,4 +1,4 @@
-const CACHE_NAME = 'throwbacktee-v1';
+const CACHE_NAME = 'likwapu-v1';
 const STATIC_CACHE = 'static-v1';
 const DYNAMIC_CACHE = 'dynamic-v1';
 
@@ -37,7 +37,7 @@ self.addEventListener('activate', (event) => {
         cacheNames
           .filter((cacheName) => {
             return (
-              cacheName.startsWith('throwbacktee-') &&
+              cacheName.startsWith('likwapu-') &&
               cacheName !== CACHE_NAME &&
               cacheName !== STATIC_CACHE &&
               cacheName !== DYNAMIC_CACHE
@@ -180,7 +180,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('ThrowbackTee', options)
+    self.registration.showNotification('LIKWAPU', options)
   );
 });
 

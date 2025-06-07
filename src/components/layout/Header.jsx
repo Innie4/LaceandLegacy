@@ -29,7 +29,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-3xl font-bold text-amber-900 font-mono tracking-wider">
-              ThrowbackTee
+              LIKWAPU
             </span>
           </Link>
 
@@ -40,6 +40,9 @@ const Header = () => {
             </Link>
             <Link to="/catalog" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
               Collections
+            </Link>
+            <Link to="/reviews" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+              Reviews
             </Link>
             <Link to="/about" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
               Our Story
@@ -107,6 +110,9 @@ const Header = () => {
             </Link>
             <Link to="/catalog" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
               Collections
+            </Link>
+            <Link to="/reviews" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+              Reviews
             </Link>
             <Link to="/about" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
               Our Story

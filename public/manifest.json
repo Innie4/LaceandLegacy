@@ -1,7 +1,7 @@
 {
-  "short_name": "ThrowbackTee",
-  "name": "ThrowbackTee - Vintage Fashion",
-  "description": "Discover authentic vintage fashion from the 70s, 80s, and 90s",
+  "short_name": "LIKWAPU",
+  "name": "LIKWAPU - Vintage Fashion",
+  "description": "Your premier destination for vintage-inspired t-shirts that capture the essence of bygone eras.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -23,17 +23,16 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#B45309",
-  "background_color": "#FFFBEB",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "orientation": "portrait",
   "categories": ["fashion", "shopping", "vintage"],
   "screenshots": [
     {
-      "src": "screenshots/home.png",
-      "sizes": "1080x1920",
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
       "type": "image/png",
-      "platform": "narrow",
-      "label": "Home screen of ThrowbackTee"
+      "label": "Home screen of LIKWAPU"
     },
     {
       "src": "screenshots/catalog.png",
