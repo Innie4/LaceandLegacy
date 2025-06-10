@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import { filterOptions } from '../../data/mockProducts';
+import { productService } from '../../services/api';
+import { toast } from 'react-hot-toast';
 
 const FilterSidebar = ({ isOpen, onClose, filters, onChange, onClear }) => {
   const [openSections, setOpenSections] = useState({
@@ -11,6 +12,33 @@ const FilterSidebar = ({ isOpen, onClose, filters, onChange, onClear }) => {
     style: true,
     condition: true
   });
+
+  const [filterOptions, setFilterOptions] = useState({
+    sizes: [],
+    colors: [],
+    decades: [],
+    styles: [],
+    conditions: []
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFilterOptions();
+  }, []);
+
+  const fetchFilterOptions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await productService.getFilters();
+      setFilterOptions(response.data);
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to load filter options';
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({

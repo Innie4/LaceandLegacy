@@ -1,26 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Send, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { reviewService } from '../../services/api';
 
 const ReviewSection = ({ productId }) => {
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      user: 'John D.',
-      rating: 5,
-      date: '2024-02-15',
-      comment: 'Amazing vintage find! The quality is outstanding and it fits perfectly.',
-    },
-    {
-      id: 2,
-      user: 'Sarah M.',
-      rating: 4,
-      date: '2024-02-10',
-      comment: 'Great condition for a vintage piece. Love the retro style!',
-    },
-  ]);
-
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [newReview, setNewReview] = useState({
     rating: 0,
     comment: '',
@@ -28,6 +14,23 @@ const ReviewSection = ({ productId }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredRating, setHoveredRating] = useState(0);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [productId]);
+
+  const fetchReviews = async () => {
+    setIsLoading(true);
+    try {
+      const response = await reviewService.getReviews(productId);
+      setReviews(response.data);
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to load reviews';
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleRatingChange = (rating) => {
     setNewReview((prev) => ({ ...prev, rating }));
@@ -46,20 +49,13 @@ const ReviewSection = ({ productId }) => {
 
     setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const review = {
-        id: reviews.length + 1,
-        user: 'You',
-        rating: newReview.rating,
-        date: new Date().toISOString().split('T')[0],
-        comment: newReview.comment,
-      };
-      setReviews((prev) => [review, ...prev]);
+      const response = await reviewService.addReview(productId, newReview);
+      setReviews((prev) => [response.data, ...prev]);
       setNewReview({ rating: 0, comment: '' });
       toast.success('Review submitted successfully');
     } catch (error) {
-      toast.error('Failed to submit review');
+      const message = error.response?.data?.message || 'Failed to submit review';
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

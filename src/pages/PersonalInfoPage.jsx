@@ -1,21 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useUser } from '../contexts/UserContext';
+import { userService } from '../services/api';
 
 const PersonalInfoPage = () => {
+  const { user, updateProfile } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     language: 'en',
     country: 'US',
-    bio: 'Vintage fashion enthusiast and collector of retro clothing.',
+    bio: '',
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        language: user.language || 'en',
+        country: user.country || 'US',
+        bio: user.bio || '',
+      });
+    }
+  }, [user]);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -59,11 +76,11 @@ const PersonalInfoPage = () => {
 
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await updateProfile(formData);
       toast.success('Profile updated successfully');
     } catch (error) {
-      toast.error('Failed to update profile');
+      // Error is already handled in the context
+      console.error('Profile update error:', error);
     } finally {
       setIsLoading(false);
     }

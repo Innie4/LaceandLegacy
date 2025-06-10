@@ -12,6 +12,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { contactService } from '../services/api';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -64,8 +65,7 @@ const ContactPage = () => {
 
     setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await contactService.sendMessage(formData);
       toast.success('Message sent successfully!');
       setFormData({
         name: '',
@@ -74,7 +74,8 @@ const ContactPage = () => {
         message: '',
       });
     } catch (error) {
-      toast.error('Failed to send message. Please try again.');
+      const message = error.response?.data?.message || 'Failed to send message. Please try again.';
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

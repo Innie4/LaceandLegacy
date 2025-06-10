@@ -1,176 +1,81 @@
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' }
 });
 
-// Request interceptor
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+// Add auth token to requests
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+});
 
-// Response interceptor
+// Handle response errors
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response) {
-      // Handle specific error cases
-      switch (error.response.status) {
-        case 401:
-          // Handle unauthorized access
-          localStorage.removeItem('token');
-          window.location.href = '/login';
-          break;
-        case 403:
-          // Handle forbidden access
-          break;
-        case 404:
-          // Handle not found
-          break;
-        case 500:
-          // Handle server error
-          break;
-        default:
-          break;
-      }
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Clear user data and redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
 
-// Mock data
-const mockProducts = [
-  {
-    id: '1',
-    name: 'Vintage 70s Rock Tee',
-    description: 'Authentic 1970s rock band t-shirt with original print',
-    price: 49.99,
-    originalPrice: 69.99,
-    image: '/images/products/70s-rock-tee.jpg',
-    category: '70s',
-    sizes: ['S', 'M', 'L', 'XL'],
-    colors: ['Black', 'White'],
-    isNew: true,
-  },
-  // Add more mock products...
-];
+// Auth services
+export const authService = {
+  register: (data) => api.post('/api/auth/register', data),
+  login: (data) => api.post('/api/auth/login', data),
+  logout: () => api.post('/api/auth/logout'),
+};
 
-const mockOrders = [
-  {
-    id: '1',
-    date: '2024-03-15',
-    status: 'delivered',
-    items: [
-      {
-        id: '1',
-        name: 'Vintage 70s Rock Tee',
-        quantity: 1,
-        price: 49.99,
-      },
-    ],
-    total: 49.99,
-  },
-  // Add more mock orders...
-];
+// User services
+export const userService = {
+  getProfile: () => api.get('/api/user/profile'),
+  updateProfile: (data) => api.put('/api/user/profile', data),
+  updatePreferences: (data) => api.put('/api/user/preferences', data),
+};
 
-// API methods
-export const apiService = {
-  // Product methods
-  getProducts: async (params = {}) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { data: mockProducts };
-  },
+// Product services
+export const productService = {
+  getProducts: (params) => api.get('/api/products', { params }),
+  getProduct: (id) => api.get(`/api/products/${id}`),
+  searchProducts: (query) => api.get('/api/products/search', { params: { q: query } }),
+  getCategories: () => api.get('/api/products/categories'),
+  getFilters: () => api.get('/api/products/filters'),
+};
 
-  getProduct: async (id) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const product = mockProducts.find((p) => p.id === id);
-    if (!product) throw new Error('Product not found');
-    return { data: product };
-  },
+// Review services
+export const reviewService = {
+  getReviews: (productId) => api.get(`/api/products/${productId}/reviews`),
+  addReview: (productId, data) => api.post(`/api/products/${productId}/reviews`, data),
+};
 
-  // Order methods
-  getOrders: async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { data: mockOrders };
-  },
+// Cart services
+export const cartService = {
+  getCart: () => api.get('/api/cart'),
+  addToCart: (data) => api.post('/api/cart/add', data),
+  updateCart: (data) => api.put('/api/cart/update', data),
+  removeFromCart: (itemId) => api.delete(`/api/cart/remove/${itemId}`),
+};
 
-  createOrder: async (orderData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const newOrder = {
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      status: 'pending',
-      ...orderData,
-    };
-    return { data: newOrder };
-  },
+// Order services
+export const orderService = {
+  getOrders: () => api.get('/api/orders'),
+  getOrder: (id) => api.get(`/api/orders/${id}`),
+  createOrder: (data) => api.post('/api/orders', data),
+};
 
-  // Auth methods
-  login: async (credentials) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    if (credentials.email === 'test@example.com' && credentials.password === 'password') {
-      return {
-        data: {
-          token: 'mock-jwt-token',
-          user: {
-            id: '1',
-            email: credentials.email,
-            name: 'Test User',
-          },
-        },
-      };
-    }
-    throw new Error('Invalid credentials');
-  },
-
-  register: async (userData) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return {
-      data: {
-        token: 'mock-jwt-token',
-        user: {
-          id: Date.now().toString(),
-          ...userData,
-        },
-      },
-    };
-  },
-
-  // User methods
-  updateProfile: async (userData) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { data: userData };
-  },
-
-  // Wishlist methods
-  getWishlist: async () => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: mockProducts.slice(0, 3) };
-  },
-
-  addToWishlist: async (productId) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: { success: true } };
-  },
-
-  removeFromWishlist: async (productId) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: { success: true } };
-  },
+// Contact services
+export const contactService = {
+  sendMessage: (data) => api.post('/api/contact', data),
 };
 
 export default api; 

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { authService, userService } from '../services/api';
+import { toast } from 'react-hot-toast';
 
 const UserContext = createContext();
 
@@ -26,7 +28,7 @@ const userReducer = (state, action) => {
     case 'LOGIN_SUCCESS':
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
         loading: false,
         error: null
@@ -88,38 +90,77 @@ export const UserProvider = ({ children }) => {
     }
   }, [state.user]);
 
-  useEffect(() => {
-    localStorage.setItem('preferences', JSON.stringify(state.preferences));
-  }, [state.preferences]);
-
   const login = async (credentials) => {
+    dispatch({ type: 'LOGIN_START' });
     try {
-      dispatch({ type: 'LOGIN_START' });
-      // Mock API call
-      const response = await new Promise(resolve => 
-        setTimeout(() => resolve({
-          id: 1,
-          name: 'John Doe',
-          email: credentials.email,
-          preferences: state.preferences
-        }), 1000)
-      );
-      dispatch({ type: 'LOGIN_SUCCESS', payload: response });
+      const response = await authService.login(credentials);
+      const { user, token } = response.data;
+      localStorage.setItem('token', token);
+      dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
+      toast.success('Login successful!');
+      return user;
     } catch (error) {
-      dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
+      const message = error.response?.data?.message || 'Login failed';
+      dispatch({ type: 'LOGIN_FAILURE', payload: message });
+      toast.error(message);
+      throw error;
     }
   };
 
-  const logout = () => {
-    dispatch({ type: 'LOGOUT' });
+  const register = async (userData) => {
+    dispatch({ type: 'LOGIN_START' });
+    try {
+      const response = await authService.register(userData);
+      const { user, token } = response.data;
+      localStorage.setItem('token', token);
+      dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
+      toast.success('Registration successful!');
+      return user;
+    } catch (error) {
+      const message = error.response?.data?.message || 'Registration failed';
+      dispatch({ type: 'LOGIN_FAILURE', payload: message });
+      toast.error(message);
+      throw error;
+    }
   };
 
-  const updatePreferences = (preferences) => {
-    dispatch({ type: 'UPDATE_PREFERENCES', payload: preferences });
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('token');
+      dispatch({ type: 'LOGOUT' });
+      toast.success('Logged out successfully');
+    }
   };
 
-  const updateProfile = (profile) => {
-    dispatch({ type: 'UPDATE_PROFILE', payload: profile });
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await userService.updateProfile(profileData);
+      dispatch({ type: 'UPDATE_PROFILE', payload: response.data });
+      toast.success('Profile updated successfully');
+      return response.data;
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to update profile';
+      toast.error(message);
+      throw error;
+    }
+  };
+
+  const updatePreferences = async (preferences) => {
+    try {
+      const response = await userService.updatePreferences(preferences);
+      dispatch({ type: 'UPDATE_PREFERENCES', payload: response.data });
+      localStorage.setItem('preferences', JSON.stringify(response.data));
+      toast.success('Preferences updated successfully');
+      return response.data;
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to update preferences';
+      toast.error(message);
+      throw error;
+    }
   };
 
   return (
@@ -127,9 +168,10 @@ export const UserProvider = ({ children }) => {
       value={{
         ...state,
         login,
+        register,
         logout,
+        updateProfile,
         updatePreferences,
-        updateProfile
       }}
     >
       {children}
@@ -143,4 +185,6 @@ export const useUser = () => {
     throw new Error('useUser must be used within a UserProvider');
   }
   return context;
-}; 
+};
+
+export default UserContext; 
