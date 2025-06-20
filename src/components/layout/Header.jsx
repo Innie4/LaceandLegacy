@@ -29,7 +29,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-3xl font-bold text-amber-900 font-mono tracking-wider">
-              LIKWAPU
+              LACE and LEGACY
             </span>
           </Link>
 

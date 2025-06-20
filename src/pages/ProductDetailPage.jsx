@@ -92,20 +92,20 @@ const ProductDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 text-amber-600 animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 className="h-8 w-8 text-gray-700 animate-spin" />
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-amber-900">Product not found</h2>
+          <h2 className="text-2xl font-bold text-black">Product not found</h2>
           <Link
             to="/products"
-            className="mt-4 inline-flex items-center text-amber-600 hover:text-amber-700"
+            className="mt-4 inline-flex items-center text-gray-700 hover:text-black"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back to products
@@ -116,20 +116,20 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-white">
       {/* Breadcrumb Navigation */}
-      <nav className="bg-white border-b-2 border-amber-200">
+      <nav className="bg-white border-b-2 border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-2 text-sm">
-            <Link to="/" className="text-amber-600 hover:text-amber-700">
+            <Link to="/" className="text-gray-700 hover:text-black">
               Home
             </Link>
-            <span className="text-amber-400">/</span>
-            <Link to="/products" className="text-amber-600 hover:text-amber-700">
+            <span className="text-gray-300">/</span>
+            <Link to="/products" className="text-gray-700 hover:text-black">
               Products
             </Link>
-            <span className="text-amber-400">/</span>
-            <span className="text-amber-900">{product.name}</span>
+            <span className="text-gray-300">/</span>
+            <span className="text-black">{product.name}</span>
           </div>
         </div>
       </nav>
@@ -148,27 +148,27 @@ const ProductDetailPage = () => {
           {/* Product Information */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-amber-900 font-mono">
+              <h1 className="text-3xl font-bold text-black font-mono">
                 {product.name}
               </h1>
               <div className="mt-2 flex items-center gap-4">
-                <span className="text-2xl font-bold text-amber-900 font-mono">
+                <span className="text-2xl font-bold text-black font-mono">
                   ${product.price.toFixed(2)}
                 </span>
-                <span className="px-3 py-1 text-sm font-medium bg-amber-100 text-amber-900 rounded-full">
+                <span className="px-3 py-1 text-sm font-medium bg-gray-100 text-black rounded-full">
                   {product.era}
                 </span>
-                <span className="px-3 py-1 text-sm font-medium bg-amber-100 text-amber-900 rounded-full">
+                <span className="px-3 py-1 text-sm font-medium bg-gray-100 text-black rounded-full">
                   {product.condition}
                 </span>
               </div>
             </div>
 
-            <p className="text-amber-600">{product.description}</p>
+            <p className="text-gray-700">{product.description}</p>
 
             {/* Color Selection */}
             <div>
-              <h3 className="text-sm font-medium text-amber-900 mb-2">
+              <h3 className="text-sm font-medium text-black mb-2">
                 Color
               </h3>
               <div className="flex gap-2">
@@ -178,8 +178,8 @@ const ProductDetailPage = () => {
                     onClick={() => setSelectedColor(color)}
                     className={`w-8 h-8 rounded-full border-2 transition-colors duration-300 ${
                       selectedColor === color
-                        ? 'border-amber-600'
-                        : 'border-amber-300'
+                        ? 'border-black'
+                        : 'border-gray-300'
                     }`}
                     style={{ backgroundColor: color.toLowerCase() }}
                   />
@@ -190,12 +190,12 @@ const ProductDetailPage = () => {
             {/* Size Selection */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-amber-900">
+                <h3 className="text-sm font-medium text-black">
                   Size
                 </h3>
                 <button
                   onClick={() => setShowSizeGuide(true)}
-                  className="text-sm text-amber-600 hover:text-amber-700 flex items-center gap-1"
+                  className="text-sm text-gray-700 hover:text-black flex items-center gap-1"
                 >
                   <Ruler className="h-4 w-4" />
                   Size Guide
@@ -208,8 +208,8 @@ const ProductDetailPage = () => {
                     onClick={() => setSelectedSize(size)}
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
                       selectedSize === size
-                        ? 'bg-amber-600 text-white'
-                        : 'border-2 border-amber-300 text-amber-900 hover:border-amber-600'
+                        ? 'bg-black text-white'
+                        : 'border-2 border-gray-300 text-black hover:border-black'
                     }`}
                   >
                     {size}
@@ -220,22 +220,22 @@ const ProductDetailPage = () => {
 
             {/* Quantity Selection */}
             <div>
-              <h3 className="text-sm font-medium text-amber-900 mb-2">
+              <h3 className="text-sm font-medium text-black mb-2">
                 Quantity
               </h3>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleQuantityChange(-1)}
-                  className="p-2 rounded-lg border-2 border-amber-300 text-amber-900 hover:border-amber-600 transition-colors duration-300"
+                  className="p-2 rounded-lg border-2 border-gray-300 text-black hover:border-black transition-colors duration-300"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <span className="text-lg font-medium text-amber-900">
+                <span className="text-lg font-medium text-black">
                   {quantity}
                 </span>
                 <button
                   onClick={() => handleQuantityChange(1)}
-                  className="p-2 rounded-lg border-2 border-amber-300 text-amber-900 hover:border-amber-600 transition-colors duration-300"
+                  className="p-2 rounded-lg border-2 border-gray-300 text-black hover:border-black transition-colors duration-300"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -246,7 +246,7 @@ const ProductDetailPage = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 inline-flex items-center justify-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                className="flex-1 inline-flex items-center justify-center px-6 py-3 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Add to Cart
@@ -256,7 +256,7 @@ const ProductDetailPage = () => {
                 className={`p-3 rounded-lg border-2 transition-colors duration-300 ${
                   isWishlisted
                     ? 'border-red-300 text-red-500 hover:text-red-600'
-                    : 'border-amber-300 text-amber-600 hover:text-amber-700'
+                    : 'border-gray-300 text-gray-700 hover:text-black'
                 }`}
               >
                 <Heart
@@ -267,33 +267,33 @@ const ProductDetailPage = () => {
               </button>
               <button
                 onClick={handleShare}
-                className="p-3 rounded-lg border-2 border-amber-300 text-amber-600 hover:text-amber-700 transition-colors duration-300"
+                className="p-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 <Share2 className="h-5 w-5" />
               </button>
             </div>
 
             {/* Product Details */}
-            <div className="border-t-2 border-amber-200 pt-6">
+            <div className="border-t-2 border-gray-200 pt-6">
               <div className="space-y-4">
                 <div className="flex items-start gap-2">
-                  <Info className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <Info className="h-5 w-5 text-gray-700 mt-0.5" />
                   <div>
-                    <h3 className="text-sm font-medium text-amber-900">
+                    <h3 className="text-sm font-medium text-black">
                       Authenticity Guarantee
                     </h3>
-                    <p className="mt-1 text-sm text-amber-600">
+                    <p className="mt-1 text-sm text-gray-700">
                       Every vintage piece is carefully authenticated by our experts.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Ruler className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <Ruler className="h-5 w-5 text-gray-700 mt-0.5" />
                   <div>
-                    <h3 className="text-sm font-medium text-amber-900">
+                    <h3 className="text-sm font-medium text-black">
                       Measurements
                     </h3>
-                    <p className="mt-1 text-sm text-amber-600">
+                    <p className="mt-1 text-sm text-gray-700">
                       {product.measurements}
                     </p>
                   </div>

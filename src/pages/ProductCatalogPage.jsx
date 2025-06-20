@@ -159,15 +159,15 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-white border-b-2 border-amber-200">
+      <div className="bg-white border-b-2 border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-50 transition-colors duration-300"
+                className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300"
               >
                 <Sliders className="h-5 w-5 mr-2" />
                 Filters
@@ -177,8 +177,8 @@ const ProductCatalogPage = () => {
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-lg ${
                     viewMode === 'grid'
-                      ? 'bg-amber-100 text-amber-900'
-                      : 'text-amber-600 hover:bg-amber-50'
+                      ? 'bg-gray-100 text-black'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   <Grid className="h-5 w-5" />
@@ -187,8 +187,8 @@ const ProductCatalogPage = () => {
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded-lg ${
                     viewMode === 'list'
-                      ? 'bg-amber-100 text-amber-900'
-                      : 'text-amber-600 hover:bg-amber-50'
+                      ? 'bg-gray-100 text-black'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   <List className="h-5 w-5" />
@@ -203,15 +203,15 @@ const ProductCatalogPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-64 pl-10 pr-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400"
+                  className="w-64 pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
                 />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-300" />
               </div>
 
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
               >
                 {sortOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -232,12 +232,12 @@ const ProductCatalogPage = () => {
                   return value.map(item => (
                     <span
                       key={`${key}-${item}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-900"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-black"
                     >
                       {item}
                       <button
                         onClick={() => handleFilterChange(key, value.filter(v => v !== item))}
-                        className="ml-2 hover:text-amber-700"
+                        className="ml-2 hover:text-black"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -248,7 +248,7 @@ const ProductCatalogPage = () => {
               })}
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-200 text-amber-900 hover:bg-amber-300"
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-200 text-black hover:bg-gray-300"
               >
                 Clear All
               </button>
@@ -301,10 +301,10 @@ const ProductCatalogPage = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-amber-900">
+                <h3 className="text-lg font-medium text-black">
                   No products found
                 </h3>
-                <p className="mt-2 text-amber-600">
+                <p className="mt-2 text-gray-700">
                   Try adjusting your search or filter criteria
                 </p>
               </div>
@@ -314,11 +314,11 @@ const ProductCatalogPage = () => {
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-amber-900">Items per page:</span>
+                  <span className="text-black">Items per page:</span>
                   <select
                     value={itemsPerPage}
                     onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                    className="px-2 py-1 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                    className="px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
                   >
                     {itemsPerPageOptions.map(option => (
                       <option key={option} value={option}>
@@ -332,7 +332,7 @@ const ProductCatalogPage = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="p-2 rounded-lg border-2 border-amber-300 text-amber-900 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 rounded-lg border-2 border-gray-300 text-black hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
@@ -343,8 +343,8 @@ const ProductCatalogPage = () => {
                       onClick={() => setCurrentPage(index + 1)}
                       className={`w-8 h-8 rounded-lg border-2 ${
                         currentPage === index + 1
-                          ? 'bg-amber-600 text-white border-amber-600'
-                          : 'border-amber-300 text-amber-900 hover:bg-amber-50'
+                          ? 'bg-gray-600 text-white border-gray-600'
+                          : 'border-gray-300 text-black hover:bg-gray-100'
                       }`}
                     >
                       {index + 1}
@@ -354,7 +354,7 @@ const ProductCatalogPage = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border-2 border-amber-300 text-amber-900 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 rounded-lg border-2 border-gray-300 text-black hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>

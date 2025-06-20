@@ -58,14 +58,14 @@ const LoginPage = () => {
       animate="animate"
       exit="exit"
       variants={pageVariants}
-      className="min-h-screen bg-amber-50 flex items-center justify-center px-4 py-12"
+      className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-amber-200">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-amber-900 font-mono">
+          <h2 className="text-3xl font-bold text-black font-mono">
             Welcome Back
           </h2>
-          <p className="mt-2 text-amber-600">
+          <p className="mt-2 text-gray-700">
             Sign in to your account to continue
           </p>
         </div>
@@ -73,12 +73,12 @@ const LoginPage = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-amber-900">
+              <label htmlFor="email" className="block text-sm font-medium text-black">
                 Email Address
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-amber-400" />
+                  <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   id="email"
@@ -91,8 +91,8 @@ const LoginPage = () => {
                     }
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.email ? 'border-red-300' : 'border-amber-300'
-                  } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
                   placeholder="you@example.com"
                 />
                 {errors.email && (
@@ -104,12 +104,12 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-amber-900">
+              <label htmlFor="password" className="block text-sm font-medium text-black">
                 Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-amber-400" />
+                  <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   id="password"
@@ -122,8 +122,8 @@ const LoginPage = () => {
                     }
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.password ? 'border-red-300' : 'border-amber-300'
-                  } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
                   placeholder="••••••••"
                 />
                 {errors.password && (
@@ -141,9 +141,9 @@ const LoginPage = () => {
                 id="remember-me"
                 type="checkbox"
                 {...register('rememberMe')}
-                className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-amber-300 rounded"
+                className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-amber-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-black">
                 Remember me
               </label>
             </div>
@@ -151,7 +151,7 @@ const LoginPage = () => {
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-amber-600 hover:text-amber-800 transition-colors duration-300"
+                className="font-medium text-black hover:text-gray-900 transition-colors duration-300"
               >
                 Forgot your password?
               </Link>
@@ -162,7 +162,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -176,24 +176,24 @@ const LoginPage = () => {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-amber-300"></div>
+              <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-amber-600">Or continue with</span>
+              <span className="px-2 bg-white text-gray-700">Or continue with</span>
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button
               onClick={() => handleSocialLogin('GitHub')}
-              className="w-full inline-flex justify-center py-2 px-4 border-2 border-amber-300 rounded-lg shadow-sm bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition-colors duration-300"
+              className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
               <Github className="h-5 w-5" />
               <span className="ml-2">GitHub</span>
             </button>
             <button
               onClick={() => handleSocialLogin('Twitter')}
-              className="w-full inline-flex justify-center py-2 px-4 border-2 border-amber-300 rounded-lg shadow-sm bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition-colors duration-300"
+              className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
               <Twitter className="h-5 w-5" />
               <span className="ml-2">Twitter</span>
@@ -202,11 +202,11 @@ const LoginPage = () => {
         </div>
 
         <div className="text-center">
-          <p className="text-sm text-amber-600">
+          <p className="text-sm text-gray-700">
             Don't have an account?{' '}
             <Link
               to="/register"
-              className="font-medium text-amber-600 hover:text-amber-800 transition-colors duration-300"
+              className="font-medium text-black hover:text-gray-900 transition-colors duration-300"
             >
               Sign up
             </Link>

@@ -82,8 +82,8 @@ const OrderConfirmationPage = () => {
   const handleShare = async () => {
     try {
       const shareData = {
-        title: 'My ThrowbackTee Order',
-        text: `I just ordered some vintage fashion from ThrowbackTee! Order #${orderData.orderNumber}`,
+        title: 'My Lace & Legacy Order',
+        text: `I just ordered some vintage fashion from Lace & Legacy! Order #${orderData.orderNumber}`,
         url: window.location.href,
       };
 
@@ -112,7 +112,7 @@ const OrderConfirmationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Confirmation Header */}
         <motion.div
@@ -126,35 +126,35 @@ const OrderConfirmationPage = () => {
             transition={{ delay: 0.2 }}
             className="inline-block mb-4"
           >
-            <CheckCircle2 className="h-16 w-16 text-amber-600 mx-auto" />
+            <CheckCircle2 className="h-16 w-16 text-gray-700 mx-auto" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-amber-900 font-mono mb-2">
+          <h1 className="text-3xl font-bold text-black font-mono mb-2">
             Order Confirmed!
           </h1>
-          <p className="text-amber-600">
+          <p className="text-gray-700">
             Thank you for your purchase. We're excited to bring some vintage style
             to your wardrobe!
           </p>
         </motion.div>
 
         {/* Order Number and Delivery */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6 mb-8">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h2 className="text-lg font-medium text-amber-900 font-mono mb-2">
+              <h2 className="text-lg font-medium text-black font-mono mb-2">
                 Order Number
               </h2>
-              <p className="text-2xl font-bold text-amber-600">
+              <p className="text-2xl font-bold text-gray-700">
                 {orderData.orderNumber}
               </p>
             </div>
             <div>
-              <h2 className="text-lg font-medium text-amber-900 font-mono mb-2">
+              <h2 className="text-lg font-medium text-black font-mono mb-2">
                 Estimated Delivery
               </h2>
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-amber-600" />
-                <p className="text-amber-900">
+                <Calendar className="h-5 w-5 text-gray-700" />
+                <p className="text-black">
                   {new Date(orderData.estimatedDelivery).toLocaleDateString()}
                 </p>
               </div>
@@ -163,17 +163,17 @@ const OrderConfirmationPage = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6 mb-8">
-          <h2 className="text-xl font-bold text-amber-900 font-mono mb-4">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-8">
+          <h2 className="text-xl font-bold text-black font-mono mb-4">
             Order Summary
           </h2>
           <div className="space-y-4">
             {orderData.items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center gap-4 p-4 border-2 border-amber-100 rounded-lg"
+                className="flex items-center gap-4 p-4 border-2 border-gray-100 rounded-lg"
               >
-                <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-amber-200">
+                <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-200">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -181,16 +181,16 @@ const OrderConfirmationPage = () => {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-amber-900 font-medium">{item.name}</h3>
-                  <p className="text-sm text-amber-600">
+                  <h3 className="text-black font-medium">{item.name}</h3>
+                  <p className="text-sm text-gray-700">
                     Size: {item.size} | Color: {item.color}
                   </p>
-                  <p className="text-sm text-amber-600">
+                  <p className="text-sm text-gray-700">
                     Quantity: {item.quantity}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-amber-900 font-mono">
+                  <p className="text-black font-mono">
                     ${(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
@@ -199,29 +199,29 @@ const OrderConfirmationPage = () => {
           </div>
 
           {/* Order Totals */}
-          <div className="mt-6 pt-6 border-t-2 border-amber-200">
+          <div className="mt-6 pt-6 border-t-2 border-gray-200">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-amber-600">Subtotal</span>
-                <span className="text-amber-900 font-mono">
+                <span className="text-gray-700">Subtotal</span>
+                <span className="text-black font-mono">
                   ${orderData.totals.subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-600">Shipping</span>
-                <span className="text-amber-900 font-mono">
+                <span className="text-gray-700">Shipping</span>
+                <span className="text-black font-mono">
                   ${orderData.totals.shipping.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-600">Tax</span>
-                <span className="text-amber-900 font-mono">
+                <span className="text-gray-700">Tax</span>
+                <span className="text-black font-mono">
                   ${orderData.totals.tax.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-lg font-bold">
-                <span className="text-amber-900">Total</span>
-                <span className="text-amber-900 font-mono">
+                <span className="text-black">Total</span>
+                <span className="text-black font-mono">
                   ${orderData.totals.total.toFixed(2)}
                 </span>
               </div>
@@ -232,45 +232,45 @@ const OrderConfirmationPage = () => {
         {/* Customer Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Shipping Address */}
-          <div className="bg-white rounded-xl border-2 border-amber-200 p-6">
-            <h2 className="text-xl font-bold text-amber-900 font-mono mb-4">
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+            <h2 className="text-xl font-bold text-black font-mono mb-4">
               Shipping Information
             </h2>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-amber-600 mt-1" />
+                <MapPin className="h-5 w-5 text-gray-700 mt-1" />
                 <div>
-                  <p className="text-amber-900 font-medium">
+                  <p className="text-black font-medium">
                     {orderData.shipping.name}
                   </p>
-                  <p className="text-amber-600">{orderData.shipping.address}</p>
-                  <p className="text-amber-600">
+                  <p className="text-gray-700">{orderData.shipping.address}</p>
+                  <p className="text-gray-700">
                     {orderData.shipping.city}, {orderData.shipping.state}{' '}
                     {orderData.shipping.zip}
                   </p>
-                  <p className="text-amber-600">{orderData.shipping.country}</p>
+                  <p className="text-gray-700">{orderData.shipping.country}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-amber-600" />
-                <p className="text-amber-600">{orderData.shipping.phone}</p>
+                <Phone className="h-5 w-5 text-gray-700" />
+                <p className="text-gray-700">{orderData.shipping.phone}</p>
               </div>
             </div>
           </div>
 
           {/* Payment Information */}
-          <div className="bg-white rounded-xl border-2 border-amber-200 p-6">
-            <h2 className="text-xl font-bold text-amber-900 font-mono mb-4">
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+            <h2 className="text-xl font-bold text-black font-mono mb-4">
               Payment Information
             </h2>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <CreditCard className="h-5 w-5 text-amber-600" />
+                <CreditCard className="h-5 w-5 text-gray-700" />
                 <div>
-                  <p className="text-amber-900">
+                  <p className="text-black">
                     {orderData.payment.type} ending in {orderData.payment.last4}
                   </p>
-                  <p className="text-sm text-amber-600">
+                  <p className="text-sm text-gray-700">
                     {orderData.payment.method}
                   </p>
                 </div>
@@ -280,44 +280,44 @@ const OrderConfirmationPage = () => {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6 mb-8">
-          <h2 className="text-xl font-bold text-amber-900 font-mono mb-4">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-8">
+          <h2 className="text-xl font-bold text-black font-mono mb-4">
             What's Next?
           </h2>
           <div className="space-y-6">
             {/* Timeline */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="p-2 bg-amber-100 rounded-full">
-                  <Package className="h-5 w-5 text-amber-600" />
+                <div className="p-2 bg-gray-100 rounded-full">
+                  <Package className="h-5 w-5 text-gray-700" />
                 </div>
                 <div>
-                  <h3 className="text-amber-900 font-medium">
+                  <h3 className="text-black font-medium">
                     Order Processing
                   </h3>
-                  <p className="text-amber-600">
+                  <p className="text-gray-700">
                     We're preparing your order for shipment
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="p-2 bg-amber-100 rounded-full">
-                  <Truck className="h-5 w-5 text-amber-600" />
+                <div className="p-2 bg-gray-100 rounded-full">
+                  <Truck className="h-5 w-5 text-gray-700" />
                 </div>
                 <div>
-                  <h3 className="text-amber-900 font-medium">Shipping</h3>
-                  <p className="text-amber-600">
+                  <h3 className="text-black font-medium">Shipping</h3>
+                  <p className="text-gray-700">
                     Your order will be shipped within 2 business days
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="p-2 bg-amber-100 rounded-full">
-                  <Home className="h-5 w-5 text-amber-600" />
+                <div className="p-2 bg-gray-100 rounded-full">
+                  <Home className="h-5 w-5 text-gray-700" />
                 </div>
                 <div>
-                  <h3 className="text-amber-900 font-medium">Delivery</h3>
-                  <p className="text-amber-600">
+                  <h3 className="text-black font-medium">Delivery</h3>
+                  <p className="text-gray-700">
                     Estimated delivery: {new Date(orderData.estimatedDelivery).toLocaleDateString()}
                   </p>
                 </div>
@@ -325,21 +325,21 @@ const OrderConfirmationPage = () => {
             </div>
 
             {/* Account Creation */}
-            <div className="p-4 bg-amber-50 rounded-lg border-2 border-amber-200">
+            <div className="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
               <div className="flex items-start gap-4">
-                <UserPlus className="h-5 w-5 text-amber-600 mt-1" />
+                <UserPlus className="h-5 w-5 text-gray-700 mt-1" />
                 <div>
-                  <h3 className="text-amber-900 font-medium">
+                  <h3 className="text-black font-medium">
                     Create an Account
                   </h3>
-                  <p className="text-amber-600 mb-4">
+                  <p className="text-gray-700 mb-4">
                     Create an account to track your order and save your information
                     for future purchases
                   </p>
                   <button
                     onClick={handleCreateAccount}
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                    className="inline-flex items-center px-4 py-2 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
                   >
                     Create Account
                   </button>
@@ -353,21 +353,21 @@ const OrderConfirmationPage = () => {
         <div className="flex flex-wrap gap-4 justify-center">
           <button
             onClick={handlePrint}
-            className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+            className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-black hover:border-black transition-colors duration-300"
           >
             <Printer className="h-4 w-4 mr-2" />
             Print Order
           </button>
           <button
             onClick={handleShare}
-            className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+            className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-black hover:border-black transition-colors duration-300"
           >
             <Share2 className="h-4 w-4 mr-2" />
             Share Order
           </button>
           <a
             href="/support/contact"
-            className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+            className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-black hover:border-black transition-colors duration-300"
           >
             <Mail className="h-4 w-4 mr-2" />
             Contact Support

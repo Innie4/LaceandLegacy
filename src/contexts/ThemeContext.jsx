@@ -6,11 +6,11 @@ const initialState = {
   mode: 'light',
   font: 'vintage',
   colors: {
-    primary: '#B45309',
-    secondary: '#92400E',
-    background: '#FFFBEB',
-    text: '#78350F',
-    accent: '#D97706',
+    primary: '#000000',
+    secondary: '#FFFFFF',
+    background: '#FFFFFF',
+    text: '#000000',
+    accent: '#333333',
   },
   animations: {
     enabled: true,

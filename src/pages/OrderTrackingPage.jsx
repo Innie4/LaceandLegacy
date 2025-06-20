@@ -148,11 +148,11 @@ const OrderTrackingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Tracking Header */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6 mb-8">
-          <h1 className="text-2xl font-bold text-amber-900 font-mono mb-6">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-8">
+          <h1 className="text-2xl font-bold text-black font-mono mb-6">
             Track Your Order
           </h1>
           <form onSubmit={handleTrackOrder} className="flex gap-4">
@@ -162,13 +162,13 @@ const OrderTrackingPage = () => {
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="Enter order number"
-                className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400"
+                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400"
               />
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="inline-flex items-center px-6 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+              className="inline-flex items-center px-6 py-2 border-2 border-gray-600 rounded-lg text-gray-900 hover:bg-gray-600 hover:text-white transition-colors duration-300"
             >
               {isLoading ? (
                 <Clock className="h-5 w-5 animate-spin" />
@@ -182,13 +182,13 @@ const OrderTrackingPage = () => {
         {/* Tracking Information */}
         <div className="space-y-8">
           {/* Status Overview */}
-          <div className="bg-white rounded-xl border-2 border-amber-200 p-6">
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-bold text-amber-900 font-mono">
+                <h2 className="text-xl font-bold text-black font-mono">
                   Order Status
                 </h2>
-                <p className="text-amber-600">Order #{trackingData.orderNumber}</p>
+                <p className="text-gray-600">Order #{trackingData.orderNumber}</p>
               </div>
               <span
                 className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
@@ -208,17 +208,17 @@ const OrderTrackingPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-medium text-amber-900 mb-2">
+                <h3 className="text-lg font-medium text-black mb-2">
                   Tracking Details
                 </h3>
                 <div className="space-y-2">
-                  <p className="text-amber-600">
+                  <p className="text-gray-600">
                     Carrier: {trackingData.carrier}
                   </p>
-                  <p className="text-amber-600">
+                  <p className="text-gray-600">
                     Tracking Number: {trackingData.trackingNumber}
                   </p>
-                  <p className="text-amber-600">
+                  <p className="text-gray-600">
                     Estimated Delivery:{' '}
                     {new Date(
                       trackingData.estimatedDelivery
@@ -227,12 +227,12 @@ const OrderTrackingPage = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-medium text-amber-900 mb-2">
+                <h3 className="text-lg font-medium text-black mb-2">
                   Current Location
                 </h3>
                 <div className="flex items-start gap-2">
-                  <MapPin className="h-5 w-5 text-amber-600 mt-1" />
-                  <p className="text-amber-600">
+                  <MapPin className="h-5 w-5 text-gray-600 mt-1" />
+                  <p className="text-gray-600">
                     {trackingData.currentLocation}
                   </p>
                 </div>

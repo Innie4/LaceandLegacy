@@ -7,8 +7,8 @@ describe('Web App Manifest', () => {
   });
 
   it('has the correct name and short name', () => {
-    expect(manifest.name).toBe('ThrowbackTee - Vintage Fashion');
-    expect(manifest.short_name).toBe('ThrowbackTee');
+    expect(manifest.name).toBe('Lace & Legacy - Vintage Fashion');
+    expect(manifest.short_name).toBe('Lace & Legacy');
   });
 
   it('has the correct description', () => {

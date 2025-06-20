@@ -113,10 +113,10 @@ const PersonalInfoPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6">
-          <h1 className="text-2xl font-bold text-amber-900 font-mono mb-6">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+          <h1 className="text-2xl font-bold text-black font-mono mb-6">
             Personal Information
           </h1>
 
@@ -124,7 +124,7 @@ const PersonalInfoPage = () => {
             {/* Avatar Section */}
             <div className="flex items-center gap-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-amber-200">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200">
                   <img
                     src="/images/avatars/default.jpg"
                     alt="Profile"
@@ -133,7 +133,7 @@ const PersonalInfoPage = () => {
                 </div>
                 <label
                   htmlFor="avatar"
-                  className="absolute bottom-0 right-0 p-2 bg-amber-600 text-white rounded-full cursor-pointer hover:bg-amber-700 transition-colors duration-300"
+                  className="absolute bottom-0 right-0 p-2 bg-black text-white rounded-full cursor-pointer hover:bg-gray-900 transition-colors duration-300"
                 >
                   <Camera className="h-4 w-4" />
                   <input
@@ -146,10 +146,10 @@ const PersonalInfoPage = () => {
                 </label>
               </div>
               <div>
-                <h2 className="text-lg font-medium text-amber-900">
+                <h2 className="text-lg font-medium text-black font-mono">
                   Profile Picture
                 </h2>
-                <p className="text-sm text-amber-600">
+                <p className="text-sm text-gray-700">
                   Upload a new profile picture (max 5MB)
                 </p>
               </div>
@@ -160,7 +160,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="firstName"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   First Name
                 </label>
@@ -169,10 +169,10 @@ const PersonalInfoPage = () => {
                   id="firstName"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors.firstName
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors.firstName && (
@@ -183,7 +183,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="lastName"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Last Name
                 </label>
@@ -192,10 +192,10 @@ const PersonalInfoPage = () => {
                   id="lastName"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors.lastName
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors.lastName && (
@@ -206,7 +206,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Email
                 </label>
@@ -215,10 +215,10 @@ const PersonalInfoPage = () => {
                   id="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors.email
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors.email && (
@@ -229,7 +229,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Phone
                 </label>
@@ -238,10 +238,10 @@ const PersonalInfoPage = () => {
                   id="phone"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors.phone
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors.phone && (
@@ -252,7 +252,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="language"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Language
                 </label>
@@ -260,7 +260,7 @@ const PersonalInfoPage = () => {
                   id="language"
                   value={formData.language}
                   onChange={(e) => handleInputChange('language', e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
                 >
                   <option value="en">English</option>
                   <option value="es">Spanish</option>
@@ -272,7 +272,7 @@ const PersonalInfoPage = () => {
               <div>
                 <label
                   htmlFor="country"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Country
                 </label>
@@ -280,7 +280,7 @@ const PersonalInfoPage = () => {
                   id="country"
                   value={formData.country}
                   onChange={(e) => handleInputChange('country', e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
                 >
                   <option value="US">United States</option>
                   <option value="CA">Canada</option>
@@ -292,7 +292,7 @@ const PersonalInfoPage = () => {
               <div className="sm:col-span-2">
                 <label
                   htmlFor="bio"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Bio
                 </label>
@@ -301,7 +301,7 @@ const PersonalInfoPage = () => {
                   value={formData.bio}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
                 />
               </div>
             </div>
@@ -311,7 +311,7 @@ const PersonalInfoPage = () => {
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className="px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

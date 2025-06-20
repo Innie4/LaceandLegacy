@@ -33,9 +33,9 @@ const CustomerReviews = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-amber-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-amber-900 text-amber-50 py-16">
+      <div className="bg-black text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ const CustomerReviews = () => {
           >
             Customer Reviews
           </motion.h1>
-          <p className="text-center text-amber-100 font-mono max-w-2xl mx-auto">
+          <p className="text-center text-gray-200 font-mono max-w-2xl mx-auto">
             Discover what our community says about their vintage fashion journey with LIKWAPU
           </p>
         </div>
@@ -56,14 +56,14 @@ const CustomerReviews = () => {
         <ReviewStats reviews={reviews} />
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-2 border-amber-200">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-2 border-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-amber-900 font-mono mb-2">Rating</label>
+              <label className="block text-black font-mono mb-2">Rating</label>
               <select
                 value={selectedRating}
                 onChange={(e) => setSelectedRating(e.target.value)}
-                className="w-full border-2 border-amber-300 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-600"
+                className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-black text-black"
               >
                 <option value="all">All Ratings</option>
                 <option value="5">5 Stars</option>
@@ -74,11 +74,11 @@ const CustomerReviews = () => {
               </select>
             </div>
             <div>
-              <label className="block text-amber-900 font-mono mb-2">Category</label>
+              <label className="block text-black font-mono mb-2">Category</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full border-2 border-amber-300 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-600"
+                className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-black text-black"
               >
                 <option value="all">All Categories</option>
                 <option value="Band Tees">Band Tees</option>
@@ -87,11 +87,11 @@ const CustomerReviews = () => {
               </select>
             </div>
             <div>
-              <label className="block text-amber-900 font-mono mb-2">Sort By</label>
+              <label className="block text-black font-mono mb-2">Sort By</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full border-2 border-amber-300 rounded-lg px-3 py-2 focus:outline-none focus:border-amber-600"
+                className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-black text-black"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -117,19 +117,19 @@ const CustomerReviews = () => {
         {/* Pagination */}
         <div className="mt-12 flex justify-center">
           <nav className="flex items-center space-x-2">
-            <button className="px-3 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-100 transition-colors duration-300">
+            <button className="px-3 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300">
               Previous
             </button>
-            <button className="px-3 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-100 transition-colors duration-300">
+            <button className="px-3 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300">
               1
             </button>
-            <button className="px-3 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-100 transition-colors duration-300">
+            <button className="px-3 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300">
               2
             </button>
-            <button className="px-3 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-100 transition-colors duration-300">
+            <button className="px-3 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300">
               3
             </button>
-            <button className="px-3 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:bg-amber-100 transition-colors duration-300">
+            <button className="px-3 py-2 border-2 border-gray-300 rounded-lg text-black hover:bg-gray-100 transition-colors duration-300">
               Next
             </button>
           </nav>

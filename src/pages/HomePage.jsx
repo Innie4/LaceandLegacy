@@ -106,7 +106,7 @@ const HomePage = () => {
                 <div className="space-x-4">
                   <Link
                     to="/catalog"
-                    className="inline-block bg-amber-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-amber-700 transition-colors duration-300"
+                    className="inline-block bg-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-900 transition-colors duration-300"
                   >
                     Shop Now
                   </Link>
@@ -118,9 +118,9 @@ const HomePage = () => {
       </section>
 
       {/* Product Categories Showcase */}
-      <section className="py-20 bg-amber-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-amber-900 mb-12 text-center font-mono">
+          <h2 className="text-4xl font-bold text-black mb-12 text-center font-mono">
             Browse by Category
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -128,7 +128,7 @@ const HomePage = () => {
               <Link
                 key={category.name}
                 to={`/catalog?category=${category.name}`}
-                className="group relative overflow-hidden rounded-xl border-4 border-amber-800"
+                className="group relative overflow-hidden rounded-xl border-4 border-black"
               >
                 <img
                   src={category.image}
@@ -136,13 +136,13 @@ const HomePage = () => {
                   className="w-full aspect-square object-cover filter sepia-[0.1] group-hover:sepia-[0.3] transition-all duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                  <span className="text-amber-400 text-sm font-mono mb-2">
+                  <span className="text-gray-700 text-sm font-mono mb-2">
                     {category.decade}
                   </span>
                   <h3 className="text-2xl font-bold text-white mb-2">
                     {category.name}
                   </h3>
-                  <div className="flex items-center text-amber-400">
+                  <div className="flex items-center text-gray-700">
                     <span className="text-sm font-mono">Explore Collection</span>
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
@@ -156,18 +156,18 @@ const HomePage = () => {
       {/* Throwback Finds Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-amber-900 mb-12 text-center font-mono">
+          <h2 className="text-4xl font-bold text-black mb-12 text-center font-mono">
               Latest Throwback Finds
             </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {mockProducts.slice(0, 4).map((product) => (
               <div
                 key={product.id}
-                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-amber-200"
+                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-200"
               >
                 <div className="relative overflow-hidden aspect-square">
                   {product.isNew && (
-                    <div className="absolute top-3 left-3 z-10 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    <div className="absolute top-3 left-3 z-10 bg-black text-white px-3 py-1 rounded-full text-sm font-bold">
                       NEW IN
                     </div>
                   )}
@@ -178,10 +178,10 @@ const HomePage = () => {
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                     <div className="flex space-x-3">
-                      <button className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300">
+                      <button className="bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-300">
                         <Heart className="h-5 w-5" />
                       </button>
-                      <button className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300">
+                      <button className="bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-300">
                         <ShoppingCart className="h-5 w-5" />
                       </button>
                     </div>
@@ -189,26 +189,26 @@ const HomePage = () => {
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-gray-100 text-black px-2 py-1 rounded-full text-xs font-medium">
                       {product.decade}
                     </span>
-                    <span className="text-amber-600 text-sm font-mono">
+                    <span className="text-gray-700 text-sm font-mono">
                       {product.condition}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-amber-900 mb-2">
+                  <h3 className="text-lg font-bold text-black mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-amber-600 text-sm mb-3 font-mono">
+                  <p className="text-gray-700 text-sm mb-3 font-mono">
                     {product.description}
                   </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="text-2xl font-bold text-amber-900">
+                      <span className="text-2xl font-bold text-black">
                         ${product.price.toFixed(2)}
                       </span>
                       {product.originalPrice && (
-                      <span className="text-amber-500 line-through">
+                      <span className="text-gray-500 line-through">
                           ${product.originalPrice.toFixed(2)}
                       </span>
                       )}
@@ -222,32 +222,32 @@ const HomePage = () => {
       </section>
 
       {/* Brand Story Section */}
-      <section className="py-20 bg-amber-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <h2 className="text-4xl font-bold text-amber-900 font-mono">
+              <h2 className="text-4xl font-bold text-black font-mono">
                 Our Vintage Journey
               </h2>
               <div className="space-y-6">
-                <div className="relative pl-8 border-l-4 border-amber-600">
-                  <div className="absolute -left-3 top-0 w-6 h-6 bg-amber-600 rounded-full" />
-                  <h3 className="text-2xl font-bold text-amber-900 mb-2">2018</h3>
-                  <p className="text-amber-700">
+                <div className="relative pl-8 border-l-4 border-black">
+                  <div className="absolute -left-3 top-0 w-6 h-6 bg-black rounded-full" />
+                  <h3 className="text-2xl font-bold text-black mb-2">2018</h3>
+                  <p className="text-gray-700">
                     Started as a small vintage shop in downtown, curating the finest collection of retro tees.
                 </p>
               </div>
-                <div className="relative pl-8 border-l-4 border-amber-600">
-                  <div className="absolute -left-3 top-0 w-6 h-6 bg-amber-600 rounded-full" />
-                  <h3 className="text-2xl font-bold text-amber-900 mb-2">2020</h3>
-                  <p className="text-amber-700">
+                <div className="relative pl-8 border-l-4 border-black">
+                  <div className="absolute -left-3 top-0 w-6 h-6 bg-black rounded-full" />
+                  <h3 className="text-2xl font-bold text-black mb-2">2020</h3>
+                  <p className="text-gray-700">
                     Expanded our collection to include rare finds from the 50s to the 90s.
                 </p>
               </div>
-                <div className="relative pl-8 border-l-4 border-amber-600">
-                  <div className="absolute -left-3 top-0 w-6 h-6 bg-amber-600 rounded-full" />
-                  <h3 className="text-2xl font-bold text-amber-900 mb-2">2023</h3>
-                  <p className="text-amber-700">
+                <div className="relative pl-8 border-l-4 border-black">
+                  <div className="absolute -left-3 top-0 w-6 h-6 bg-black rounded-full" />
+                  <h3 className="text-2xl font-bold text-black mb-2">2023</h3>
+                  <p className="text-gray-700">
                     Launched our online store, bringing vintage fashion to enthusiasts worldwide.
                 </p>
               </div>
@@ -272,21 +272,21 @@ const HomePage = () => {
       {/* Newsletter Signup */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-amber-900 mb-4 font-mono">
+          <h2 className="text-4xl font-bold text-black mb-4 font-mono">
             Join Our Vintage Community
           </h2>
-          <p className="text-amber-600 mb-8 font-mono">
+          <p className="text-gray-700 mb-8 font-mono">
             Subscribe to get exclusive access to new arrivals and special offers
           </p>
           <form className="flex flex-col sm:flex-row gap-4">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 transition-colors duration-300 font-mono bg-white"
+              className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600 transition-colors duration-300 font-mono bg-white"
             />
             <button
               type="submit"
-              className="px-8 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition-colors duration-300"
+              className="px-8 py-3 bg-black text-white rounded-lg font-bold hover:bg-gray-900 transition-colors duration-300"
             >
               Subscribe
             </button>

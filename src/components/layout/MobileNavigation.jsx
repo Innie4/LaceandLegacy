@@ -50,23 +50,23 @@ const MobileNavigation = () => {
       {/* Mobile Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-amber-50/95 backdrop-blur-sm shadow-md' : 'bg-transparent'
+          isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-transparent'
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3">
           <button
             onClick={() => setIsOpen(true)}
-            className="p-2 text-amber-900 hover:text-amber-700 transition-colors"
+            className="p-2 text-black hover:text-gray-700 transition-colors"
             aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <Link to="/" className="text-2xl font-bold text-amber-900 font-mono">
-            ThrowbackTee
+          <Link to="/" className="text-2xl font-bold text-black font-mono">
+            Lace & Legacy
           </Link>
           <Link
             to="/cart"
-            className="p-2 text-amber-900 hover:text-amber-700 transition-colors"
+            className="p-2 text-black hover:text-gray-700 transition-colors"
             aria-label="Shopping cart"
           >
             <ShoppingBag className="h-6 w-6" />
@@ -93,19 +93,19 @@ const MobileNavigation = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 20 }}
-              className="fixed top-0 left-0 bottom-0 w-72 bg-amber-50 z-50 overflow-y-auto"
+              className="fixed top-0 left-0 bottom-0 w-72 bg-white z-50 overflow-y-auto"
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-8">
                   <Link
                     to="/"
-                    className="text-2xl font-bold text-amber-900 font-mono"
+                    className="text-2xl font-bold text-black font-mono"
                   >
-                    ThrowbackTee
+                    Lace & Legacy
                   </Link>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 text-amber-900 hover:text-amber-700 transition-colors"
+                    className="p-2 text-black hover:text-gray-700 transition-colors"
                     aria-label="Close menu"
                   >
                     <X className="h-6 w-6" />
@@ -116,7 +116,7 @@ const MobileNavigation = () => {
                 {user ? (
                   <Link
                     to="/account"
-                    className="flex items-center gap-3 p-3 text-amber-900 hover:bg-amber-100 rounded-lg transition-colors mb-4"
+                    className="flex items-center gap-3 p-3 text-black hover:bg-gray-100 rounded-lg transition-colors mb-4"
                   >
                     <User className="h-6 w-6" />
                     <span className="font-medium">My Account</span>
@@ -125,13 +125,13 @@ const MobileNavigation = () => {
                   <div className="space-y-2 mb-4">
                     <Link
                       to="/login"
-                      className="block w-full p-3 text-center text-amber-900 hover:bg-amber-100 rounded-lg transition-colors font-medium"
+                      className="block w-full p-3 text-center text-black hover:bg-gray-100 rounded-lg transition-colors font-medium"
                     >
                       Login
                     </Link>
                     <Link
                       to="/register"
-                      className="block w-full p-3 text-center bg-amber-600 text-white hover:bg-amber-700 rounded-lg transition-colors font-medium"
+                      className="block w-full p-3 text-center bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors font-medium"
                     >
                       Register
                     </Link>
@@ -144,7 +144,7 @@ const MobileNavigation = () => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className="flex items-center gap-3 p-3 text-amber-900 hover:bg-amber-100 rounded-lg transition-colors"
+                      className="flex items-center gap-3 p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                     >
                       {item.icon}
                       <span className="font-medium">{item.label}</span>
@@ -154,7 +154,7 @@ const MobileNavigation = () => {
 
                 {/* Categories */}
                 <div className="mt-8">
-                  <h3 className="text-lg font-bold text-amber-900 mb-4">
+                  <h3 className="text-lg font-bold text-black mb-4">
                     Categories
                   </h3>
                   <div className="space-y-2">
@@ -163,7 +163,7 @@ const MobileNavigation = () => {
                         <Link
                           key={category}
                           to={`/category/${category.toLowerCase()}`}
-                          className="block p-3 text-amber-900 hover:bg-amber-100 rounded-lg transition-colors"
+                          className="block p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                         >
                           {category}
                         </Link>
@@ -174,7 +174,7 @@ const MobileNavigation = () => {
 
                 {/* Support Links */}
                 <div className="mt-8">
-                  <h3 className="text-lg font-bold text-amber-900 mb-4">
+                  <h3 className="text-lg font-bold text-black mb-4">
                     Support
                   </h3>
                   <div className="space-y-2">
@@ -188,7 +188,7 @@ const MobileNavigation = () => {
                       <Link
                         key={item}
                         to={`/support/${item.toLowerCase().replace(' ', '-')}`}
-                        className="block p-3 text-amber-900 hover:bg-amber-100 rounded-lg transition-colors"
+                        className="block p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                       >
                         {item}
                       </Link>

@@ -63,7 +63,7 @@ const PasswordStrengthIndicator = ({ password }) => {
           <div
             key={i}
             className={`flex-1 rounded-full ${
-              i < strength ? `bg-${strengthColors[i]}-500` : 'bg-amber-100'
+              i < strength ? `bg-${strengthColors[i]}-500` : 'bg-gray-100'
             }`}
           />
         ))}
@@ -102,14 +102,14 @@ const RegisterPage = () => {
       animate="animate"
       exit="exit"
       variants={pageVariants}
-      className="min-h-screen bg-amber-50 flex items-center justify-center px-4 py-12"
+      className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-amber-200">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-amber-900 font-mono">
+          <h2 className="text-3xl font-bold text-black font-mono">
             Create Account
           </h2>
-          <p className="mt-2 text-amber-600">
+          <p className="mt-2 text-gray-700">
             Join our community of vintage fashion enthusiasts
           </p>
         </div>
@@ -117,12 +117,12 @@ const RegisterPage = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-amber-900">
+              <label htmlFor="firstName" className="block text-sm font-medium text-black">
                 First Name
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-amber-400" />
+                  <User className="h-5 w-5 text-gray-300" />
                 </div>
                 <input
                   id="firstName"
@@ -131,8 +131,8 @@ const RegisterPage = () => {
                     required: 'First name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.firstName ? 'border-red-300' : 'border-amber-300'
-                  } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                    errors.firstName ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
                   placeholder="John"
                 />
                 {errors.firstName && (
@@ -144,12 +144,12 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-amber-900">
+              <label htmlFor="lastName" className="block text-sm font-medium text-black">
                 Last Name
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-amber-400" />
+                  <User className="h-5 w-5 text-gray-300" />
                 </div>
                 <input
                   id="lastName"
@@ -158,8 +158,8 @@ const RegisterPage = () => {
                     required: 'Last name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.lastName ? 'border-red-300' : 'border-amber-300'
-                  } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                    errors.lastName ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
@@ -172,12 +172,12 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-amber-900">
+            <label htmlFor="email" className="block text-sm font-medium text-black">
               Email Address
             </label>
             <div className="mt-1 relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-amber-400" />
+                <Mail className="h-5 w-5 text-gray-300" />
               </div>
               <input
                 id="email"
@@ -190,8 +190,8 @@ const RegisterPage = () => {
                   }
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.email ? 'border-red-300' : 'border-amber-300'
-                } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                  errors.email ? 'border-red-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
                 placeholder="you@example.com"
               />
               {errors.email && (
@@ -203,18 +203,18 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label htmlFor="country" className="block text-sm font-medium text-amber-900">
+            <label htmlFor="country" className="block text-sm font-medium text-black">
               Country
             </label>
             <div className="mt-1 relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Globe className="h-5 w-5 text-amber-400" />
+                <Globe className="h-5 w-5 text-gray-300" />
               </div>
               <select
                 id="country"
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                className="block w-full pl-10 pr-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600 text-gray-900"
               >
                 {countries.map((country) => (
                   <option key={country.code} value={country.code}>
@@ -226,12 +226,12 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-amber-900">
+            <label htmlFor="password" className="block text-sm font-medium text-black">
               Password
             </label>
             <div className="mt-1 relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-amber-400" />
+                <Lock className="h-5 w-5 text-gray-300" />
               </div>
               <input
                 id="password"
@@ -244,8 +244,8 @@ const RegisterPage = () => {
                   }
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.password ? 'border-red-300' : 'border-amber-300'
-                } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                  errors.password ? 'border-red-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
                 placeholder="••••••••"
               />
               {errors.password && (
@@ -258,12 +258,12 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-amber-900">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
               Confirm Password
             </label>
             <div className="mt-1 relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-amber-400" />
+                <Lock className="h-5 w-5 text-gray-300" />
               </div>
               <input
                 id="confirmPassword"
@@ -273,8 +273,8 @@ const RegisterPage = () => {
                   validate: value => value === password || 'Passwords do not match'
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.confirmPassword ? 'border-red-300' : 'border-amber-300'
-                } rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400`}
+                  errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
                 placeholder="••••••••"
               />
               {errors.confirmPassword && (
@@ -292,15 +292,15 @@ const RegisterPage = () => {
               {...register('terms', {
                 required: 'You must accept the terms and conditions'
               })}
-              className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-amber-300 rounded"
+              className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-amber-900">
+            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
               I agree to the{' '}
-              <Link to="/terms" className="text-amber-600 hover:text-amber-800">
+              <Link to="/terms" className="text-gray-600 hover:text-gray-800">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link to="/privacy" className="text-amber-600 hover:text-amber-800">
+              <Link to="/privacy" className="text-gray-600 hover:text-gray-800">
                 Privacy Policy
               </Link>
             </label>
@@ -315,7 +315,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -327,11 +327,11 @@ const RegisterPage = () => {
         </form>
 
         <div className="text-center">
-          <p className="text-sm text-amber-600">
+          <p className="text-sm text-gray-600">
             Already have an account?{' '}
             <Link
               to="/login"
-              className="font-medium text-amber-600 hover:text-amber-800 transition-colors duration-300"
+              className="font-medium text-gray-600 hover:text-gray-800 transition-colors duration-300"
             >
               Sign in
             </Link>

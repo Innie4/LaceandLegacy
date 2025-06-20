@@ -164,204 +164,214 @@ const OrderHistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold text-amber-900 font-mono mb-6">
-          Order History
-        </h1>
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+          <h1 className="text-2xl font-bold text-black font-mono mb-6">
+            <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-black">
+              <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-black text-white">
+                <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-300 text-black">
+                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-400 text-white">
+                    Order History
+                  </span>
+                </span>
+              </span>
+            </span>
+          </h1>
 
-        <div className="space-y-6">
-          {orders.map((order) => (
-            <motion.div
-              key={order.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl border-2 border-amber-200 overflow-hidden"
-            >
-              {/* Order Header */}
-              <div className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-medium text-amber-900 font-mono">
-                      Order {order.id}
-                    </h2>
-                    <p className="text-sm text-amber-600">
-                      Placed on {new Date(order.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {getStatusIcon(order.status)}
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
-                    </span>
-                    <button
-                      onClick={() =>
-                        setExpandedOrder(
-                          expandedOrder === order.id ? null : order.id
-                        )
-                      }
-                      className="p-2 text-amber-600 hover:text-amber-700 transition-colors duration-300"
-                    >
-                      {expandedOrder === order.id ? (
-                        <ChevronUp className="h-5 w-5" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5" />
-                      )}
-                    </button>
+          <div className="space-y-6">
+            {orders.map((order) => (
+              <motion.div
+                key={order.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden"
+              >
+                {/* Order Header */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-medium text-black font-mono">
+                        Order {order.id}
+                      </h2>
+                      <p className="text-sm text-gray-700">
+                        Placed on {new Date(order.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                          order.status
+                        )}`}
+                      >
+                        {getStatusIcon(order.status)}
+                        {order.status.charAt(0).toUpperCase() +
+                          order.status.slice(1)}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setExpandedOrder(
+                            expandedOrder === order.id ? null : order.id
+                          )
+                        }
+                        className="p-2 text-gray-700 hover:text-gray-800 transition-colors duration-300"
+                      >
+                        {expandedOrder === order.id ? (
+                          <ChevronUp className="h-5 w-5" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Order Details */}
-              <AnimatePresence>
-                {expandedOrder === order.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="border-t-2 border-amber-200">
-                      {/* Order Items */}
-                      <div className="p-6 space-y-4">
-                        {order.items.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-center gap-4"
-                          >
-                            <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-amber-200">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                              />
+                {/* Order Details */}
+                <AnimatePresence>
+                  {expandedOrder === order.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="border-t-2 border-gray-200">
+                        {/* Order Items */}
+                        <div className="p-6 space-y-4">
+                          {order.items.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center gap-4"
+                            >
+                              <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-200">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-black font-medium">
+                                  {item.name}
+                                </h3>
+                                <p className="text-sm text-gray-700">
+                                  Quantity: {item.quantity}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-black font-mono">
+                                  ${item.price.toFixed(2)}
+                                </p>
+                              </div>
                             </div>
-                            <div className="flex-1">
-                              <h3 className="text-amber-900 font-medium">
-                                {item.name}
-                              </h3>
-                              <p className="text-sm text-amber-600">
-                                Quantity: {item.quantity}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-amber-900 font-mono">
-                                ${item.price.toFixed(2)}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Order Summary */}
-                      <div className="border-t-2 border-amber-200 p-6">
-                        <div className="flex justify-between items-center mb-4">
-                          <h3 className="text-lg font-medium text-amber-900">
-                            Order Summary
-                          </h3>
-                          <p className="text-xl font-bold text-amber-900 font-mono">
-                            ${order.total.toFixed(2)}
-                          </p>
+                          ))}
                         </div>
 
-                        {/* Tracking Information */}
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-amber-600">
-                                Tracking Number
-                              </p>
-                              <p className="text-amber-900 font-mono">
-                                {order.tracking.number}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm text-amber-600">
-                                Estimated Delivery
-                              </p>
-                              <p className="text-amber-900">
-                                {new Date(
-                                  order.tracking.estimatedDelivery
-                                ).toLocaleDateString()}
-                              </p>
-                            </div>
+                        {/* Order Summary */}
+                        <div className="border-t-2 border-gray-200 p-6">
+                          <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-medium text-black">
+                              Order Summary
+                            </h3>
+                            <p className="text-xl font-bold text-black font-mono">
+                              ${order.total.toFixed(2)}
+                            </p>
                           </div>
 
-                          {/* Tracking Timeline */}
-                          <div className="mt-6">
-                            <h4 className="text-sm font-medium text-amber-900 mb-4">
-                              Tracking History
-                            </h4>
-                            <div className="space-y-4">
-                              {order.tracking.history.map((event, index) => (
-                                <div
-                                  key={index}
-                                  className="flex items-start gap-4"
-                                >
-                                  <div className="relative">
-                                    <div
-                                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                                        index ===
-                                        order.tracking.history.length - 1
-                                          ? 'border-amber-600 bg-amber-600 text-white'
-                                          : 'border-amber-300 text-amber-600'
-                                      }`}
-                                    >
-                                      <Package className="h-4 w-4" />
+                          {/* Tracking Information */}
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm text-gray-700">
+                                  Tracking Number
+                                </p>
+                                <p className="text-black font-mono">
+                                  {order.tracking.number}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-sm text-gray-700">
+                                  Estimated Delivery
+                                </p>
+                                <p className="text-black">
+                                  {new Date(
+                                    order.tracking.estimatedDelivery
+                                  ).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Tracking Timeline */}
+                            <div className="mt-6">
+                              <h4 className="text-sm font-medium text-black mb-4">
+                                Tracking History
+                              </h4>
+                              <div className="space-y-4">
+                                {order.tracking.history.map((event, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-start gap-4"
+                                  >
+                                    <div className="relative">
+                                      <div
+                                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
+                                          index ===
+                                          order.tracking.history.length - 1
+                                            ? 'border-gray-600 bg-gray-600 text-white'
+                                            : 'border-gray-300 text-gray-600'
+                                        }`}
+                                      >
+                                        <Package className="h-4 w-4" />
+                                      </div>
+                                      {index <
+                                        order.tracking.history.length - 1 && (
+                                        <div className="absolute left-4 top-8 bottom-0 w-0.5 bg-gray-300" />
+                                      )}
                                     </div>
-                                    {index <
-                                      order.tracking.history.length - 1 && (
-                                      <div className="absolute left-4 top-8 bottom-0 w-0.5 bg-amber-300" />
-                                    )}
+                                    <div>
+                                      <p className="text-black font-medium">
+                                        {event.status}
+                                      </p>
+                                      <p className="text-sm text-gray-700">
+                                        {event.date}
+                                      </p>
+                                      <p className="text-sm text-gray-700">
+                                        {event.location}
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <p className="text-amber-900 font-medium">
-                                      {event.status}
-                                    </p>
-                                    <p className="text-sm text-amber-600">
-                                      {event.date}
-                                    </p>
-                                    <p className="text-sm text-amber-600">
-                                      {event.location}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Action Buttons */}
-                        <div className="mt-6 flex justify-end gap-4">
-                          <button
-                            onClick={() => handleDownloadInvoice(order.id)}
-                            disabled={isLoading}
-                            className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
-                          >
-                            <Download className="h-4 w-4 mr-2" />
-                            Download Invoice
-                          </button>
-                          <button
-                            onClick={() => handleReorder(order.id)}
-                            disabled={isLoading}
-                            className="inline-flex items-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
-                          >
-                            <RefreshCw className="h-4 w-4 mr-2" />
-                            Reorder
-                          </button>
+                          {/* Action Buttons */}
+                          <div className="mt-6 flex justify-end gap-4">
+                            <button
+                              onClick={() => handleDownloadInvoice(order.id)}
+                              disabled={isLoading}
+                              className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-900 hover:border-gray-600 transition-colors duration-300"
+                            >
+                              <Download className="h-4 w-4 mr-2" />
+                              Download Invoice
+                            </button>
+                            <button
+                              onClick={() => handleReorder(order.id)}
+                              disabled={isLoading}
+                              className="inline-flex items-center px-4 py-2 border-2 border-gray-600 rounded-lg text-gray-900 hover:bg-gray-600 hover:text-white transition-colors duration-300"
+                            >
+                              <RefreshCw className="h-4 w-4 mr-2" />
+                              Reorder
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

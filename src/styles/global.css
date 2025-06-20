@@ -4,11 +4,11 @@
 
 :root {
   /* Color Variables */
-  --primary-color: #B45309;
-  --secondary-color: #92400E;
-  --background-color: #FFFBEB;
-  --text-color: #78350F;
-  --accent-color: #D97706;
+  --primary-color: #000000;
+  --secondary-color: #FFFFFF;
+  --background-color: #FFFFFF;
+  --text-color: #000000;
+  --accent-color: #333333;
   
   /* Typography */
   --font-vintage: 'Courier New', monospace;
@@ -52,47 +52,47 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Vintage Button Styles */
 .vintage-button {
-  @apply px-4 py-2 rounded-md border-2 border-amber-600 
-         bg-amber-50 text-amber-900 font-medium
-         hover:bg-amber-100 transition-colors
-         focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2;
+  @apply px-4 py-2 rounded-md border-2 border-black 
+         bg-white text-black font-medium
+         hover:bg-gray-100 transition-colors
+         focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
 }
 
 .vintage-button-primary {
-  @apply bg-amber-600 text-white hover:bg-amber-700;
+  @apply bg-black text-white hover:bg-gray-900;
 }
 
 /* Vintage Card Styles */
 .vintage-card {
-  @apply bg-white rounded-lg border-2 border-amber-200
+  @apply bg-white rounded-lg border-2 border-gray-200
          shadow-md hover:shadow-lg transition-shadow
          p-4;
 }
 
 /* Vintage Input Styles */
 .vintage-input {
-  @apply w-full px-3 py-2 rounded-md border-2 border-amber-200
-         bg-amber-50 text-amber-900
-         focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent;
+  @apply w-full px-3 py-2 rounded-md border-2 border-gray-200
+         bg-white text-black
+         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent;
 }
 
 /* Vintage Select Styles */
 .vintage-select {
-  @apply w-full px-3 py-2 rounded-md border-2 border-amber-200
-         bg-amber-50 text-amber-900
-         focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent;
+  @apply w-full px-3 py-2 rounded-md border-2 border-gray-200
+         bg-white text-black
+         focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent;
 }
 
 /* Vintage Badge Styles */
 .vintage-badge {
   @apply inline-flex items-center px-2.5 py-0.5 rounded-full
-         text-xs font-medium bg-amber-100 text-amber-800;
+         text-xs font-medium bg-gray-100 text-black;
 }
 
 /* Vintage Link Styles */
 .vintage-link {
-  @apply text-amber-600 hover:text-amber-700
-         underline decoration-amber-300 hover:decoration-amber-600
+  @apply text-gray-700 hover:text-black
+         underline decoration-gray-300 hover:decoration-black
          transition-colors;
 }
 
@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Vintage Loading Spinner */
 .vintage-spinner {
-  @apply w-8 h-8 border-4 border-amber-200 border-t-amber-600
+  @apply w-8 h-8 border-4 border-gray-200 border-t-black
          rounded-full animate-spin;
 }
 
@@ -134,36 +134,36 @@ h1, h2, h3, h4, h5, h6 {
 /* Vintage Heading */
 .vintage-heading {
   @apply text-3xl sm:text-4xl lg:text-5xl font-bold
-         text-amber-900 mb-8 text-center;
+         text-black mb-8 text-center;
 }
 
 /* Vintage Subheading */
 .vintage-subheading {
-  @apply text-xl sm:text-2xl text-amber-800 mb-6;
+  @apply text-xl sm:text-2xl text-black mb-6;
 }
 
 /* Vintage Paragraph */
 .vintage-paragraph {
-  @apply text-amber-700 leading-relaxed mb-4;
+  @apply text-gray-700 leading-relaxed mb-4;
 }
 
 /* Vintage List */
 .vintage-list {
-  @apply space-y-2 list-disc list-inside text-amber-700;
+  @apply space-y-2 list-disc list-inside text-gray-700;
 }
 
 /* Vintage Table */
 .vintage-table {
-  @apply min-w-full divide-y divide-amber-200;
+  @apply min-w-full divide-y divide-gray-200;
 }
 
 .vintage-table th {
-  @apply px-6 py-3 bg-amber-50 text-left text-xs font-medium
-         text-amber-900 uppercase tracking-wider;
+  @apply px-6 py-3 bg-white text-left text-xs font-medium
+         text-black uppercase tracking-wider;
 }
 
 .vintage-table td {
-  @apply px-6 py-4 whitespace-nowrap text-sm text-amber-700;
+  @apply px-6 py-4 whitespace-nowrap text-sm text-gray-700;
 }
 
 /* Vintage Form Group */
@@ -172,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .vintage-label {
-  @apply block text-sm font-medium text-amber-900 mb-1;
+  @apply block text-sm font-medium text-black mb-1;
 }
 
 /* Vintage Alert */
@@ -193,7 +193,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .vintage-alert-info {
-  @apply bg-amber-50 border-amber-200 text-amber-800;
+  @apply bg-white border-gray-200 text-black;
 }
 
 /* Responsive Utilities */

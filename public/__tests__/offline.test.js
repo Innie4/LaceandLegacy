@@ -21,7 +21,7 @@ describe('Offline Page', () => {
   });
 
   it('has the correct title', () => {
-    expect(offlinePage).toContain('<title>Offline - ThrowbackTee</title>');
+    expect(offlinePage).toContain('<title>Offline - Lace & Legacy</title>');
   });
 
   it('has the correct stylesheet link', () => {

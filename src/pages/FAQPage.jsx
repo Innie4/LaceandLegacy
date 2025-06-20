@@ -125,14 +125,14 @@ const FAQPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-amber-900 font-mono mb-4">
+          <h1 className="text-4xl font-bold text-black font-mono mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-lg text-amber-700 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Find answers to common questions about our vintage collection,
             ordering process, and more.
           </p>
@@ -146,9 +146,9 @@ const FAQPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search FAQs..."
-              className="w-full px-4 py-3 pl-12 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400"
+              className="w-full px-4 py-3 pl-12 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
             />
-            <Search className="h-5 w-5 text-amber-600 absolute left-4 top-1/2 transform -translate-y-1/2" />
+            <Search className="h-5 w-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
           </div>
         </div>
 
@@ -160,8 +160,8 @@ const FAQPage = () => {
               onClick={() => setActiveCategory(category.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-colors duration-300 ${
                 activeCategory === category.id
-                  ? 'border-amber-600 bg-amber-600 text-white'
-                  : 'border-amber-300 text-amber-900 hover:border-amber-600'
+                  ? 'border-black bg-black text-white'
+                  : 'border-gray-300 text-black hover:border-black'
               }`}
             >
               {category.icon}
@@ -179,19 +179,19 @@ const FAQPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-white rounded-xl border-2 border-amber-200 overflow-hidden"
+                className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden"
               >
                 <button
                   onClick={() => toggleFaq(faq.id)}
-                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-amber-50 transition-colors duration-300"
+                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-100 transition-colors duration-300"
                 >
-                  <span className="text-lg font-medium text-amber-900">
+                  <span className="text-lg font-medium text-black">
                     {faq.question}
                   </span>
                   {expandedFaqs[faq.id] ? (
-                    <ChevronUp className="h-5 w-5 text-amber-600" />
+                    <ChevronUp className="h-5 w-5 text-black" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-amber-600" />
+                    <ChevronDown className="h-5 w-5 text-black" />
                   )}
                 </button>
                 <AnimatePresence>
@@ -202,8 +202,8 @@ const FAQPage = () => {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 py-4 border-t-2 border-amber-100">
-                        <p className="text-amber-700">{faq.answer}</p>
+                      <div className="px-6 py-4 border-t-2 border-gray-100">
+                        <p className="text-gray-700">{faq.answer}</p>
                       </div>
                     </motion.div>
                   )}
@@ -214,8 +214,8 @@ const FAQPage = () => {
         </div>
 
         {/* Related Articles */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-8">
-          <h2 className="text-2xl font-bold text-amber-900 font-mono mb-6">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-black font-mono mb-6">
             Related Articles
           </h2>
           <div className="space-y-4">
@@ -223,16 +223,16 @@ const FAQPage = () => {
               <a
                 key={index}
                 href={article.link}
-                className="block p-4 border-2 border-amber-100 rounded-lg hover:border-amber-300 transition-colors duration-300"
+                className="block p-4 border-2 border-gray-100 rounded-lg hover:border-gray-300 transition-colors duration-300"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-amber-900 mb-1">
+                    <h3 className="text-lg font-medium text-black mb-1">
                       {article.title}
                     </h3>
-                    <p className="text-amber-600">{article.description}</p>
+                    <p className="text-gray-600">{article.description}</p>
                   </div>
-                  <ExternalLink className="h-5 w-5 text-amber-600" />
+                  <ExternalLink className="h-5 w-5 text-gray-600" />
                 </div>
               </a>
             ))}
@@ -241,15 +241,15 @@ const FAQPage = () => {
 
         {/* Still Need Help */}
         <div className="mt-12 text-center">
-          <h2 className="text-2xl font-bold text-amber-900 font-mono mb-4">
+          <h2 className="text-2xl font-bold text-black font-mono mb-4">
             Still Need Help?
           </h2>
-          <p className="text-amber-700 mb-6">
+          <p className="text-gray-700 mb-6">
             Can't find what you're looking for? Our support team is here to help.
           </p>
           <a
             href="/support/contact"
-            className="inline-flex items-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+            className="inline-flex items-center px-6 py-3 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
           >
             <BookOpen className="h-5 w-5 mr-2" />
             Contact Support

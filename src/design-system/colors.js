@@ -2,50 +2,50 @@
 export const colors = {
   // Earth tones
   brown: {
-    light: '#D4C1A9',
-    medium: '#B69F7D',
-    dark: '#8C7A5B',
-    darkest: '#5F5242'
+    light: '#F5F5F5',
+    medium: '#CCCCCC',
+    dark: '#333333',
+    darkest: '#000000'
   },
   cream: {
-    lightest: '#FFFBF2',
-    light: '#F7F2E4',
-    medium: '#EFE8D6',
-    dark: '#E6DCBF'
+    lightest: '#FFFFFF',
+    light: '#F5F5F5',
+    medium: '#CCCCCC',
+    dark: '#333333'
   },
   orange: {
-    light: '#F2C094',
-    medium: '#E8A76F',
-    dark: '#D48C4A',
-    burnt: '#BF7E45'
+    light: '#F5F5F5',
+    medium: '#CCCCCC',
+    dark: '#333333',
+    burnt: '#000000'
   },
   blue: {
-    faded: '#A5B9C9',
-    muted: '#7D96A9',
-    vintage: '#5D7A8C',
-    dark: '#3F5766'
+    faded: '#CCCCCC',
+    muted: '#999999',
+    vintage: '#333333',
+    dark: '#000000'
   },
   yellow: {
-    pale: '#F2E6B6',
-    soft: '#E8D68C',
-    golden: '#D4BF6A',
-    amber: '#BFA94D'
+    pale: '#F5F5F5',
+    soft: '#CCCCCC',
+    golden: '#333333',
+    amber: '#000000'
   },
   // Utility colors
-  black: '#2A2A2A',
-  white: '#FFFEF7',
+  black: '#000000',
+  white: '#FFFFFF',
   gray: {
-    lightest: '#F2F0E6',
-    light: '#D9D6C9',
-    medium: '#BFBCB2',
-    dark: '#8C8A83',
-    darkest: '#5F5E59'
+    lightest: '#F5F5F5',
+    light: '#CCCCCC',
+    medium: '#999999',
+    dark: '#333333',
+    darkest: '#000000'
   },
   // Accent colors
   accent: {
-    red: '#C25B4F',
-    green: '#5B8C70',
-    teal: '#5B8C8C'
+    red: '#333333',
+    green: '#333333',
+    teal: '#333333'
   }
 };
 

@@ -85,7 +85,7 @@ const ContactPage = () => {
     {
       icon: <Mail className="h-6 w-6" />,
       title: 'Email Us',
-      details: ['support@throwbacktee.com', 'sales@throwbacktee.com'],
+      details: ['support@lace-legacy.com', 'sales@lace-legacy.com'],
       response: 'Within 24 hours',
     },
     {
@@ -110,14 +110,14 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-amber-50 py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-amber-900 font-mono mb-4">
+          <h1 className="text-4xl font-bold text-black font-mono mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-amber-700 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Have questions about our vintage collection? We're here to help!
             Choose your preferred way to reach us below.
           </p>

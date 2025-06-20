@@ -27,16 +27,16 @@ const CareersPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-amber-800 mb-8">Join Our Team</h1>
+      <h1 className="text-4xl font-bold text-black mb-8">Join Our Team</h1>
       
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Why Work With Us?</h2>
-        <p className="text-gray-600 leading-relaxed mb-6">
-          At ThrowbackTee, we're passionate about creating high-quality vintage-inspired clothing while 
+        <h2 className="text-2xl font-semibold text-black mb-4">Why Work With Us?</h2>
+        <p className="text-gray-700 leading-relaxed mb-6">
+          At Lace & Legacy, we're passionate about creating high-quality vintage-inspired clothing while 
           maintaining a positive and inclusive work environment. We value creativity, innovation, and 
           a strong work ethic.
         </p>
-        <ul className="list-disc list-inside text-gray-600 space-y-2">
+        <ul className="list-disc list-inside text-gray-700 space-y-2">
           <li>Competitive compensation and benefits</li>
           <li>Remote work opportunities</li>
           <li>Professional development support</li>

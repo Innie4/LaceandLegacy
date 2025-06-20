@@ -1,4 +1,4 @@
-// Typography system for ThrowbackTee
+// Typography system for Lace & Legacy
 export const fontFamilies = {
   // Serif fonts for headers
   serif: ['"Playfair Display"', 'Georgia', 'serif'],

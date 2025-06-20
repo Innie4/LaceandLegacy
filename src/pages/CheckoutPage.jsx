@@ -187,7 +187,7 @@ const CheckoutPage = () => {
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-amber-900 font-mono">
+              <h2 className="text-2xl font-bold text-black font-mono">
                 Shipping Information
               </h2>
               <div className="flex items-center gap-2">
@@ -196,9 +196,9 @@ const CheckoutPage = () => {
                   id="guest"
                   checked={isGuest}
                   onChange={(e) => setIsGuest(e.target.checked)}
-                  className="rounded border-amber-300 text-amber-600 focus:ring-amber-600"
+                  className="rounded border-gray-300 text-gray-700 focus:ring-black"
                 />
-                <label htmlFor="guest" className="text-sm text-amber-900">
+                <label htmlFor="guest" className="text-sm text-black">
                   Checkout as Guest
                 </label>
               </div>
@@ -208,7 +208,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="firstName"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   First Name
                 </label>
@@ -219,10 +219,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'firstName', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.firstName']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.firstName'] && (
@@ -235,7 +235,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="lastName"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Last Name
                 </label>
@@ -246,10 +246,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'lastName', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.lastName']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.lastName'] && (
@@ -262,7 +262,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Email
                 </label>
@@ -273,10 +273,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'email', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.email']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.email'] && (
@@ -289,7 +289,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Phone
                 </label>
@@ -300,14 +300,14 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'phone', e.target.value)
                   }
-                  className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900 placeholder-amber-400"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
                 />
               </div>
 
               <div className="sm:col-span-2">
                 <label
                   htmlFor="address"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Address
                 </label>
@@ -318,10 +318,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'address', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.address']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.address'] && (
@@ -334,7 +334,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="city"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   City
                 </label>
@@ -345,10 +345,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'city', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.city']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.city'] && (
@@ -361,7 +361,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="state"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   State
                 </label>
@@ -372,10 +372,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'state', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.state']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.state'] && (
@@ -388,7 +388,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="zipCode"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Zip Code
                 </label>
@@ -399,10 +399,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'zipCode', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['shipping.zipCode']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['shipping.zipCode'] && (
@@ -415,7 +415,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="country"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Country
                 </label>
@@ -425,7 +425,7 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('shipping', 'country', e.target.value)
                   }
-                  className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
                 >
                   <option value="US">United States</option>
                   <option value="CA">Canada</option>
@@ -439,7 +439,7 @@ const CheckoutPage = () => {
       case 1:
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-amber-900 font-mono">
+            <h2 className="text-2xl font-bold text-black font-mono">
               Billing Information
             </h2>
 
@@ -451,9 +451,9 @@ const CheckoutPage = () => {
                 onChange={(e) =>
                   handleInputChange('billing', 'sameAsShipping', e.target.checked)
                 }
-                className="rounded border-amber-300 text-amber-600 focus:ring-amber-600"
+                className="rounded border-gray-300 text-gray-700 focus:ring-black"
               />
-              <label htmlFor="sameAsShipping" className="text-sm text-amber-900">
+              <label htmlFor="sameAsShipping" className="text-sm text-black">
                 Same as shipping address
               </label>
             </div>
@@ -463,7 +463,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     First Name
                   </label>
@@ -474,10 +474,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'firstName', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.firstName']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.firstName'] && (
@@ -490,7 +490,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     Last Name
                   </label>
@@ -501,10 +501,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'lastName', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.lastName']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.lastName'] && (
@@ -517,7 +517,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="address"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     Address
                   </label>
@@ -528,10 +528,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'address', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.address']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.address'] && (
@@ -544,7 +544,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     City
                   </label>
@@ -555,10 +555,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'city', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.city']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.city'] && (
@@ -571,7 +571,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="state"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     State
                   </label>
@@ -582,10 +582,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'state', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.state']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.state'] && (
@@ -598,7 +598,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="zipCode"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     Zip Code
                   </label>
@@ -609,10 +609,10 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'zipCode', e.target.value)
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['billing.zipCode']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                   />
                   {errors['billing.zipCode'] && (
@@ -625,7 +625,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="country"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     Country
                   </label>
@@ -635,7 +635,7 @@ const CheckoutPage = () => {
                     onChange={(e) =>
                       handleInputChange('billing', 'country', e.target.value)
                     }
-                    className="w-full px-4 py-2 border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-600 text-amber-900"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
                   >
                     <option value="US">United States</option>
                     <option value="CA">Canada</option>
@@ -650,7 +650,7 @@ const CheckoutPage = () => {
       case 2:
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-amber-900 font-mono">
+            <h2 className="text-2xl font-bold text-black font-mono">
               Payment Information
             </h2>
 
@@ -658,7 +658,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="cardNumber"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Card Number
                 </label>
@@ -674,14 +674,14 @@ const CheckoutPage = () => {
                         e.target.value.replace(/\D/g, '').slice(0, 16)
                       )
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['payment.cardNumber']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                     placeholder="1234 5678 9012 3456"
                   />
-                  <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-600" />
+                  <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-700" />
                 </div>
                 {errors['payment.cardNumber'] && (
                   <p className="mt-1 text-sm text-red-600">
@@ -693,7 +693,7 @@ const CheckoutPage = () => {
               <div>
                 <label
                   htmlFor="cardName"
-                  className="block text-sm font-medium text-amber-900 mb-2"
+                  className="block text-sm font-medium text-black mb-2"
                 >
                   Name on Card
                 </label>
@@ -704,10 +704,10 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('payment', 'cardName', e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                     errors['payment.cardName']
                       ? 'border-red-300'
-                      : 'border-amber-300 focus:border-amber-600'
+                      : 'border-gray-300 focus:border-black'
                   }`}
                 />
                 {errors['payment.cardName'] && (
@@ -721,7 +721,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="expiryDate"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     Expiry Date
                   </label>
@@ -739,10 +739,10 @@ const CheckoutPage = () => {
                           .slice(0, 5)
                       )
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['payment.expiryDate']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                     placeholder="MM/YY"
                   />
@@ -756,7 +756,7 @@ const CheckoutPage = () => {
                 <div>
                   <label
                     htmlFor="cvv"
-                    className="block text-sm font-medium text-amber-900 mb-2"
+                    className="block text-sm font-medium text-black mb-2"
                   >
                     CVV
                   </label>
@@ -771,10 +771,10 @@ const CheckoutPage = () => {
                         e.target.value.replace(/\D/g, '').slice(0, 4)
                       )
                     }
-                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-amber-900 placeholder-amber-400 ${
+                    className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-black placeholder-gray-400 ${
                       errors['payment.cvv']
                         ? 'border-red-300'
-                        : 'border-amber-300 focus:border-amber-600'
+                        : 'border-gray-300 focus:border-black'
                     }`}
                     placeholder="123"
                   />
@@ -794,14 +794,14 @@ const CheckoutPage = () => {
                   onChange={(e) =>
                     handleInputChange('payment', 'saveCard', e.target.checked)
                   }
-                  className="rounded border-amber-300 text-amber-600 focus:ring-amber-600"
+                  className="rounded border-gray-300 text-gray-700 focus:ring-black"
                 />
-                <label htmlFor="saveCard" className="text-sm text-amber-900">
+                <label htmlFor="saveCard" className="text-sm text-black">
                   Save card for future purchases
                 </label>
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-amber-600">
+              <div className="flex items-center gap-2 text-sm text-gray-700">
                 <Lock className="h-4 w-4" />
                 <span>Your payment information is secure and encrypted</span>
               </div>
@@ -812,16 +812,16 @@ const CheckoutPage = () => {
       case 3:
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-amber-900 font-mono">
+            <h2 className="text-2xl font-bold text-black font-mono">
               Review Order
             </h2>
 
-            <div className="bg-white rounded-xl border-2 border-amber-200 p-6 space-y-6">
+            <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-amber-900 mb-4">
+                <h3 className="text-lg font-medium text-black mb-4">
                   Shipping Address
                 </h3>
-                <div className="text-amber-600">
+                <div className="text-gray-600">
                   <p>{formData.shipping.firstName} {formData.shipping.lastName}</p>
                   <p>{formData.shipping.address}</p>
                   <p>
@@ -833,34 +833,34 @@ const CheckoutPage = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-medium text-amber-900 mb-4">
+                <h3 className="text-lg font-medium text-black mb-4">
                   Payment Method
                 </h3>
-                <div className="text-amber-600">
+                <div className="text-gray-600">
                   <p>Card ending in {formData.payment.cardNumber.slice(-4)}</p>
                   <p>Expires {formData.payment.expiryDate}</p>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-lg font-medium text-amber-900 mb-4">
+                <h3 className="text-lg font-medium text-black mb-4">
                   Order Summary
                 </h3>
                 <div className="space-y-4">
-                  <div className="flex justify-between text-amber-900">
+                  <div className="flex justify-between text-black">
                     <span>Subtotal</span>
                     <span className="font-mono">$139.98</span>
                   </div>
-                  <div className="flex justify-between text-amber-900">
+                  <div className="flex justify-between text-black">
                     <span>Tax (10%)</span>
                     <span className="font-mono">$14.00</span>
                   </div>
-                  <div className="flex justify-between text-amber-900">
+                  <div className="flex justify-between text-black">
                     <span>Shipping</span>
                     <span className="font-mono">Free</span>
                   </div>
-                  <div className="border-t-2 border-amber-200 pt-4">
-                    <div className="flex justify-between text-lg font-bold text-amber-900">
+                  <div className="border-t-2 border-gray-200 pt-4">
+                    <div className="flex justify-between text-lg font-bold text-black">
                       <span>Total</span>
                       <span className="font-mono">$153.98</span>
                     </div>
@@ -872,9 +872,9 @@ const CheckoutPage = () => {
                 <input
                   type="checkbox"
                   id="terms"
-                  className="mt-1 rounded border-amber-300 text-amber-600 focus:ring-amber-600"
+                  className="mt-1 rounded border-gray-300 text-gray-700 focus:ring-black"
                 />
-                <label htmlFor="terms" className="text-sm text-amber-600">
+                <label htmlFor="terms" className="text-sm text-gray-700">
                   I agree to the terms and conditions and confirm that all
                   information provided is accurate.
                 </label>
@@ -889,7 +889,7 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Progress Bar */}
         <div className="mb-8">
@@ -900,8 +900,8 @@ const CheckoutPage = () => {
                   <div
                     className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
                       index <= currentStep
-                        ? 'border-amber-600 bg-amber-600 text-white'
-                        : 'border-amber-300 text-amber-600'
+                        ? 'border-gray-600 bg-gray-600 text-white'
+                        : 'border-gray-300 text-gray-600'
                     }`}
                   >
                     {index < currentStep ? (
@@ -913,8 +913,8 @@ const CheckoutPage = () => {
                   <span
                     className={`ml-2 text-sm font-medium ${
                       index <= currentStep
-                        ? 'text-amber-900'
-                        : 'text-amber-600'
+                        ? 'text-gray-900'
+                        : 'text-gray-600'
                     }`}
                   >
                     {step.title}
@@ -924,8 +924,8 @@ const CheckoutPage = () => {
                   <div
                     className={`flex-1 h-0.5 mx-4 ${
                       index < currentStep
-                        ? 'bg-amber-600'
-                        : 'bg-amber-300'
+                        ? 'bg-gray-600'
+                        : 'bg-gray-300'
                     }`}
                   />
                 )}
@@ -935,7 +935,7 @@ const CheckoutPage = () => {
         </div>
 
         {/* Form Content */}
-        <div className="bg-white rounded-xl border-2 border-amber-200 p-6">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
           {renderStep()}
 
           {/* Navigation Buttons */}
@@ -943,7 +943,7 @@ const CheckoutPage = () => {
             {currentStep > 0 ? (
               <button
                 onClick={handleBack}
-                className="inline-flex items-center px-6 py-3 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-900 hover:border-gray-600 transition-colors duration-300"
               >
                 <ChevronLeft className="h-5 w-5 mr-2" />
                 Back
@@ -951,7 +951,7 @@ const CheckoutPage = () => {
             ) : (
               <Link
                 to="/cart"
-                className="inline-flex items-center px-6 py-3 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-900 hover:border-gray-600 transition-colors duration-300"
               >
                 <ChevronLeft className="h-5 w-5 mr-2" />
                 Back to Cart
@@ -961,7 +961,7 @@ const CheckoutPage = () => {
             {currentStep < steps.length - 1 ? (
               <button
                 onClick={handleNext}
-                className="inline-flex items-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 border-2 border-gray-600 rounded-lg text-gray-900 hover:bg-gray-600 hover:text-white transition-colors duration-300"
               >
                 Next
                 <ChevronRight className="h-5 w-5 ml-2" />
@@ -970,7 +970,7 @@ const CheckoutPage = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isProcessing}
-                className="inline-flex items-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-6 py-3 border-2 border-gray-600 rounded-lg text-gray-900 hover:bg-gray-600 hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
                   <Loader2 className="h-5 w-5 animate-spin" />

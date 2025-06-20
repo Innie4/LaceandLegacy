@@ -80,7 +80,7 @@ const WishlistPage = () => {
       
       if (navigator.share) {
         await navigator.share({
-          title: 'My ThrowbackTee Wishlist',
+          title: 'My Lace & Legacy Wishlist',
           text: 'Check out my vintage fashion wishlist!',
           url: shareUrl,
         });
@@ -94,15 +94,15 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-amber-900 font-mono">
+          <h1 className="text-2xl font-bold text-black font-mono">
             My Wishlist
           </h1>
           <button
             onClick={handleShareWishlist}
-            className="inline-flex items-center px-4 py-2 border-2 border-amber-300 rounded-lg text-amber-900 hover:border-amber-600 transition-colors duration-300"
+            className="inline-flex items-center px-4 py-2 border-2 border-gray-300 rounded-lg text-black hover:border-black transition-colors duration-300"
           >
             <Share2 className="h-4 w-4 mr-2" />
             Share Wishlist
@@ -111,16 +111,16 @@ const WishlistPage = () => {
 
         {wishlistItems.length === 0 ? (
           <div className="text-center py-12">
-            <Heart className="h-12 w-12 text-amber-300 mx-auto mb-4" />
-            <h2 className="text-xl font-medium text-amber-900 mb-2">
+            <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl font-medium text-black mb-2">
               Your wishlist is empty
             </h2>
-            <p className="text-amber-600 mb-6">
+            <p className="text-gray-700 mb-6">
               Start adding items to your wishlist to save them for later
             </p>
             <a
               href="/products"
-              className="inline-flex items-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+              className="inline-flex items-center px-6 py-3 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
             >
               Browse Products
               <ExternalLink className="h-4 w-4 ml-2" />
@@ -135,7 +135,7 @@ const WishlistPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-white rounded-xl border-2 border-amber-200 overflow-hidden"
+                className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden"
               >
                 <div className="relative">
                   <div className="aspect-w-1 aspect-h-1">
@@ -145,11 +145,11 @@ const WishlistPage = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="absolute inset-0 bg-amber-900/10 mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-black/10 mix-blend-multiply" />
                   <button
                     onClick={() => handleRemoveFromWishlist(item.id)}
                     disabled={removingItemId === item.id}
-                    className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full text-amber-600 hover:text-amber-700 transition-colors duration-300"
+                    className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-700 hover:text-black transition-colors duration-300"
                   >
                     {removingItemId === item.id ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -162,24 +162,24 @@ const WishlistPage = () => {
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="text-lg font-medium text-amber-900 font-mono">
+                      <h3 className="text-lg font-medium text-black font-mono">
                         {item.name}
                       </h3>
-                      <p className="text-sm text-amber-600">{item.category}</p>
+                      <p className="text-sm text-gray-700">{item.category}</p>
                     </div>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-black">
                       {item.era}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between mt-4">
-                    <p className="text-xl font-bold text-amber-900 font-mono">
+                    <p className="text-xl font-bold text-black font-mono">
                       ${item.price.toFixed(2)}
                     </p>
                     <button
                       onClick={() => handleAddToCart(item.id)}
                       disabled={isLoading}
-                      className="inline-flex items-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                      className="inline-flex items-center px-4 py-2 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
                     >
                       {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -192,7 +192,7 @@ const WishlistPage = () => {
                     </button>
                   </div>
 
-                  <p className="text-sm text-amber-600 mt-2">
+                  <p className="text-sm text-gray-700 mt-2">
                     Added on {new Date(item.addedDate).toLocaleDateString()}
                   </p>
                 </div>

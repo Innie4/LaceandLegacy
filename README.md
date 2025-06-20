@@ -1,6 +1,6 @@
-# ThrowbackTee - Your Vintage T-Shirt Destination
+# Lace & Legacy - Your Vintage T-Shirt Destination
 
-Welcome to ThrowbackTee, your one-stop shop for authentic vintage and retro t-shirts! This guide will help you understand how to use our website and make the most of your shopping experience.
+Welcome to Lace & Legacy, your one-stop shop for authentic vintage and retro t-shirts! This guide will help you understand how to use our website and make the most of your shopping experience.
 
 ## 🛍️ Shopping Features
 
@@ -99,7 +99,7 @@ Browse our collection of:
 ## 📱 Contact & Support
 
 Need help? We're here for you:
-- Email: support@throwbacktee.com
+- Email: support@lace-legacy.com
 - Phone: (555) 123-4567
 - Live Chat: Available during business hours
 
@@ -127,7 +127,7 @@ Your security is our priority:
 
 ---
 
-Thank you for choosing ThrowbackTee! We're committed to providing you with the best vintage t-shirt shopping experience. Happy shopping! 🎉
+Thank you for choosing Lace & Legacy! We're committed to providing you with the best vintage t-shirt shopping experience. Happy shopping! 🎉
 
 ## Features
 
@@ -161,8 +161,8 @@ Thank you for choosing ThrowbackTee! We're committed to providing you with the b
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/throwbacktee.git
-cd throwbacktee
+git clone https://github.com/yourusername/lace-legacy.git
+cd lace-legacy
 ```
 
 2. Install dependencies:
