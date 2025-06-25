@@ -1,81 +1,155 @@
-import axios from 'axios';
-import API_BASE_URL from '../config/api';
+// Centralized Fetch API Service for Lace & Legacy
+const API_BASE_URL = 'https://likwapuecommerce.fly.dev';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' }
-});
-
-// Add auth token to requests
-api.interceptors.request.use(config => {
+function getAuthHeaders() {
   const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+  return token
+    ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+    : { 'Content-Type': 'application/json' };
+}
 
-// Handle response errors
-api.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response?.status === 401) {
-      // Clear user data and redirect to login
+function handleResponse(response) {
+  if (!response.ok) {
+    if (response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
-    return Promise.reject(error);
+    return response.json().then(err => { throw err; });
   }
-);
+  return response.json();
+}
 
 // Auth services
 export const authService = {
-  register: (data) => api.post('/api/auth/register', data),
-  login: (data) => api.post('/api/auth/login', data),
-  logout: () => api.post('/api/auth/logout'),
+  register: (data) =>
+    fetch(`${API_BASE_URL}/api/registration/register`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  login: (data) =>
+    fetch(`${API_BASE_URL}/api/registration/login`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  logout: () =>
+    fetch(`${API_BASE_URL}/api/registration/logout`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
 };
 
 // User services
 export const userService = {
-  getProfile: () => api.get('/api/user/profile'),
-  updateProfile: (data) => api.put('/api/user/profile', data),
-  updatePreferences: (data) => api.put('/api/user/preferences', data),
+  getProfile: () =>
+    fetch(`${API_BASE_URL}/api/user/profile`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  updateProfile: (data) =>
+    fetch(`${API_BASE_URL}/api/user/profile`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  updatePreferences: (data) =>
+    fetch(`${API_BASE_URL}/api/user/preferences`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
 
 // Product services
 export const productService = {
-  getProducts: (params) => api.get('/api/products', { params }),
-  getProduct: (id) => api.get(`/api/products/${id}`),
-  searchProducts: (query) => api.get('/api/products/search', { params: { q: query } }),
-  getCategories: () => api.get('/api/products/categories'),
-  getFilters: () => api.get('/api/products/filters'),
+  getProducts: (params) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetch(`${API_BASE_URL}/api/products${query}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse);
+  },
+  getProduct: (id) =>
+    fetch(`${API_BASE_URL}/api/products/${id}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  searchProducts: (query) =>
+    fetch(`${API_BASE_URL}/api/products/search?q=${encodeURIComponent(query)}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  getCategories: () =>
+    fetch(`${API_BASE_URL}/api/products/categories`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  getFilters: () =>
+    fetch(`${API_BASE_URL}/api/products/filters`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
 };
 
 // Review services
 export const reviewService = {
-  getReviews: (productId) => api.get(`/api/products/${productId}/reviews`),
-  addReview: (productId, data) => api.post(`/api/products/${productId}/reviews`, data),
+  getReviews: (productId) =>
+    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  addReview: (productId, data) =>
+    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
 
 // Cart services
 export const cartService = {
-  getCart: () => api.get('/api/cart'),
-  addToCart: (data) => api.post('/api/cart/add', data),
-  updateCart: (data) => api.put('/api/cart/update', data),
-  removeFromCart: (itemId) => api.delete(`/api/cart/remove/${itemId}`),
+  getCart: () =>
+    fetch(`${API_BASE_URL}/api/cart`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  addToCart: (data) =>
+    fetch(`${API_BASE_URL}/api/cart/add`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  updateCart: (data) =>
+    fetch(`${API_BASE_URL}/api/cart/update`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  removeFromCart: (itemId) =>
+    fetch(`${API_BASE_URL}/api/cart/remove/${itemId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
 };
 
 // Order services
 export const orderService = {
-  getOrders: () => api.get('/api/orders'),
-  getOrder: (id) => api.get(`/api/orders/${id}`),
-  createOrder: (data) => api.post('/api/orders', data),
+  getOrders: () =>
+    fetch(`${API_BASE_URL}/api/orders`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  getOrder: (id) =>
+    fetch(`${API_BASE_URL}/api/orders/${id}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  createOrder: (data) =>
+    fetch(`${API_BASE_URL}/api/orders`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
 
 // Contact services
 export const contactService = {
-  sendMessage: (data) => api.post('/api/contact', data),
+  sendMessage: (data) =>
+    fetch(`${API_BASE_URL}/api/contact`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
-
-export default api; 

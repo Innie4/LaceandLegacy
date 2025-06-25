@@ -1,4 +1,3 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   ApiResponse,
   Product,
@@ -13,194 +12,126 @@ import {
   ApiError
 } from '../types/api';
 
-const api: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const API_BASE_URL = 'https://likwapuecommerce.fly.dev';
 
-// Request interceptor
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+function getAuthHeaders(): HeadersInit {
+  const token = localStorage.getItem('token');
+  return token
+    ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+    : { 'Content-Type': 'application/json' };
+}
+
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+    const err = await response.json();
+    throw err;
   }
-);
+  return response.json();
+}
 
-// Response interceptor
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response) {
-      const apiError: ApiError = {
-        status: error.response.status,
-        message: error.response.data?.message || 'An error occurred',
-        code: error.response.data?.code
-      };
-
-      switch (error.response.status) {
-        case 401:
-          localStorage.removeItem('token');
-          window.location.href = '/login';
-          break;
-        case 403:
-          // Handle forbidden access
-          break;
-        case 404:
-          // Handle not found
-          break;
-        case 500:
-          // Handle server error
-          break;
-        default:
-          break;
-      }
-      return Promise.reject(apiError);
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Mock data
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Vintage 70s Rock Tee',
-    description: 'Authentic 1970s rock band t-shirt with original print',
-    price: 49.99,
-    originalPrice: 69.99,
-    image: '/images/products/70s-rock-tee.jpg',
-    category: '70s',
-    sizes: ['S', 'M', 'L', 'XL'],
-    colors: ['Black', 'White'],
-    isNew: true,
-    condition: 'Excellent',
-    decade: '70s'
-  },
-  // Add more mock products...
-];
-
-const mockOrders: Order[] = [
-  {
-    id: '1',
-    date: '2024-03-15',
-    status: 'delivered',
-    items: [
-      {
-        id: '1',
-        name: 'Vintage 70s Rock Tee',
-        quantity: 1,
-        price: 49.99,
-      },
-    ],
-    total: 49.99,
-  },
-  // Add more mock orders...
-];
-
-// API methods
 export const apiService = {
   // Product methods
-  getProducts: async (params: ProductFilters = {}): Promise<ApiResponse<Product[]>> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { data: mockProducts, success: true };
+  getProducts: (params: ProductFilters = {}): Promise<ApiResponse<Product[]>> => {
+    const query = Object.keys(params).length ? '?' + new URLSearchParams(params as any).toString() : '';
+    return fetch(`${API_BASE_URL}/api/products${query}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse);
   },
-
-  getProduct: async (id: string): Promise<ApiResponse<Product>> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const product = mockProducts.find((p) => p.id === id);
-    if (!product) throw new Error('Product not found');
-    return { data: product, success: true };
-  },
-
+  getProduct: (id: string): Promise<ApiResponse<Product>> =>
+    fetch(`${API_BASE_URL}/api/products/${id}`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
   // Order methods
-  getOrders: async (): Promise<ApiResponse<Order[]>> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { data: mockOrders, success: true };
-  },
-
-  createOrder: async (orderData: CreateOrderRequest): Promise<ApiResponse<Order>> => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const newOrder: Order = {
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      status: 'pending',
-      items: orderData.items,
-      total: orderData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-    };
-    return { data: newOrder, success: true };
-  },
-
+  getOrders: (): Promise<ApiResponse<Order[]>> =>
+    fetch(`${API_BASE_URL}/api/orders`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  createOrder: (orderData: CreateOrderRequest): Promise<ApiResponse<Order>> =>
+    fetch(`${API_BASE_URL}/api/orders`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(orderData),
+    }).then(handleResponse),
   // Auth methods
-  login: async (credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    if (credentials.email === 'test@example.com' && credentials.password === 'password') {
-      return {
-        data: {
-          token: 'mock-jwt-token',
-          user: {
-            id: '1',
-            email: credentials.email,
-            name: 'Test User',
-          },
-        },
-        success: true
-      };
-    }
-    throw new Error('Invalid credentials');
-  },
-
-  register: async (userData: RegisterRequest): Promise<ApiResponse<AuthResponse>> => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return {
-      data: {
-        token: 'mock-jwt-token',
-        user: {
-          id: Date.now().toString(),
-          ...userData,
-        },
-      },
-      success: true
-    };
-  },
-
+  login: (credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> =>
+    fetch(`${API_BASE_URL}/api/registration/login`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(credentials),
+    }).then(handleResponse),
+  register: (userData: RegisterRequest): Promise<ApiResponse<AuthResponse>> =>
+    fetch(`${API_BASE_URL}/api/registration/register`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(userData),
+    }).then(handleResponse),
   // User methods
-  updateProfile: async (userData: Partial<User>): Promise<ApiResponse<User>> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { 
-      data: { 
-        id: '1', 
-        email: 'test@example.com', 
-        name: 'Test User',
-        ...userData 
-      }, 
-      success: true 
-    };
-  },
-
+  updateProfile: (userData: Partial<User>): Promise<ApiResponse<User>> =>
+    fetch(`${API_BASE_URL}/api/user/profile`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(userData),
+    }).then(handleResponse),
   // Wishlist methods
-  getWishlist: async (): Promise<ApiResponse<Product[]>> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: mockProducts.slice(0, 3), success: true };
-  },
-
-  addToWishlist: async (productId: string): Promise<ApiResponse<{ success: boolean }>> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: { success: true }, success: true };
-  },
-
-  removeFromWishlist: async (productId: string): Promise<ApiResponse<{ success: boolean }>> => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return { data: { success: true }, success: true };
-  },
+  getWishlist: (): Promise<ApiResponse<Product[]>> =>
+    fetch(`${API_BASE_URL}/api/wishlist`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  addToWishlist: (productId: string): Promise<ApiResponse<{ success: boolean }>> =>
+    fetch(`${API_BASE_URL}/api/wishlist/add`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ productId }),
+    }).then(handleResponse),
+  removeFromWishlist: (productId: string): Promise<ApiResponse<{ success: boolean }>> =>
+    fetch(`${API_BASE_URL}/api/wishlist/remove`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ productId }),
+    }).then(handleResponse),
+  // Cart methods
+  getCart: (): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/cart`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  addToCart: (data: any): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/cart/add`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  updateCart: (data: any): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/cart/update`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  removeFromCart: (itemId: string): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/cart/remove/${itemId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  // Review methods
+  getReviews: (productId: string): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+      headers: getAuthHeaders(),
+    }).then(handleResponse),
+  addReview: (productId: string, data: any): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  // Contact
+  sendMessage: (data: any): Promise<ApiResponse<any>> =>
+    fetch(`${API_BASE_URL}/api/contact`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
-
-export default api; 
