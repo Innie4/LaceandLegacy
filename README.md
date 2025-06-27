@@ -1,6 +1,6 @@
-# Lace & Legacy - Your Vintage T-Shirt Destination
+# Lace and Legacy - Your Vintage T-Shirt Destination
 
-Welcome to Lace & Legacy, your one-stop shop for authentic vintage and retro t-shirts! This guide will help you understand how to use our website and make the most of your shopping experience.
+Welcome to Lace and Legacy, your one-stop shop for authentic vintage and retro t-shirts! This guide will help you understand how to use our website and make the most of your shopping experience.
 
 ## 🛍️ Shopping Features
 
@@ -127,7 +127,7 @@ Your security is our priority:
 
 ---
 
-Thank you for choosing Lace & Legacy! We're committed to providing you with the best vintage t-shirt shopping experience. Happy shopping! 🎉
+Thank you for choosing Lace and Legacy! We're committed to providing you with the best vintage t-shirt shopping experience. Happy shopping! 🎉
 
 ## Features
 

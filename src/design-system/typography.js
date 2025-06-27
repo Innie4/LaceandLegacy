@@ -1,4 +1,4 @@
-// Typography system for Lace & Legacy
+// Typography system for Lace and Legacy
 export const fontFamilies = {
   // Serif fonts for headers
   serif: ['"Playfair Display"', 'Georgia', 'serif'],

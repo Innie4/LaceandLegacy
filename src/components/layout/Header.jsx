@@ -28,8 +28,8 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-3xl font-bold text-amber-900 font-mono tracking-wider">
-              LACE and LEGACY
+            <span className="text-3xl font-bold text-black font-mono tracking-wider">
+              Lace and Legacy
             </span>
           </Link>
 

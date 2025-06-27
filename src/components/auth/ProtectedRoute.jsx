@@ -17,11 +17,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    addToast({
-      message: 'Please log in to access this page',
-      type: 'warning',
-      duration: 3000
-    });
+    addToast('Please log in to access this page', 'warning', 3000);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

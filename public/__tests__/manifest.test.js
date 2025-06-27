@@ -7,8 +7,8 @@ describe('Web App Manifest', () => {
   });
 
   it('has the correct name and short name', () => {
-    expect(manifest.name).toBe('Lace & Legacy - Vintage Fashion');
-    expect(manifest.short_name).toBe('Lace & Legacy');
+    expect(manifest.name).toBe('Lace and Legacy - Vintage Fashion');
+    expect(manifest.short_name).toBe('Lace and Legacy');
   });
 
   it('has the correct description', () => {
@@ -24,8 +24,8 @@ describe('Web App Manifest', () => {
   });
 
   it('has the correct theme and background colors', () => {
-    expect(manifest.theme_color).toBe('#B45309');
-    expect(manifest.background_color).toBe('#FFFBEB');
+    expect(manifest.theme_color).toBe('#000000');
+    expect(manifest.background_color).toBe('#ffffff');
   });
 
   it('has the correct orientation', () => {

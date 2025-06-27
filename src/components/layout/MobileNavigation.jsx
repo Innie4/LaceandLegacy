@@ -62,7 +62,7 @@ const MobileNavigation = () => {
             <Menu className="h-6 w-6" />
           </button>
           <Link to="/" className="text-2xl font-bold text-black font-mono">
-            Lace & Legacy
+            Lace and Legacy
           </Link>
           <Link
             to="/cart"
@@ -101,11 +101,11 @@ const MobileNavigation = () => {
                     to="/"
                     className="text-2xl font-bold text-black font-mono"
                   >
-                    Lace & Legacy
+                    Lace and Legacy
                   </Link>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 text-black hover:text-gray-700 transition-colors"
+                    className="p-2 text-black hover:text-black transition-colors"
                     aria-label="Close menu"
                   >
                     <X className="h-6 w-6" />

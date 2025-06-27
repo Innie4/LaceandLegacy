@@ -82,8 +82,8 @@ const OrderConfirmationPage = () => {
   const handleShare = async () => {
     try {
       const shareData = {
-        title: 'My Lace & Legacy Order',
-        text: `I just ordered some vintage fashion from Lace & Legacy! Order #${orderData.orderNumber}`,
+        title: 'My Lace and Legacy Order',
+        text: `I just ordered some vintage fashion from Lace and Legacy! Order #${orderData.orderNumber}`,
         url: window.location.href,
       };
 

@@ -10,22 +10,22 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link to="/" className="text-3xl font-bold text-black font-mono tracking-wider">
-              Lace & Legacy
+              Lace and Legacy
             </Link>
             <p className="text-black">
               Your destination for authentic vintage t-shirts from the most iconic moments in history.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-700 hover:text-black transition-colors duration-300">
+              <a href="#" className="text-black hover:text-black transition-colors duration-300">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-700 hover:text-black transition-colors duration-300">
+              <a href="#" className="text-black hover:text-black transition-colors duration-300">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-700 hover:text-black transition-colors duration-300">
+              <a href="#" className="text-black hover:text-black transition-colors duration-300">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="mailto:contact@lace-legacy.com" className="text-gray-700 hover:text-black transition-colors duration-300">
+              <a href="mailto:contact@lace-legacy.com" className="text-black hover:text-black transition-colors duration-300">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
@@ -36,22 +36,22 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-black mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/catalog" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/catalog" className="text-black hover:text-black transition-colors duration-300">
                   Shop All
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/about" className="text-black hover:text-black transition-colors duration-300">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/contact" className="text-black hover:text-black transition-colors duration-300">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/faq" className="text-black hover:text-black transition-colors duration-300">
                   FAQ
                 </Link>
               </li>
@@ -63,22 +63,22 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-black mb-4">Customer Service</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/shipping" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/shipping" className="text-black hover:text-black transition-colors duration-300">
                   Shipping & Returns
                 </Link>
               </li>
               <li>
-                <Link to="/size-guide" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/size-guide" className="text-black hover:text-black transition-colors duration-300">
                   Size Guide
                 </Link>
               </li>
               <li>
-                <Link to="/care-guide" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/care-guide" className="text-black hover:text-black transition-colors duration-300">
                   Care Guide
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-black hover:text-gray-700 transition-colors duration-300">
+                <Link to="/privacy" className="text-black hover:text-black transition-colors duration-300">
                   Privacy Policy
                 </Link>
               </li>
@@ -108,9 +108,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
+        <div className="mt-12 pt-8 border-t border-black">
           <p className="text-center text-black">
-            © {new Date().getFullYear()} Lace & Legacy. All rights reserved.
+            © {new Date().getFullYear()} Lace and Legacy. All rights reserved.
           </p>
         </div>
       </div>

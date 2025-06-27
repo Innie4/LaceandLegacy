@@ -16,12 +16,12 @@ describe('Offline Page', () => {
   it('has the correct meta tags', () => {
     expect(offlinePage).toContain('<meta charset="utf-8">');
     expect(offlinePage).toContain('<meta name="viewport" content="width=device-width, initial-scale=1">');
-    expect(offlinePage).toContain('<meta name="theme-color" content="#B45309">');
+    expect(offlinePage).toContain('<meta name="theme-color" content="#000000">');
     expect(offlinePage).toContain('<meta name="description" content="You are currently offline. Browse your saved items and previously loaded content.">');
   });
 
   it('has the correct title', () => {
-    expect(offlinePage).toContain('<title>Offline - Lace & Legacy</title>');
+    expect(offlinePage).toContain('<title>Offline - Lace and Legacy</title>');
   });
 
   it('has the correct stylesheet link', () => {
@@ -131,7 +131,7 @@ describe('Offline Page', () => {
   });
 
   it('has the correct theme color', () => {
-    expect(offlinePage).toContain('content="#B45309"');
+    expect(offlinePage).toContain('content="#000000"');
   });
 
   it('has the correct language attribute', () => {

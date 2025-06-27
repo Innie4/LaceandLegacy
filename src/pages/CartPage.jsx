@@ -12,6 +12,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import Button from '../components/buttons/Button';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([
@@ -290,6 +291,12 @@ const CartPage = () => {
                     className="block w-full text-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
                   >
                     Proceed to Checkout
+                  </Link>
+                </div>
+
+                <div className="flex flex-col gap-4 mt-8">
+                  <Link to="/payment">
+                    <Button className="w-full">Proceed to Payment</Button>
                   </Link>
                 </div>
               </div>

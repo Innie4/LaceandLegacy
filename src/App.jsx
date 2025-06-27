@@ -37,6 +37,7 @@ import AboutPage from './pages/AboutPage';
 import BlogPage from './pages/BlogPage';
 import CareersPage from './pages/CareersPage';
 import CustomerReviews from './pages/CustomerReviews';
+import PaymentPage from './pages/PaymentPage';
 
 // Global Styles
 import './styles/global.css';
@@ -70,62 +71,14 @@ const AnimatedRoutes = () => {
         <Route path="/return-policy" element={<ReturnPolicyPage />} />
         
         {/* Protected Routes */}
-        <Route
-          path="/checkout"
-          element={
-            <ProtectedRoute>
-              <CheckoutPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/order-confirmation"
-          element={
-            <ProtectedRoute>
-              <OrderConfirmationPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/order-tracking"
-          element={
-            <ProtectedRoute>
-              <OrderTrackingPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/account"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/account/personal-info"
-          element={
-            <ProtectedRoute>
-              <PersonalInfoPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/account/wishlist"
-          element={
-            <ProtectedRoute>
-              <WishlistPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/account/orders"
-          element={
-            <ProtectedRoute>
-              <OrderHistoryPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+        <Route path="/order-tracking" element={<OrderTrackingPage />} />
+        <Route path="/account" element={<DashboardPage />} />
+        <Route path="/account/personal-info" element={<PersonalInfoPage />} />
+        <Route path="/account/wishlist" element={<WishlistPage />} />
+        <Route path="/account/orders" element={<OrderHistoryPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFoundPage />} />

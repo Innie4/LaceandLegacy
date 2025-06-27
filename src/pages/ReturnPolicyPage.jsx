@@ -249,35 +249,35 @@ const ReturnPolicyPage = () => {
         </div>
 
         {/* Need Help */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8">
+        <div className="bg-white rounded-xl border-2 border-black p-8">
           <h2 className="text-2xl font-bold text-black font-mono mb-6">
             Need Help with Your Return?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-start gap-4 p-4 border-2 border-gray-100 rounded-lg">
-              <Mail className="h-6 w-6 text-gray-700 mt-1" />
+            <div className="flex items-start gap-4 p-4 border-2 border-black rounded-lg">
+              <Mail className="h-6 w-6 text-black mt-1" />
               <div>
                 <h3 className="text-lg font-medium text-black mb-1">
                   Email Support
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-black">
                   returns@lace-legacy.com
                 </p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-black mt-1">
                   Response within 24 hours
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-4 border-2 border-gray-100 rounded-lg">
-              <Phone className="h-6 w-6 text-gray-700 mt-1" />
+            <div className="flex items-start gap-4 p-4 border-2 border-black rounded-lg">
+              <Phone className="h-6 w-6 text-black mt-1" />
               <div>
                 <h3 className="text-lg font-medium text-black mb-1">
                   Call Support
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-black">
                   +1 (555) 123-4567
                 </p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-black mt-1">
                   Mon-Fri, 9am-6pm EST
                 </p>
               </div>

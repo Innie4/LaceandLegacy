@@ -80,7 +80,7 @@ const WishlistPage = () => {
       
       if (navigator.share) {
         await navigator.share({
-          title: 'My Lace & Legacy Wishlist',
+          title: 'My Lace and Legacy Wishlist',
           text: 'Check out my vintage fashion wishlist!',
           url: shareUrl,
         });

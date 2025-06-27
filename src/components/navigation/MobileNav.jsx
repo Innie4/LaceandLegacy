@@ -101,13 +101,13 @@ const MobileNav = () => {
             onTouchMove={handleTouchMove}
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between p-4 border-b-2 border-gray-200">
+            <div className="flex items-center justify-between p-4 border-b-2 border-black">
               <Link to="/" className="text-2xl font-bold text-black font-mono">
-                Lace & Legacy
+                Lace and Legacy
               </Link>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-black hover:text-gray-700 transition-colors duration-300"
+                className="p-2 text-black hover:text-black transition-colors duration-300"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
