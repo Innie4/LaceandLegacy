@@ -85,10 +85,28 @@ const RegisterPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // TODO: Implement registration logic
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-      toast.success('Account created successfully!');
-      navigate('/verify-email');
+      const response = await fetch('https://likwapuecommerce.fly.dev/api/registration/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          country: selectedCountry
+        })
+      });
+
+      const message = await response.text();
+
+      if (response.ok) {
+        toast.success(message || 'Account created successfully!');
+        navigate('/verify-email');
+      } else {
+        toast.error(message || 'Registration failed. Please try again.');
+      }
     } catch (error) {
       toast.error('Registration failed. Please try again.');
     } finally {
