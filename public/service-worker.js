@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   '/favicon.ico',
   '/logo192.png',
   '/logo512.png',
+  '/logo.png',
 ];
 
 // Install event - cache static assets

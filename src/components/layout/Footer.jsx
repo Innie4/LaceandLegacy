@@ -9,8 +9,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <Link to="/" className="text-3xl font-bold text-black font-mono tracking-wider">
-              Lace and Legacy
+            <Link to="/" className="flex items-center space-x-2 text-3xl font-bold text-black font-mono tracking-wider">
+              <img src="/logo.jpg" alt="Logo" className="h-10 w-10 object-contain" />
+              <span>Lace and Legacy</span>
             </Link>
             <p className="text-black">
               Your destination for authentic vintage t-shirts from the most iconic moments in history.

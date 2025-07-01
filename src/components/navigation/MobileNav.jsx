@@ -102,8 +102,9 @@ const MobileNav = () => {
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between p-4 border-b-2 border-black">
-              <Link to="/" className="text-2xl font-bold text-black font-mono">
-                Lace and Legacy
+              <Link to="/" className="flex items-center space-x-2 text-2xl font-bold text-black font-mono">
+                <img src="/logo.jpg" alt="Logo" className="h-8 w-8 object-contain" />
+                <span>Lace and Legacy</span>
               </Link>
               <button
                 onClick={() => setIsOpen(false)}

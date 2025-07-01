@@ -28,6 +28,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
+            <img src="/logo.jpg" alt="Logo" className="h-10 w-10 object-contain" />
             <span className="text-3xl font-bold text-black font-mono tracking-wider">
               Lace and Legacy
             </span>

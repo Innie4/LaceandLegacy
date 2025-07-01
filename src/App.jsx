@@ -38,6 +38,9 @@ import BlogPage from './pages/BlogPage';
 import CareersPage from './pages/CareersPage';
 import CustomerReviews from './pages/CustomerReviews';
 import PaymentPage from './pages/PaymentPage';
+import ShippingReturnsPage from './pages/ShippingReturnsPage';
+import CareGuidePage from './pages/CareGuidePage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 // Global Styles
 import './styles/global.css';
@@ -79,6 +82,11 @@ const AnimatedRoutes = () => {
         <Route path="/account/wishlist" element={<WishlistPage />} />
         <Route path="/account/orders" element={<OrderHistoryPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        
+        {/* New Routes */}
+        <Route path="/shipping" element={<ShippingReturnsPage />} />
+        <Route path="/care-guide" element={<CareGuidePage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFoundPage />} />
