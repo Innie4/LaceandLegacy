@@ -70,6 +70,11 @@
   --transition-fast: 150ms;
   --transition-normal: 300ms;
   --transition-slow: 500ms;
+  
+  --font-family-sans: 'Times New Roman', Times, serif;
+  --font-family-serif: 'Times New Roman', Times, serif;
+  --font-family-mono: 'Times New Roman', Times, serif;
+  --font-family-display: 'Times New Roman', Times, serif;
 }
 
 /* Base styles */

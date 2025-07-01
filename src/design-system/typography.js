@@ -1,13 +1,13 @@
 // Typography system for Lace and Legacy
 export const fontFamilies = {
   // Serif fonts for headers
-  serif: ['"Playfair Display"', 'Georgia', 'serif'],
+  serif: ['"Times New Roman"', 'Times', 'serif'],
   // Vintage display fonts
-  display: ['"Abril Fatface"', '"Playfair Display"', 'serif'],
+  display: ['"Times New Roman"', 'Times', 'serif'],
   // Sans-serif for body text
-  sans: ['"Work Sans"', 'Helvetica', 'Arial', 'sans-serif'],
+  sans: ['"Times New Roman"', 'Times', 'serif'],
   // Typewriter style for special elements
-  mono: ['"Special Elite"', '"Courier New"', 'monospace'],
+  mono: ['"Times New Roman"', 'Times', 'serif'],
 };
 
 export const fontSizes = {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ShoppingCart, ChevronDown } from 'lucide-react';
+import { Menu, X, ShoppingCart, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -35,19 +35,16 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link to="/catalog" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/catalog" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Shop
             </Link>
-            <Link to="/catalog" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
-              Collections
-            </Link>
-            <Link to="/reviews" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/reviews" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Reviews
             </Link>
-            <Link to="/about" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/about" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Our Story
             </Link>
-            <Link to="/contact" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/contact" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Contact
             </Link>
           </nav>
@@ -71,7 +68,8 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors duration-300 font-mono"
+                  className="bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300"
+                  style={{ fontFamily: 'Times New Roman, Times, serif' }}
                 >
                   Register
                 </Link>
@@ -87,9 +85,10 @@ const Header = () => {
             </Link>
             <button
               onClick={toggleTheme}
-              className="hidden lg:block bg-transparent border-2 border-amber-300 rounded-lg px-3 py-1 text-amber-900 font-mono focus:outline-none focus:border-amber-600"
+              className="hidden lg:block bg-transparent border-2 border-gray-300 rounded-lg px-3 py-1 text-black focus:outline-none focus:border-black"
+              aria-label="Toggle theme"
             >
-              {theme === 'light' ? 'Dark' : 'Light'}
+              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -105,19 +104,16 @@ const Header = () => {
       {isMenuOpen && (
         <div className="lg:hidden bg-white border-t-2 border-amber-200">
           <div className="px-4 py-3 space-y-3">
-            <Link to="/catalog" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/catalog" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Shop
             </Link>
-            <Link to="/catalog" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
-              Collections
-            </Link>
-            <Link to="/reviews" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/reviews" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Reviews
             </Link>
-            <Link to="/about" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/about" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Our Story
             </Link>
-            <Link to="/contact" className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono">
+            <Link to="/contact" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Contact
             </Link>
             {user ? (
@@ -137,7 +133,8 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="block bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors duration-300 font-mono text-center"
+                  className="block bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 text-center"
+                  style={{ fontFamily: 'Times New Roman, Times, serif' }}
                 >
                   Register
                 </Link>
@@ -145,9 +142,10 @@ const Header = () => {
             )}
             <button
               onClick={toggleTheme}
-              className="w-full bg-transparent border-2 border-amber-300 rounded-lg px-3 py-2 text-amber-900 font-mono focus:outline-none focus:border-amber-600"
+              className="w-full bg-transparent border-2 border-gray-300 rounded-lg px-3 py-2 text-black focus:outline-none focus:border-black mt-2"
+              aria-label="Toggle theme"
             >
-              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              {theme === 'light' ? <Moon className="w-5 h-5 mx-auto" /> : <Sun className="w-5 h-5 mx-auto" />}
             </button>
           </div>
         </div>

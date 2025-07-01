@@ -8,10 +8,11 @@ describe('Global Styles', () => {
 
   it('has the correct CSS variables', () => {
     expect(globalStyles).toContain(':root {');
-    expect(globalStyles).toContain('--color-primary: #000000');
-    expect(globalStyles).toContain('--color-secondary: #FFFFFF');
-    expect(globalStyles).toContain('--color-background: #FFFFFF');
-    expect(globalStyles).toContain('--color-text: #000000');
+    expect(globalStyles).toContain('--color-primary: var(--color-black)');
+    expect(globalStyles).toContain('--color-secondary: var(--color-white)');
+    expect(globalStyles).toContain('--color-background: var(--color-white)');
+    expect(globalStyles).toContain('--color-text: var(--color-black)');
+    expect(globalStyles).toContain('--color-shadow: rgba(0, 0, 0, 0.1)');
     expect(globalStyles).toContain('--color-accent: #333333');
     expect(globalStyles).toContain('background-color: #F5F5F5');
   });

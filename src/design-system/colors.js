@@ -1,73 +1,26 @@
-// Vintage color palette
+// Black & White Brand Color System
 export const colors = {
-  // Earth tones
-  brown: {
-    light: '#F5F5F5',
-    medium: '#CCCCCC',
-    dark: '#333333',
-    darkest: '#000000'
-  },
-  cream: {
-    lightest: '#FFFFFF',
-    light: '#F5F5F5',
-    medium: '#CCCCCC',
-    dark: '#333333'
-  },
-  orange: {
-    light: '#F5F5F5',
-    medium: '#CCCCCC',
-    dark: '#333333',
-    burnt: '#000000'
-  },
-  blue: {
-    faded: '#CCCCCC',
-    muted: '#999999',
-    vintage: '#333333',
-    dark: '#000000'
-  },
-  yellow: {
-    pale: '#F5F5F5',
-    soft: '#CCCCCC',
-    golden: '#333333',
-    amber: '#000000'
-  },
-  // Utility colors
   black: '#000000',
-  white: '#FFFFFF',
+  white: '#ffffff',
   gray: {
-    lightest: '#F5F5F5',
-    light: '#CCCCCC',
-    medium: '#999999',
-    dark: '#333333',
-    darkest: '#000000'
+    50: '#fafafa',
+    100: '#f5f5f5',
+    200: '#e5e5e5',
+    300: '#d4d4d4',
+    400: '#a3a3a3',
+    500: '#737373',
+    600: '#404040',
+    700: '#2d2d2d',
+    800: '#1f1f1f',
+    900: '#111111',
   },
-  // Accent colors
-  accent: {
-    red: '#333333',
-    green: '#333333',
-    teal: '#333333'
-  }
+  primary: '#000000',
+  secondary: '#ffffff',
 };
 
 // Function to generate CSS variables
 export const generateColorVariables = () => {
-  let cssVars = ':root {\n';
-  
-  // Process nested color objects
-  const processColorObject = (obj, prefix = '') => {
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'string') {
-        cssVars += `  --color-${prefix}${key}: ${value};\n`;
-      } else {
-        processColorObject(value, `${prefix}${key}-`);
-      }
-    }
-  };
-  
-  processColorObject(colors);
-  cssVars += '}\n';
-  
-  return cssVars;
+  return `:root {\n  --color-black: #000000;\n  --color-white: #ffffff;\n  --color-gray-900: #111111;\n  --color-gray-800: #1f1f1f;\n  --color-gray-700: #2d2d2d;\n  --color-gray-600: #404040;\n  --color-gray-500: #737373;\n  --color-gray-400: #a3a3a3;\n  --color-gray-300: #d4d4d4;\n  --color-gray-200: #e5e5e5;\n  --color-gray-100: #f5f5f5;\n  --color-gray-50: #fafafa;\n  --color-primary: var(--color-black);\n  --color-secondary: var(--color-white);\n  --color-background: var(--color-white);\n  --color-surface: var(--color-white);\n  --color-text: var(--color-black);\n  --color-text-secondary: var(--color-gray-600);\n  --color-border: var(--color-gray-300);\n  --color-shadow: rgba(0, 0, 0, 0.1);\n}\n`;
 };
 
 export default colors;

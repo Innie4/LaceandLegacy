@@ -54,6 +54,10 @@ self.addEventListener('activate', (event) => {
 // Fetch event - handle requests
 self.addEventListener('fetch', (event) => {
   const request = event.request;
+  // Skip non-HTTP(s) requests
+  if (!request.url.startsWith('http')) {
+    return;
+  }
   const url = new URL(request.url);
 
   // Skip non-GET requests

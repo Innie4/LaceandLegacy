@@ -55,27 +55,27 @@ const HomePage = () => {
 
   const heroSlides = [
     {
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=600&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
       title: "70s Rock Collection",
       description: "Iconic band tees from the golden era of rock"
     },
     {
-      image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=1200&h=600&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
       title: "80s Sports Classics",
       description: "Vintage sports memorabilia and team wear"
     },
     {
-      image: "https://images.unsplash.com/photo-1583743814966-8936f37f630e?w=1200&h=600&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
       title: "90s Grunge Revival",
       description: "Authentic grunge style from the Seattle scene"
     }
   ];
 
   const categories = [
-    { name: "Band Tees", image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&auto=format", decade: "70s" },
-    { name: "Sports Classics", image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=400&fit=crop&auto=format", decade: "80s" },
-    { name: "Surf & Skate", image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5b?w=400&h=400&fit=crop&auto=format", decade: "80s" },
-    { name: "Movie Classics", image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=400&fit=crop&auto=format", decade: "70s" }
+    { name: "Band Tees", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "70s" },
+    { name: "Sports Classics", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "80s" },
+    { name: "Surf & Skate", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "80s" },
+    { name: "Movie Classics", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "70s" }
   ];
 
   return (
@@ -255,12 +255,12 @@ const HomePage = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <img
-                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&auto=format"
+                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
                 alt="Vintage Collection"
                 className="rounded-lg filter sepia-[0.2]"
               />
               <img
-                src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=400&fit=crop&auto=format"
+                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
                 alt="Store Front"
                 className="rounded-lg filter sepia-[0.2] mt-8"
               />

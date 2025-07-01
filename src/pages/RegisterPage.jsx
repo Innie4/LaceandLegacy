@@ -54,7 +54,13 @@ const PasswordStrengthIndicator = ({ password }) => {
 
   const strength = getStrength(password);
   const strengthText = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
-  const strengthColors = ['red', 'orange', 'yellow', 'lime', 'green'];
+  const strengthColors = [
+    'gray-400', // Very Weak
+    'gray-500', // Weak
+    'gray-600', // Medium
+    'gray-700', // Strong
+    'gray-900', // Very Strong
+  ];
 
   return (
     <div className="mt-2">
@@ -62,13 +68,11 @@ const PasswordStrengthIndicator = ({ password }) => {
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
-            className={`flex-1 rounded-full ${
-              i < strength ? `bg-${strengthColors[i]}-500` : 'bg-gray-100'
-            }`}
+            className={`flex-1 rounded-full ${i < strength ? `bg-${strengthColors[i]}` : 'bg-gray-100'}`}
           />
         ))}
       </div>
-      <p className={`mt-1 text-sm font-mono text-${strengthColors[strength - 1]}-600`}>
+      <p className={`mt-1 text-sm font-mono text-${strengthColors[strength - 1]}`}>
         {strengthText[strength - 1]}
       </p>
     </div>
@@ -127,7 +131,7 @@ const RegisterPage = () => {
           <h2 className="text-3xl font-bold text-black font-mono">
             Create Account
           </h2>
-          <p className="mt-2 text-gray-700">
+          <p className="mt-2 text-gray-600">
             Join our community of vintage fashion enthusiasts
           </p>
         </div>
@@ -149,12 +153,12 @@ const RegisterPage = () => {
                     required: 'First name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.firstName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
+                    errors.firstName ? 'border-gray-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                   placeholder="John"
                 />
                 {errors.firstName && (
-                  <p className="mt-1 text-sm text-red-600 font-mono">
+                  <p className="mt-1 text-sm text-gray-600 font-mono">
                     {errors.firstName.message}
                   </p>
                 )}
@@ -176,12 +180,12 @@ const RegisterPage = () => {
                     required: 'Last name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.lastName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
+                    errors.lastName ? 'border-gray-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
-                  <p className="mt-1 text-sm text-red-600 font-mono">
+                  <p className="mt-1 text-sm text-gray-600 font-mono">
                     {errors.lastName.message}
                   </p>
                 )}
@@ -208,12 +212,12 @@ const RegisterPage = () => {
                   }
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
+                  errors.email ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="you@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.email.message}
                 </p>
               )}
@@ -232,7 +236,7 @@ const RegisterPage = () => {
                 id="country"
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600 text-gray-900"
+                className="block w-full pl-10 pr-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600 text-black"
               >
                 {countries.map((country) => (
                   <option key={country.code} value={country.code}>
@@ -262,12 +266,12 @@ const RegisterPage = () => {
                   }
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
+                  errors.password ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="••••••••"
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.password.message}
                 </p>
               )}
@@ -291,12 +295,12 @@ const RegisterPage = () => {
                   validate: value => value === password || 'Passwords do not match'
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-gray-600 text-gray-900 placeholder-gray-400`}
+                  errors.confirmPassword ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="••••••••"
               />
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -310,21 +314,21 @@ const RegisterPage = () => {
               {...register('terms', {
                 required: 'You must accept the terms and conditions'
               })}
-              className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+              className="h-4 w-4 text-gray-600 focus:ring-gray-600 border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+            <label htmlFor="terms" className="ml-2 block text-sm text-gray-600">
               I agree to the{' '}
-              <Link to="/terms" className="text-gray-600 hover:text-gray-800">
+              <Link to="/terms" className="text-gray-600 hover:text-black">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link to="/privacy" className="text-gray-600 hover:text-gray-800">
+              <Link to="/privacy" className="text-gray-600 hover:text-black">
                 Privacy Policy
               </Link>
             </label>
           </div>
           {errors.terms && (
-            <p className="text-sm text-red-600 font-mono">
+            <p className="text-sm text-gray-600 font-mono">
               {errors.terms.message}
             </p>
           )}
@@ -333,7 +337,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -349,7 +353,7 @@ const RegisterPage = () => {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="font-medium text-gray-600 hover:text-gray-800 transition-colors duration-300"
+              className="font-medium text-gray-600 hover:text-black transition-colors duration-300"
             >
               Sign in
             </Link>
