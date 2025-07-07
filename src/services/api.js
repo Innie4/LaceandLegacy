@@ -1,5 +1,5 @@
 // Centralized Fetch API Service for Lace and Legacy
-const API_BASE_URL = 'https://likwapuecommerce.fly.dev';
+const API_BASE_URL = 'https://likwapu-ecommerce-backend.fly.dev/';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');

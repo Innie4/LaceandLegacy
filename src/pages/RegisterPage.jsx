@@ -89,7 +89,7 @@ const RegisterPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://likwapuecommerce.fly.dev/api/registration/register', {
+      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/registration/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
