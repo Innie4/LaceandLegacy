@@ -99,15 +99,17 @@ const RegisterPage = () => {
           lastName: data.lastName,
           email: data.email,
           password: data.password,
+          repeatedPassword: data.confirmPassword,  // <-- THIS LINE ADDED!
           country: selectedCountry
         })
       });
 
       const message = await response.text();
+      console.log('API message:', message, 'Response:', response);
 
       if (response.ok) {
         toast.success(message || 'Account created successfully!');
-        navigate('/verify-email');
+        setTimeout(() => navigate('/verify-email'), 1000);
       } else {
         toast.error(message || 'Registration failed. Please try again.');
       }
