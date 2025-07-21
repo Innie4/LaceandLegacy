@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Loader2, Github, Twitter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useUser } from '../contexts/UserContext';
 
 const pageVariants = {
   initial: {
@@ -32,16 +33,15 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { login } = useUser();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // TODO: Implement actual login logic
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-      toast.success('Welcome back!');
-      navigate('/');
+      await login({ email: data.email, password: data.password });
+      navigate('/account/personal-info');
     } catch (error) {
-      toast.error('Invalid credentials');
+      // Error toast is handled in context
     } finally {
       setIsLoading(false);
     }
