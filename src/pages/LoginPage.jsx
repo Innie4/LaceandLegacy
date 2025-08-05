@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -18,7 +18,7 @@ const pageVariants = {
       duration: 0.5,
       ease: 'easeOut'
     }
-  },
+  }, 
   exit: {
     opacity: 0,
     y: -20,
@@ -52,8 +52,7 @@ const LoginPage = () => {
     // TODO: Implement social login
   };
 
-  return (
-    <motion.div
+  return (    <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
