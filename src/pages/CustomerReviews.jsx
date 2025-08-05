@@ -45,7 +45,7 @@ const CustomerReviews = () => {
             Customer Reviews
           </motion.h1>
           <p className="text-center text-gray-200 font-mono max-w-2xl mx-auto">
-            Discover what our community says about their vintage fashion journey with LIKWAPU
+            Discover what our community says about their vintage fashion journey with Lace and Legacy
           </p>
         </div>
       </div>

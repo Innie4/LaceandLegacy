@@ -337,26 +337,6 @@ const ContactPage = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div className="bg-white rounded-xl border-2 border-amber-200 p-8">
-              <h2 className="text-2xl font-bold text-amber-900 font-mono mb-6">
-                Quick Links
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                {faqCategories.map((category, index) => (
-                  <a
-                    key={index}
-                    href={category.link}
-                    className="flex items-center justify-between p-4 border-2 border-amber-100 rounded-lg hover:border-amber-300 transition-colors duration-300"
-                  >
-                    <span className="text-amber-900 font-medium">
-                      {category.title}
-                    </span>
-                    <ChevronRight className="h-5 w-5 text-amber-600" />
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 

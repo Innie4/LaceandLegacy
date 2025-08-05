@@ -36,11 +36,12 @@ const ReviewStats = ({ reviews }) => {
 
         {/* Rating Distribution */}
         <div>
-          <h2 className="text-2xl font-serif text-amber-900 mb-4">Rating Distribution</h2>
+          <h2 className="text-2xl font-serif text-amber-900 mb-2">Rating Distribution</h2>
+          <p className="text-sm text-amber-600 mb-4 font-mono">Number of reviews for each star rating</p>
           <div className="space-y-2">
             {[5, 4, 3, 2, 1].map((rating) => (
               <div key={rating} className="flex items-center">
-                <span className="w-8 text-amber-900 font-mono">{rating}</span>
+                <span className="w-8 text-amber-900 font-mono">{rating}★</span>
                 <div className="flex-1 h-4 bg-amber-100 rounded-full mx-2">
                   <div
                     className="h-full bg-amber-500 rounded-full"
@@ -49,8 +50,8 @@ const ReviewStats = ({ reviews }) => {
                     }}
                   />
                 </div>
-                <span className="w-12 text-amber-600 font-mono text-sm">
-                  {ratingDistribution[rating] || 0}
+                <span className="w-16 text-amber-600 font-mono text-sm">
+                  {ratingDistribution[rating] || 0} reviews
                 </span>
               </div>
             ))}

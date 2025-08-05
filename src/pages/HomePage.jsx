@@ -96,7 +96,7 @@ const HomePage = () => {
               className="w-full h-full object-cover filter sepia-[0.2]"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white">
+              <div className="text-center text-black">
                 <h1 className="text-5xl md:text-7xl font-bold mb-4 font-mono tracking-wider">
                   {typewriterText}
                 </h1>
@@ -136,13 +136,13 @@ const HomePage = () => {
                   className="w-full aspect-square object-cover filter sepia-[0.1] group-hover:sepia-[0.3] transition-all duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                  <span className="text-gray-700 text-sm font-mono mb-2">
+                  <span className="text-gray-300 text-sm font-mono mb-2">
                     {category.decade}
                   </span>
                   <h3 className="text-2xl font-bold text-white mb-2">
                     {category.name}
                   </h3>
-                  <div className="flex items-center text-gray-700">
+                  <div className="flex items-center text-white">
                     <span className="text-sm font-mono">Explore Collection</span>
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
                   </div>

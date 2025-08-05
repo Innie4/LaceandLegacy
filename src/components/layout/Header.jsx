@@ -36,6 +36,9 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
+            <Link to="/" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+              Home
+            </Link>
             <Link to="/catalog" className="text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Shop
             </Link>
@@ -85,13 +88,6 @@ const Header = () => {
               )}
             </Link>
             <button
-              onClick={toggleTheme}
-              className="hidden lg:block bg-transparent border-2 border-gray-300 rounded-lg px-3 py-1 text-black focus:outline-none focus:border-black"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
-            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden text-amber-900 hover:text-amber-600 transition-colors duration-300"
             >
@@ -105,6 +101,9 @@ const Header = () => {
       {isMenuOpen && (
         <div className="lg:hidden bg-white border-t-2 border-amber-200">
           <div className="px-4 py-3 space-y-3">
+            <Link to="/" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+              Home
+            </Link>
             <Link to="/catalog" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
               Shop
             </Link>
@@ -127,27 +126,20 @@ const Header = () => {
             ) : (
               <>
                 <Link
-                  to="/login"
-                  className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
-                >
-                  Login
-                </Link>
-                <Link
                   to="/register"
                   className="block bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 text-center"
                   style={{ fontFamily: 'Times New Roman, Times, serif' }}
                 >
                   Register
                 </Link>
+                <Link
+                  to="/login"
+                  className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
+                >
+                  Login
+                </Link>
               </>
             )}
-            <button
-              onClick={toggleTheme}
-              className="w-full bg-transparent border-2 border-gray-300 rounded-lg px-3 py-2 text-black focus:outline-none focus:border-black mt-2"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? <Moon className="w-5 h-5 mx-auto" /> : <Sun className="w-5 h-5 mx-auto" />}
-            </button>
           </div>
         </div>
       )}

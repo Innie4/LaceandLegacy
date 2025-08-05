@@ -22,7 +22,10 @@ const itemsPerPageOptions = [12, 24, 36, 48];
 
 const ProductCatalogPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [viewMode, setViewMode] = useState('grid');
+  // Default to list view on mobile, grid on desktop
+  const [viewMode, setViewMode] = useState(() => {
+    return window.innerWidth < 768 ? 'list' : 'grid';
+  });
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -172,7 +175,7 @@ const ProductCatalogPage = () => {
                 <Sliders className="h-5 w-5 mr-2" />
                 Filters
               </button>
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-lg ${
@@ -196,14 +199,14 @@ const ProductCatalogPage = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="relative flex-1 sm:flex-none">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-64 pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
+                  className="w-full sm:w-64 pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400"
                 />
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-300" />
               </div>
@@ -211,7 +214,7 @@ const ProductCatalogPage = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
+                className="w-full sm:w-auto px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
               >
                 {sortOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -288,7 +291,7 @@ const ProductCatalogPage = () => {
                   viewMode === 'grid'
                     ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                     : 'grid-cols-1'
-                }`}
+                } md:${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}
               >
                 {paginatedProducts.map(product => (
                   <ProductCard
