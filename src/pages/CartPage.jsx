@@ -173,7 +173,7 @@ const CartPage = () => {
                       </div>
 
                       <div className="mt-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                           <button
                             onClick={() => handleQuantityChange(item.id, -1)}
                             className="p-1 rounded-lg border-2 border-amber-300 text-amber-600 hover:border-amber-600 transition-colors duration-300"
@@ -191,17 +191,21 @@ const CartPage = () => {
                           </button>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-bold text-amber-900 font-mono">
+                          <p className="text-lg font-bold text-amber-900 font-mono mb-2">
                             ${(item.price * item.quantity).toFixed(2)}
                           </p>
-                          <button
-                            onClick={() => handleSaveForLater(item.id)}
-                            className="mt-1 text-sm text-amber-600 hover:text-amber-700 transition-colors duration-300"
-                          >
-                            <Heart className="h-4 w-4 inline mr-1" />
-                            Save for later
-                          </button>
                         </div>
+                      </div>
+                      
+                      {/* Save for Later Button - Separate Row for Better Spacing */}
+                      <div className="mt-3 flex justify-end">
+                        <button
+                          onClick={() => handleSaveForLater(item.id)}
+                          className="inline-flex items-center text-sm text-amber-600 hover:text-amber-700 transition-colors duration-300 px-2 py-1 rounded-lg hover:bg-amber-50"
+                        >
+                          <Heart className="h-4 w-4 mr-2" />
+                          Save for later
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -350,4 +354,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage; 
+export default CartPage;

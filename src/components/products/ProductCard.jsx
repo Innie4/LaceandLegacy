@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Eye, ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../../contexts/CartContext';
 
 const ProductCard = ({ product, viewMode, onQuickView }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addToCart } = useCart();
 
   const handleWishlist = (e) => {
     e.preventDefault();
@@ -20,8 +22,21 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-    // TODO: Implement add to cart logic
-    toast.success('Added to cart');
+    e.stopPropagation();
+    
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: Array.isArray(product.sizes) ? product.sizes[0] : product.size,
+      color: product.color || 'Default',
+      era: product.era,
+      quantity: 1
+    };
+    
+    addToCart(cartItem);
+    toast.success(`${product.name} added to cart!`);
   };
 
   const cardVariants = {
@@ -87,9 +102,14 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                   />
                 </button>
                 <button
-                  onClick={onQuickView}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onQuickView();
+                  }}
                   className="p-2 rounded-lg text-amber-600 hover:text-amber-700 transition-colors duration-300"
                   title="Quick View Product Details"
+                  aria-label="Quick View Product Details"
                 >
                   <Eye className="h-5 w-5" />
                 </button>
@@ -185,9 +205,14 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
               />
             </button>
             <button
-              onClick={onQuickView}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onQuickView();
+              }}
               className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:text-amber-700 transition-colors duration-300"
               title="Quick View Product Details"
+              aria-label="Quick View Product Details"
             >
               <Eye className="h-5 w-5" />
             </button>
@@ -257,4 +282,4 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
   );
 };
 
-export default ProductCard; 
+export default ProductCard;

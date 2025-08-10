@@ -162,9 +162,9 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-20 lg:pt-0">
       {/* Header */}
-      <div className="bg-white border-b-2 border-gray-200">
+      <div className="bg-white border-b-2 border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -261,8 +261,8 @@ const ProductCatalogPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
+        <div className="flex gap-8 relative">
           {/* Filter Sidebar */}
           <AnimatePresence>
             {showFilters && (
@@ -270,21 +270,34 @@ const ProductCatalogPage = () => {
                 initial={{ x: -300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -300, opacity: 0 }}
-                className="w-64 flex-shrink-0"
+                className="w-64 flex-shrink-0 hidden lg:block"
               >
-                <FilterSidebar
-                  isOpen={showFilters}
-                  onClose={() => setShowFilters(false)}
-                  filters={filters}
-                  onFilterChange={handleFilterChange}
-                  onClearFilters={clearFilters}
-                />
+                <div className="sticky top-24">
+                  <FilterSidebar
+                    isOpen={showFilters}
+                    onClose={() => setShowFilters(false)}
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
+                    onClearFilters={clearFilters}
+                  />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
 
+          {/* Mobile Filter Sidebar */}
+          {showFilters && (
+            <FilterSidebar
+              isOpen={showFilters}
+              onClose={() => setShowFilters(false)}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onClearFilters={clearFilters}
+            />
+          )}
+
           {/* Product Grid/List */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {paginatedProducts.length > 0 ? (
               <div
                 className={`grid gap-6 ${
@@ -381,4 +394,4 @@ const ProductCatalogPage = () => {
   );
 };
 
-export default ProductCatalogPage; 
+export default ProductCatalogPage;

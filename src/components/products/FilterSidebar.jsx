@@ -64,12 +64,12 @@ const FilterSidebar = ({
 
   return (
     <>
-      {/* Overlay */}
+      {/* Mobile Overlay - Only show on mobile */}
       <motion.div
         initial="initial"
         animate={isOpen ? 'animate' : 'exit'}
         variants={overlayVariants}
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
         onClick={onClose}
       />
 
@@ -78,17 +78,17 @@ const FilterSidebar = ({
         initial="initial"
         animate={isOpen ? 'animate' : 'exit'}
         variants={sidebarVariants}
-        className="fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-xl z-50 overflow-y-auto"
+        className="fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-xl z-50 overflow-y-auto lg:relative lg:top-auto lg:left-auto lg:h-auto lg:w-auto lg:max-w-none lg:shadow-none lg:z-auto"
       >
-        <div className="p-6">
+        <div className="p-6 lg:p-4 lg:border-2 lg:border-gray-200 lg:rounded-xl lg:bg-white">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-amber-900 font-mono">
+            <h2 className="text-2xl font-bold text-amber-900 font-mono lg:text-xl">
               Filters
             </h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg text-amber-600 hover:text-amber-700 transition-colors duration-300"
+              className="p-2 rounded-lg text-amber-600 hover:text-amber-700 transition-colors duration-300 lg:hidden"
             >
               <X className="h-6 w-6" />
             </button>
@@ -142,4 +142,4 @@ const FilterSidebar = ({
   );
 };
 
-export default FilterSidebar; 
+export default FilterSidebar;

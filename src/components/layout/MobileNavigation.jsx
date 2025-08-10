@@ -126,13 +126,13 @@ const MobileNavigation = () => {
                   <div className="space-y-2 mb-4">
                     <Link
                       to="/login"
-                      className="block w-full p-3 text-center text-black hover:bg-gray-100 rounded-lg transition-colors font-medium"
+                      className="block w-full p-3 text-center border-2 border-gray-600 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-bold"
                     >
-                      Login
+                      Log In
                     </Link>
                     <Link
                       to="/register"
-                      className="block w-full p-3 text-center bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors font-medium"
+                      className="block w-full p-3 text-center bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors font-bold"
                     >
                       Register
                     </Link>
@@ -205,4 +205,4 @@ const MobileNavigation = () => {
   );
 };
 
-export default MobileNavigation; 
+export default MobileNavigation;
