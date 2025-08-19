@@ -162,9 +162,9 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20 lg:pt-0">
+    <div className="min-h-screen bg-white pt-20 lg:pt-24">
       {/* Header */}
-      <div className="bg-white border-b-2 border-gray-200 sticky top-0 z-30">
+      <div className="bg-white border-b-2 border-gray-200 sticky top-20 lg:top-24 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -261,7 +261,7 @@ const ProductCatalogPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
         <div className="flex gap-8 relative">
           {/* Filter Sidebar */}
           <AnimatePresence>
@@ -272,7 +272,7 @@ const ProductCatalogPage = () => {
                 exit={{ x: -300, opacity: 0 }}
                 className="w-64 flex-shrink-0 hidden lg:block"
               >
-                <div className="sticky top-24">
+                <div className="sticky top-32 lg:top-36">
                   <FilterSidebar
                     isOpen={showFilters}
                     onClose={() => setShowFilters(false)}

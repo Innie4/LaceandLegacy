@@ -125,16 +125,16 @@ const MobileNavigation = () => {
                 ) : (
                   <div className="space-y-2 mb-4">
                     <Link
-                      to="/login"
-                      className="block w-full p-3 text-center border-2 border-gray-600 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-bold"
-                    >
-                      Log In
-                    </Link>
-                    <Link
                       to="/register"
                       className="block w-full p-3 text-center bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors font-bold"
                     >
                       Register
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="block w-full p-3 text-center border-2 border-gray-600 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-bold"
+                    >
+                      Log In
                     </Link>
                   </div>
                 )}
