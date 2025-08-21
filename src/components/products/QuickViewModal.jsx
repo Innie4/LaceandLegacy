@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, ShoppingCart, Minus, Plus } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../../contexts/CartContext';
 
 const QuickViewModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleWishlist = () => {
@@ -22,8 +24,20 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
       toast.error('Please select a size');
       return;
     }
-    // TODO: Implement add to cart logic
-    toast.success('Added to cart');
+    
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: selectedSize,
+      color: product.color || 'Default',
+      era: product.era,
+      quantity: quantity
+    };
+    
+    addToCart(cartItem);
+    toast.success(`${product.name} added to cart!`);
     onClose();
   };
 
@@ -172,4 +186,4 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
   );
 };
 
-export default QuickViewModal; 
+export default QuickViewModal;

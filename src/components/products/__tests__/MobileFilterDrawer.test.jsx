@@ -281,7 +281,7 @@ describe('MobileFilterDrawer', () => {
     
     // Check if the drawer has the correct classes
     const drawer = screen.getByRole('dialog');
-    expect(drawer).toHaveClass('fixed', 'inset-x-0', 'bottom-0', 'z-50');
+    expect(drawer).toHaveClass('fixed', 'inset-x-0', 'bottom-0', 'z-40');
   });
 
   it('applies the correct styles to section headers', () => {
@@ -351,4 +351,4 @@ describe('MobileFilterDrawer', () => {
       expect(button).toHaveClass('px-4', 'py-2', 'rounded-md', 'font-medium');
     });
   });
-}); 
+});

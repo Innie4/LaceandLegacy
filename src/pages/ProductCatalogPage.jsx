@@ -240,7 +240,7 @@ const ProductCatalogPage = () => {
                       {item}
                       <button
                         onClick={() => handleFilterChange(key, value.filter(v => v !== item))}
-                        className="ml-2 hover:text-black"
+                        className="ml-2 hover:bg-black hover:text-white rounded transition-colors duration-300"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -251,7 +251,7 @@ const ProductCatalogPage = () => {
               })}
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-200 text-black hover:bg-gray-300"
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-200 text-black hover:bg-black hover:text-white transition-colors duration-300"
               >
                 Clear All
               </button>

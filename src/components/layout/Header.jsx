@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingCart, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -11,6 +11,7 @@ const Header = () => {
   const { itemCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +20,11 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
 
   return (
     <header className={`absolute w-full z-[1] transition-all duration-300 ${
@@ -66,7 +72,7 @@ const Header = () => {
               <div className="hidden lg:flex items-center space-x-4">
                 <Link
                   to="/login"
-                  className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
+                  className="bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 font-mono"
                 >
                   Login
                 </Link>
@@ -97,49 +103,77 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t-2 border-amber-200">
-          <div className="px-4 py-3 space-y-3">
-            <Link to="/" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
-              Home
-            </Link>
-            <Link to="/catalog" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
-              Shop
-            </Link>
-            <Link to="/reviews" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
-              Reviews
-            </Link>
-            <Link to="/about" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
-              Our Story
-            </Link>
-            <Link to="/contact" className="block text-black hover:text-gray-700 transition-colors duration-300" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
-              Contact
-            </Link>
-            {user ? (
-              <Link
-                to="/account"
-                className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
+        <div className="lg:hidden fixed inset-0 z-50">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+            onClick={() => setIsMenuOpen(false)}
+          />
+          
+          {/* Slide Menu */}
+          <div className="absolute right-0 top-0 h-full w-[45%] bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+            {/* Menu Header */}
+            <div className="flex items-center justify-between p-4 border-b border-amber-200">
+              <span className="text-lg font-bold text-amber-900 font-mono">Menu</span>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="text-amber-900 hover:text-amber-600 transition-colors duration-300"
               >
-                My Account
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            {/* Menu Content */}
+            <div className="px-4 py-6 space-y-4">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-black hover:text-gray-700 transition-colors duration-300 py-2 border-b border-gray-100" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+                Home
               </Link>
-            ) : (
-              <>
-                <Link
-                  to="/register"
-                  className="block bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 text-center"
-                  style={{ fontFamily: 'Times New Roman, Times, serif' }}
-                >
-                  Register
-                </Link>
-                <Link
-                  to="/login"
-                  className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
-                >
-                  Login
-                </Link>
-              </>
-            )}
+              <Link to="/catalog" onClick={() => setIsMenuOpen(false)} className="block text-black hover:text-gray-700 transition-colors duration-300 py-2 border-b border-gray-100" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+                Shop
+              </Link>
+              <Link to="/reviews" onClick={() => setIsMenuOpen(false)} className="block text-black hover:text-gray-700 transition-colors duration-300 py-2 border-b border-gray-100" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+                Reviews
+              </Link>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block text-black hover:text-gray-700 transition-colors duration-300 py-2 border-b border-gray-100" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+                Our Story
+              </Link>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block text-black hover:text-gray-700 transition-colors duration-300 py-2 border-b border-gray-100" style={{ fontFamily: 'Times New Roman, Times, serif' }}>
+                Contact
+              </Link>
+              
+              {/* Authentication Links */}
+              <div className="pt-4 mt-4 border-t border-amber-200">
+                {user ? (
+                  <Link
+                    to="/account"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono py-2"
+                  >
+                    My Account
+                  </Link>
+                ) : (
+                  <div className="space-y-3">
+                    <Link
+                      to="/register"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 text-center"
+                      style={{ fontFamily: 'Times New Roman, Times, serif' }}
+                    >
+                      Register
+                    </Link>
+                    <Link
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block bg-white text-black px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors duration-300 font-mono text-center"
+                    >
+                      Login
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -147,4 +181,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

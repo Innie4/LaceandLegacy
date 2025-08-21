@@ -117,6 +117,7 @@ const MobileNavigation = () => {
                 {user ? (
                   <Link
                     to="/account"
+                    onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 p-3 text-black hover:bg-gray-100 rounded-lg transition-colors mb-4"
                   >
                     <User className="h-6 w-6" />
@@ -126,12 +127,14 @@ const MobileNavigation = () => {
                   <div className="space-y-2 mb-4">
                     <Link
                       to="/register"
+                      onClick={() => setIsOpen(false)}
                       className="block w-full p-3 text-center bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors font-bold"
                     >
                       Register
                     </Link>
                     <Link
                       to="/login"
+                      onClick={() => setIsOpen(false)}
                       className="block w-full p-3 text-center border-2 border-gray-600 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-bold"
                     >
                       Log In
@@ -145,6 +148,7 @@ const MobileNavigation = () => {
                     <Link
                       key={item.path}
                       to={item.path}
+                      onClick={() => setIsOpen(false)}
                       className="flex items-center gap-3 p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                     >
                       {item.icon}
@@ -164,6 +168,7 @@ const MobileNavigation = () => {
                         <Link
                           key={category}
                           to={`/category/${category.toLowerCase()}`}
+                          onClick={() => setIsOpen(false)}
                           className="block p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                         >
                           {category}
@@ -189,6 +194,7 @@ const MobileNavigation = () => {
                       <Link
                         key={item}
                         to={`/support/${item.toLowerCase().replace(' ', '-')}`}
+                        onClick={() => setIsOpen(false)}
                         className="block p-3 text-black hover:bg-gray-100 rounded-lg transition-colors"
                       >
                         {item}

@@ -91,8 +91,8 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                   onClick={handleWishlist}
                   className={`p-2 rounded-lg transition-colors duration-300 ${
                     isWishlisted
-                      ? 'text-red-500 hover:text-red-600'
-                      : 'text-amber-600 hover:text-amber-700'
+                      ? 'text-red-500 hover:bg-black hover:text-white'
+                      : 'text-amber-600 hover:bg-black hover:text-white'
                   }`}
                 >
                   <Heart
@@ -107,7 +107,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                     e.stopPropagation();
                     onQuickView();
                   }}
-                  className="p-2 rounded-lg text-amber-600 hover:text-amber-700 transition-colors duration-300"
+                  className="p-2 rounded-lg text-amber-600 hover:bg-black hover:text-white transition-colors duration-300"
                   title="Quick View Product Details"
                   aria-label="Quick View Product Details"
                 >
@@ -148,7 +148,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
             <div className="mt-4">
               <button
                 onClick={handleAddToCart}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300"
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Add to Cart
@@ -194,8 +194,8 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
               onClick={handleWishlist}
               className={`p-2 rounded-lg bg-white/90 backdrop-blur-sm transition-colors duration-300 ${
                 isWishlisted
-                  ? 'text-red-500 hover:text-red-600'
-                  : 'text-amber-600 hover:text-amber-700'
+                  ? 'text-red-500 hover:bg-black hover:text-white'
+                  : 'text-amber-600 hover:bg-black hover:text-white'
               }`}
             >
               <Heart
@@ -210,7 +210,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                 e.stopPropagation();
                 onQuickView();
               }}
-              className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:text-amber-700 transition-colors duration-300"
+              className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:bg-black hover:text-white transition-colors duration-300"
               title="Quick View Product Details"
               aria-label="Quick View Product Details"
             >
@@ -272,7 +272,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
       >
         <button
           onClick={handleAddToCart}
-          className="w-full inline-flex items-center justify-center px-3 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300 text-sm"
+          className="w-full inline-flex items-center justify-center px-3 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300 text-sm"
         >
           <ShoppingCart className="h-4 w-4 mr-2" />
           Add to Cart

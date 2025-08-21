@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Heart, ShoppingCart, Eye } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
+import QuickViewModal from '../products/QuickViewModal';
 
 const ProductGrid = ({ products }) => {
   const { addToCart } = useCart();
   const { addToast } = useToast();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -38,6 +41,17 @@ const ProductGrid = ({ products }) => {
               <div className="flex space-x-3">
                 <button className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300">
                   <Heart className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedProduct(product);
+                  }}
+                  className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300"
+                  title="Quick View Product Details"
+                >
+                  <Eye className="h-5 w-5" />
                 </button>
                 <button
                   onClick={(e) => {
@@ -83,8 +97,18 @@ const ProductGrid = ({ products }) => {
           </div>
         </div>
       ))}
+
+      {/* Quick View Modal */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <QuickViewModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-export default ProductGrid; 
+export default ProductGrid;

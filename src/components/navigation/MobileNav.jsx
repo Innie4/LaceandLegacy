@@ -122,6 +122,7 @@ const MobileNav = () => {
                   <li key={item.name}>
                     <Link
                       to={item.path}
+                      onClick={() => setIsOpen(false)}
                       className="flex items-center justify-between p-3 text-amber-900 hover:bg-amber-50 rounded-lg transition-colors duration-300"
                     >
                       <span className="font-mono">{item.name}</span>
@@ -137,6 +138,7 @@ const MobileNav = () => {
               <div className="grid grid-cols-3 gap-4">
                 <Link
                   to="/account"
+                  onClick={() => setIsOpen(false)}
                   className="flex flex-col items-center p-3 text-amber-900 hover:bg-amber-50 rounded-lg transition-colors duration-300"
                 >
                   <User className="w-6 h-6 mb-1" />
@@ -144,6 +146,7 @@ const MobileNav = () => {
                 </Link>
                 <Link
                   to="/wishlist"
+                  onClick={() => setIsOpen(false)}
                   className="flex flex-col items-center p-3 text-amber-900 hover:bg-amber-50 rounded-lg transition-colors duration-300"
                 >
                   <Heart className="w-6 h-6 mb-1" />
@@ -151,6 +154,7 @@ const MobileNav = () => {
                 </Link>
                 <Link
                   to="/cart"
+                  onClick={() => setIsOpen(false)}
                   className="flex flex-col items-center p-3 text-amber-900 hover:bg-amber-50 rounded-lg transition-colors duration-300"
                 >
                   <ShoppingCart className="w-6 h-6 mb-1" />
@@ -165,4 +169,4 @@ const MobileNav = () => {
   );
 };
 
-export default MobileNav; 
+export default MobileNav;

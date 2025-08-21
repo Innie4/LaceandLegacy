@@ -18,6 +18,7 @@ import SizeGuideModal from '../components/products/SizeGuideModal';
 import ReviewSection from '../components/products/ReviewSection';
 import ProductRecommendations from '../components/products/ProductRecommendations';
 import { mockProducts } from '../data/mockProducts';
+import { useCart } from '../contexts/CartContext';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -29,6 +30,7 @@ const ProductDetailPage = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     // Simulate API call
@@ -63,8 +65,20 @@ const ProductDetailPage = () => {
       toast.error('Please select a size');
       return;
     }
-    // TODO: Implement add to cart logic
-    toast.success('Added to cart');
+    
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      size: selectedSize,
+      color: selectedColor,
+      era: product.era,
+      quantity: quantity
+    };
+    
+    addToCart(cartItem);
+    toast.success(`${product.name} added to cart!`);
   };
 
   const handleWishlist = () => {
@@ -255,8 +269,8 @@ const ProductDetailPage = () => {
                 onClick={handleWishlist}
                 className={`p-3 rounded-lg border-2 transition-colors duration-300 ${
                   isWishlisted
-                    ? 'border-red-300 text-red-500 hover:text-red-600'
-                    : 'border-gray-300 text-gray-700 hover:text-black'
+                    ? 'border-red-300 text-red-500 hover:bg-black hover:text-white'
+                    : 'border-gray-300 text-gray-700 hover:bg-black hover:text-white'
                 }`}
               >
                 <Heart
@@ -267,7 +281,7 @@ const ProductDetailPage = () => {
               </button>
               <button
                 onClick={handleShare}
-                className="p-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:text-black transition-colors duration-300"
+                className="p-3 rounded-lg border-2 border-gray-300 text-gray-700 hover:bg-black hover:text-white transition-colors duration-300"
               >
                 <Share2 className="h-5 w-5" />
               </button>
@@ -327,4 +341,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage; 
+export default ProductDetailPage;

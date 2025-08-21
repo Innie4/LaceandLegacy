@@ -166,7 +166,7 @@ const CartPage = () => {
                         <button
                           onClick={() => handleRemoveItem(item.id)}
                           disabled={removingItemId === item.id}
-                          className="p-2 text-amber-600 hover:text-amber-700 transition-colors duration-300"
+                          className="p-2 text-amber-600 hover:bg-black hover:text-white rounded transition-colors duration-300"
                         >
                           <Trash2 className="h-5 w-5" />
                         </button>

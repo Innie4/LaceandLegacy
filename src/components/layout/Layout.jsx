@@ -23,10 +23,10 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className={`min-h-screen bg-${theme === 'light' ? 'amber-50' : 'gray-900'}`}>
+    <div className={`min-h-screen flex flex-col bg-${theme === 'light' ? 'amber-50' : 'gray-900'}`}>
       <Header />
       <motion.main
-        className="pt-20"
+        className="flex-1 pt-20"
         initial="initial"
         animate="in"
         exit="out"
@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
         transition={pageTransition}
       >
         <Breadcrumbs />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
           {children}
         </div>
       </motion.main>
@@ -43,4 +43,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout; 
+export default Layout;

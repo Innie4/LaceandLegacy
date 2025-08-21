@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const buttonVariants = {
-  primary: 'bg-brown-medium hover:bg-brown-dark text-white',
-  secondary: 'bg-cream-medium hover:bg-cream-dark text-brown-darkest border border-brown-medium',
-  vintage: 'vintage-border bg-cream-light hover:bg-cream-medium text-brown-darkest font-mono tracking-vintage',
-  link: 'text-blue-vintage hover:text-blue-dark underline',
+  primary: 'bg-brown-medium hover:bg-black hover:text-white text-white',
+  secondary: 'bg-cream-medium hover:bg-black hover:text-white text-brown-darkest border border-brown-medium',
+  vintage: 'vintage-border bg-cream-light hover:bg-black hover:text-white text-brown-darkest font-mono tracking-vintage',
+  link: 'text-blue-vintage hover:bg-black hover:text-white underline px-2 py-1 rounded',
 };
 
 const sizeVariants = {

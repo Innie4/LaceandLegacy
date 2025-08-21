@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { mockProducts } from '../data/mockProducts';
+import ProductCard from '../components/products/ProductCard';
+import QuickViewModal from '../components/products/QuickViewModal';
 
 const HomePage = () => {
   const [typewriterText, setTypewriterText] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Typewriter effect for hero section
   useEffect(() => {
@@ -161,61 +165,12 @@ const HomePage = () => {
             </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {mockProducts.slice(0, 4).map((product) => (
-              <div
+              <ProductCard
                 key={product.id}
-                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-200"
-              >
-                <div className="relative overflow-hidden aspect-square">
-                  {product.isNew && (
-                    <div className="absolute top-3 left-3 z-10 bg-black text-white px-3 py-1 rounded-full text-sm font-bold">
-                      NEW IN
-                    </div>
-                  )}
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 filter sepia-[0.1] group-hover:sepia-[0.3]"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="flex space-x-3">
-                      <button className="bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-300">
-                        <Heart className="h-5 w-5" />
-                      </button>
-                      <button className="bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-300">
-                        <ShoppingCart className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-gray-100 text-black px-2 py-1 rounded-full text-xs font-medium">
-                      {product.decade}
-                    </span>
-                    <span className="text-gray-700 text-sm font-mono">
-                      {product.condition}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-black mb-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-700 text-sm mb-3 font-mono">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl font-bold text-black">
-                        ${product.price.toFixed(2)}
-                      </span>
-                      {product.originalPrice && (
-                      <span className="text-gray-500 line-through">
-                          ${product.originalPrice.toFixed(2)}
-                      </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                product={product}
+                viewMode="grid"
+                onQuickView={() => setSelectedProduct(product)}
+              />
             ))}
           </div>
         </div>
@@ -293,6 +248,16 @@ const HomePage = () => {
           </form>
         </div>
       </section>
+
+      {/* Quick View Modal */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <QuickViewModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

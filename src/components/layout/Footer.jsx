@@ -4,7 +4,7 @@ import { Facebook, Twitter, Instagram, Mail } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t-2 border-gray-200">
+    <footer className="relative bg-white border-t-2 border-gray-200 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
@@ -119,4 +119,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

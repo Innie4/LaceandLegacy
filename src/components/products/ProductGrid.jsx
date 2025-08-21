@@ -78,7 +78,7 @@ const ProductGrid = ({ products, onLoadMore }) => {
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="flex space-x-3">
                     <button 
-                      className="bg-white text-amber-800 p-3 rounded-full hover:bg-amber-100 transition-colors duration-300 touch-manipulation"
+                      className="bg-white text-amber-800 p-3 rounded-full hover:bg-black hover:text-white transition-colors duration-300 touch-manipulation"
                       onClick={(e) => {
                         e.preventDefault();
                         // Add to wishlist logic
@@ -87,7 +87,7 @@ const ProductGrid = ({ products, onLoadMore }) => {
                       <Heart className="h-5 w-5" />
                     </button>
                     <button 
-                      className="bg-white text-amber-800 p-3 rounded-full hover:bg-amber-100 transition-colors duration-300 touch-manipulation"
+                      className="bg-white text-amber-800 p-3 rounded-full hover:bg-black hover:text-white transition-colors duration-300 touch-manipulation"
                       onClick={(e) => {
                         e.preventDefault();
                         // Add to cart logic
@@ -142,4 +142,4 @@ const ProductGrid = ({ products, onLoadMore }) => {
   );
 };
 
-export default ProductGrid; 
+export default ProductGrid;
