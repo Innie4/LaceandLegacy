@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Heart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../contexts/CartContext';
 
