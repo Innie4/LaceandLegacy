@@ -272,7 +272,7 @@ const ProductCatalogPage = () => {
                 exit={{ x: -300, opacity: 0 }}
                 className="w-64 flex-shrink-0 hidden lg:block"
               >
-                <div className="sticky top-32 lg:top-36">
+                <div>
                   <FilterSidebar
                     isOpen={showFilters}
                     onClose={() => setShowFilters(false)}
@@ -286,15 +286,13 @@ const ProductCatalogPage = () => {
           </AnimatePresence>
 
           {/* Mobile Filter Sidebar */}
-          {showFilters && (
-            <FilterSidebar
-              isOpen={showFilters}
-              onClose={() => setShowFilters(false)}
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={clearFilters}
-            />
-          )}
+          <FilterSidebar
+            isOpen={showFilters}
+            onClose={() => setShowFilters(false)}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onClearFilters={clearFilters}
+          />
 
           {/* Product Grid/List */}
           <div className="flex-1 min-w-0">

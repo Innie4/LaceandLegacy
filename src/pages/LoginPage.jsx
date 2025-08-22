@@ -1,8 +1,8 @@
- import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { Mail, Lock, Loader2, Github, Twitter } from 'lucide-react';
+import { Mail, Lock, Loader2, Chrome } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useUser } from '../contexts/UserContext';
 
@@ -184,18 +184,18 @@ const LoginPage = () => {
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button
-              onClick={() => handleSocialLogin('GitHub')}
+              onClick={() => handleSocialLogin('Google')}
               className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
-              <Github className="h-5 w-5" />
-              <span className="ml-2">GitHub</span>
+              <Chrome className="h-5 w-5" />
+              <span className="ml-2">Google</span>
             </button>
             <button
-              onClick={() => handleSocialLogin('Twitter')}
+              onClick={() => handleSocialLogin('Facebook')}
               className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
-              <Twitter className="h-5 w-5" />
-              <span className="ml-2">Twitter</span>
+              <Mail className="h-5 w-5" />
+              <span className="ml-2">Facebook</span>
             </button>
           </div>
         </div>
@@ -216,4 +216,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;
