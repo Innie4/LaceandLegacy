@@ -1,42 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Trash2,
   Heart,
   ChevronLeft,
-  ChevronRight,
   Minus,
   Plus,
-  X,
   Loader2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import Button from '../components/buttons/Button';
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Vintage 70s Rock Band Tee',
-      price: 49.99,
-      image: '/images/products/rock-band-tee.jpg',
-      size: 'M',
-      color: 'Black',
-      era: '70s',
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: 'Retro 80s Neon Jacket',
-      price: 89.99,
-      image: '/images/products/neon-jacket.jpg',
-      size: 'L',
-      color: 'Pink',
-      era: '80s',
-      quantity: 1,
-    },
-  ]);
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
 
   const [couponCode, setCouponCode] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
@@ -110,17 +87,17 @@ const CartPage = () => {
         </h1>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-medium text-amber-900 mb-4">
-              Your cart is empty
-            </h2>
-            <Link
-              to="/products"
-              className="inline-flex items-center text-amber-600 hover:text-amber-700"
+          <div className="min-h-screen flex flex-col items-center justify-center px-4">
+            <h2 className="text-2xl font-bold mb-4 text-amber-900">Your cart is empty</h2>
+            <p className="text-amber-600 mb-8 text-center">
+              Discover our vintage collection and find your perfect piece
+            </p>
+            <button
+              onClick={() => navigate('/products')}
+              className="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition-all duration-200"
             >
-              <ChevronLeft className="h-4 w-4 mr-1" />
               Continue Shopping
-            </Link>
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -219,13 +196,13 @@ const CartPage = () => {
                 >
                   Clear Cart
                 </button>
-                <Link
-                  to="/products"
+                <button
+                  onClick={() => navigate('/products')}
                   className="inline-flex items-center text-amber-600 hover:text-amber-700"
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Continue Shopping
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -290,19 +267,15 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  <Link
-                    to="/checkout"
-                    className="block w-full text-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                  <button
+                    onClick={() => navigate('/checkout')}
+                    className="block w-full text-center px-8 py-3 bg-white border-2 border-black text-black rounded hover:bg-black hover:text-white transition-all duration-200 font-medium"
                   >
                     Proceed to Checkout
-                  </Link>
+                  </button>
                 </div>
 
-                <div className="flex flex-col gap-4 mt-8">
-                  <Link to="/payment">
-                    <Button className="w-full">Proceed to Payment</Button>
-                  </Link>
-                </div>
+
               </div>
             </div>
           </div>

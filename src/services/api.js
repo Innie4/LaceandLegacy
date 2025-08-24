@@ -29,7 +29,7 @@ export const authService = {
       body: JSON.stringify(data),
     }).then(handleResponse),
   login: (data) =>
-    fetch(`${API_BASE_URL}api/login`, {
+    fetch(`${API_BASE_URL}/api/login`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),

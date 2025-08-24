@@ -9,12 +9,14 @@ import {
   ChevronRight,
   X,
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 import ProductCard from '../components/products/ProductCard';
 import FilterSidebar from '../components/products/FilterSidebar';
 import QuickViewModal from '../components/products/QuickViewModal';
 import useDebounce from '../hooks/useDebounce';
 import { mockProducts } from '../data/mockProducts';
+import { useCart } from '../contexts/CartContext';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/Sheet';
@@ -29,12 +31,14 @@ const ProductCatalogPage = () => {
     return window.innerWidth < 768 ? 'list' : 'grid';
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [sortBy, setSortBy] = useState('newest');
   const [headerHeight, setHeaderHeight] = useState(0);
+  const { addToCart } = useCart();
   const [filters, setFilters] = useState({
     sizes: [],
     colors: [],
@@ -180,6 +184,27 @@ const ProductCatalogPage = () => {
     setSelectedProduct(product);
   };
 
+  const handleAddToCart = async (product) => {
+    try {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      
+      await addToCart(cartItem);
+      toast.success(`${product.name} added to cart!`);
+    } catch (error) {
+      toast.error('Failed to add item to cart');
+      console.error('Cart error:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Fixed Filter Header */}
@@ -222,31 +247,33 @@ const ProductCatalogPage = () => {
                 </SelectContent>
               </Select>
 
-              {/* Mobile Filter Toggle */}
+              {/* Mobile Filter Button */}
               <Button
                 variant="secondary"
-                onClick={() => setShowFilters(!showFilters)}
-                className="md:hidden"
+                size="sm"
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="lg:hidden flex items-center gap-2"
               >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
+                <Filter className="h-4 w-4" />
+                Filter & Sort
                 {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                     {activeFiltersCount}
                   </Badge>
                 )}
               </Button>
-
+              
               {/* Desktop Filter Toggle */}
               <Button
                 variant="secondary"
+                size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="hidden md:flex"
+                className="hidden lg:flex items-center gap-2"
               >
-                <Filter className="w-4 h-4 mr-2" />
-                {showFilters ? 'Hide' : 'Show'} Filters
+                <Filter className="h-4 w-4" />
+                Filter
                 {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                     {activeFiltersCount}
                   </Badge>
                 )}
@@ -290,11 +317,11 @@ const ProductCatalogPage = () => {
         <div className="flex gap-6">
           {/* Desktop Sidebar */}
           <aside
-            className={`hidden md:block transition-all duration-300 ${
+            className={`hidden lg:block transition-all duration-300 lg:ml-6 ${
               showFilters ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
             }`}
           >
-            <div className="sticky top-4">
+            <div className="sticky top-4 bg-white rounded-lg shadow-sm p-6">
               <FilterSidebar
                 filters={filters}
                 activeFilters={activeFilters}
@@ -355,6 +382,7 @@ const ProductCatalogPage = () => {
                       product={product}
                       viewMode={viewMode}
                       onQuickView={() => handleQuickView(product)}
+                      onAddToCart={() => handleAddToCart(product)}
                     />
                   ))}
                 </div>
@@ -414,17 +442,27 @@ const ProductCatalogPage = () => {
       </div>
 
       {/* Mobile Filter Overlay */}
-      <Sheet open={showFilters && typeof window !== 'undefined' && window.innerWidth < 768} onOpenChange={setShowFilters}>
+      <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
         <SheetContent side="left" className="w-full sm:w-80 p-0">
           <SheetHeader className="p-6 border-b">
             <SheetTitle>Filter Products</SheetTitle>
           </SheetHeader>
           <div className="p-6 overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold">Filter & Sort</h2>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
             <FilterSidebar
               filters={filters}
               activeFilters={activeFilters}
               onFilterChange={handleFilterChange}
               onClearFilters={clearAllFilters}
+              onClose={() => setIsMobileFilterOpen(false)}
             />
           </div>
         </SheetContent>
