@@ -7,6 +7,7 @@ const initialState = {
   total: 0,
   itemCount: 0,
   isOpen: false,
+  isLoading: false,
 };
 
 const cartReducer = (state, action) => {
@@ -83,6 +84,12 @@ const cartReducer = (state, action) => {
         isOpen: !state.isOpen,
       };
 
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+
     default:
       return state;
   }
@@ -98,8 +105,26 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(state));
   }, [state]);
 
-  const addToCart = (item) => {
-    dispatch({ type: 'ADD_ITEM', payload: item });
+  const addToCart = async (item) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      // Add unique cart ID for easier management
+      const cartItem = {
+        ...item,
+        cartId: `${item.id}-${Date.now()}-${Math.random()}`,
+      };
+      
+      dispatch({ type: 'ADD_ITEM', payload: cartItem });
+      
+      // Simulate async operation (could be API call)
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+    } catch (error) {
+      console.error('Failed to add item to cart:', error);
+      throw error;
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
   };
 
   const removeFromCart = (itemId) => {
@@ -140,4 +165,4 @@ export const useCart = () => {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-}; 
+};

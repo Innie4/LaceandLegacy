@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
 import QuickViewModal from '../products/QuickViewModal';
+import Tooltip from '../ui/Tooltip';
 
 const ProductGrid = ({ products }) => {
   const { addToCart } = useCart();
@@ -42,17 +43,19 @@ const ProductGrid = ({ products }) => {
                 <button className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300">
                   <Heart className="h-5 w-5" />
                 </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelectedProduct(product);
-                  }}
-                  className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300"
-                  title="Quick View Product Details"
-                >
-                  <Eye className="h-5 w-5" />
-                </button>
+                <Tooltip content="Quick View Product Details" side="top">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedProduct(product);
+                    }}
+                    className="bg-white text-amber-800 p-2 rounded-full hover:bg-amber-100 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                    aria-label="Quick View Product Details"
+                  >
+                    <Eye className="h-5 w-5" />
+                  </button>
+                </Tooltip>
                 <button
                   onClick={(e) => {
                     e.preventDefault();

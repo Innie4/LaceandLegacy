@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Eye, ShoppingCart } from 'lucide-react';
+import { Heart, Eye, ShoppingCart, Loader2, Info } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../contexts/CartContext';
+import Tooltip from '../ui/Tooltip';
 
 const ProductCard = ({ product, viewMode, onQuickView }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const { addToCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+  const { addToCart, isLoading } = useCart();
 
   const handleWishlist = (e) => {
     e.preventDefault();
@@ -20,23 +22,33 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
     );
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
-    const cartItem = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      size: Array.isArray(product.sizes) ? product.sizes[0] : product.size,
-      color: product.color || 'Default',
-      era: product.era,
-      quantity: 1
-    };
+    if (isAdding || isLoading) return;
     
-    addToCart(cartItem);
-    toast.success(`${product.name} added to cart!`);
+    setIsAdding(true);
+    try {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size,
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      
+      await addToCart(cartItem);
+      toast.success(`${product.name} added to cart!`);
+    } catch (error) {
+      toast.error('Failed to add item to cart');
+      console.error('Cart error:', error);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const cardVariants = {
@@ -87,32 +99,36 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                 </p>
               </div>
               <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-                <button
-                  onClick={handleWishlist}
-                  className={`p-2 rounded-lg transition-colors duration-300 ${
-                    isWishlisted
-                      ? 'text-red-500 hover:bg-black hover:text-white'
-                      : 'text-amber-600 hover:bg-black hover:text-white'
-                  }`}
-                >
-                  <Heart
-                    className={`h-5 w-5 ${
-                      isWishlisted ? 'fill-current' : ''
+                <Tooltip content={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"} side="top">
+                  <button
+                    onClick={handleWishlist}
+                    className={`p-2 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                      isWishlisted
+                        ? 'text-red-500 hover:bg-black hover:text-white'
+                        : 'text-amber-600 hover:bg-black hover:text-white'
                     }`}
-                  />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onQuickView();
-                  }}
-                  className="p-2 rounded-lg text-amber-600 hover:bg-black hover:text-white transition-colors duration-300"
-                  title="Quick View Product Details"
-                  aria-label="Quick View Product Details"
-                >
-                  <Eye className="h-5 w-5" />
-                </button>
+                    aria-label={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                  >
+                    <Heart
+                      className={`h-5 w-5 ${
+                        isWishlisted ? 'fill-current' : ''
+                      }`}
+                    />
+                  </button>
+                </Tooltip>
+                <Tooltip content="Quick View Product Details" side="top">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onQuickView();
+                    }}
+                    className="p-2 rounded-lg text-amber-600 hover:bg-black hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                    aria-label="Quick View Product Details"
+                  >
+                    <Eye className="h-5 w-5" />
+                  </button>
+                </Tooltip>
               </div>
             </div>
 
@@ -148,10 +164,20 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
             <div className="mt-4">
               <button
                 onClick={handleAddToCart}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300"
+                disabled={isAdding || isLoading || !product.inStock}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-amber-900 disabled:hover:border-amber-600"
               >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Add to Cart
+                {isAdding ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5 mr-2" />
+                    {product.inStock !== false ? 'Add to Cart' : 'Out of Stock'}
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -190,32 +216,36 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
               isHovered ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'
             }`}
           >
-            <button
-              onClick={handleWishlist}
-              className={`p-2 rounded-lg bg-white/90 backdrop-blur-sm transition-colors duration-300 ${
-                isWishlisted
-                  ? 'text-red-500 hover:bg-black hover:text-white'
-                  : 'text-amber-600 hover:bg-black hover:text-white'
-              }`}
-            >
-              <Heart
-                className={`h-5 w-5 ${
-                  isWishlisted ? 'fill-current' : ''
+            <Tooltip content={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"} side="left">
+              <button
+                onClick={handleWishlist}
+                className={`p-2 rounded-lg bg-white/90 backdrop-blur-sm transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                  isWishlisted
+                    ? 'text-red-500 hover:bg-black hover:text-white'
+                    : 'text-amber-600 hover:bg-black hover:text-white'
                 }`}
-              />
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onQuickView();
-              }}
-              className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:bg-black hover:text-white transition-colors duration-300"
-              title="Quick View Product Details"
-              aria-label="Quick View Product Details"
-            >
-              <Eye className="h-5 w-5" />
-            </button>
+                aria-label={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+              >
+                <Heart
+                  className={`h-5 w-5 ${
+                    isWishlisted ? 'fill-current' : ''
+                  }`}
+                />
+              </button>
+            </Tooltip>
+            <Tooltip content="Quick View Product Details" side="left">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onQuickView();
+                }}
+                className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:bg-black hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                aria-label="Quick View Product Details"
+              >
+                <Eye className="h-5 w-5" />
+              </button>
+            </Tooltip>
           </div>
 
           {/* Era Badge */}
@@ -272,10 +302,20 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
       >
         <button
           onClick={handleAddToCart}
-          className="w-full inline-flex items-center justify-center px-3 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300 text-sm"
+          disabled={isAdding || isLoading || !product.inStock}
+          className="w-full inline-flex items-center justify-center px-3 py-2 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-black hover:text-white hover:border-black transition-colors duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-amber-900 disabled:hover:border-amber-600"
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Add to Cart
+          {isAdding ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Adding...
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              {product.inStock !== false ? 'Add to Cart' : 'Out of Stock'}
+            </>
+          )}
         </button>
       </div>
     </motion.div>

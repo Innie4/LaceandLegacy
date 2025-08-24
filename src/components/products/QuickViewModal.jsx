@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Minus, ShoppingCart, Heart } from 'lucide-react';
+import { X, Plus, Minus, ShoppingCart, Heart, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../contexts/CartContext';
 
 const QuickViewModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+  const { addToCart, isLoading } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleWishlist = () => {
@@ -19,26 +20,36 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
     );
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedSize) {
       toast.error('Please select a size');
       return;
     }
     
-    const cartItem = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      size: selectedSize,
-      color: product.color || 'Default',
-      era: product.era,
-      quantity: quantity
-    };
+    if (isAdding || isLoading) return;
     
-    addToCart(cartItem);
-    toast.success(`${product.name} added to cart!`);
-    onClose();
+    setIsAdding(true);
+    try {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: selectedSize,
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: quantity
+      };
+      
+      await addToCart(cartItem);
+      toast.success(`${product.name} added to cart!`);
+      onClose();
+    } catch (error) {
+      toast.error('Failed to add item to cart');
+      console.error('Cart error:', error);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const handleQuantityChange = (value) => {
@@ -173,10 +184,20 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className="mt-8 inline-flex items-center justify-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300"
+                disabled={isAdding || isLoading || !product.inStock}
+                className="mt-8 inline-flex items-center justify-center px-6 py-3 border-2 border-amber-600 rounded-lg text-amber-900 hover:bg-amber-600 hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Add to Cart
+                {isAdding ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5 mr-2" />
+                    {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                  </>
+                )}
               </button>
             </div>
           </div>

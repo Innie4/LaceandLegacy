@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
 import QuickViewModal from '../products/QuickViewModal';
+import Tooltip from '../ui/Tooltip';
 
 const ProductList = ({ products }) => {
   const { addToCart } = useCart();
@@ -70,17 +71,19 @@ const ProductList = ({ products }) => {
                 <button className="bg-white text-amber-800 p-2 rounded-full hover:bg-black hover:text-white transition-colors duration-300 border-2 border-amber-200">
                   <Heart className="h-5 w-5" />
                 </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelectedProduct(product);
-                  }}
-                  className="bg-white text-amber-800 p-2 rounded-full hover:bg-black hover:text-white transition-colors duration-300 border-2 border-amber-200"
-                  title="Quick View Product Details"
-                >
-                  <Eye className="h-5 w-5" />
-                </button>
+                <Tooltip content="Quick View Product Details" side="top">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedProduct(product);
+                    }}
+                    className="bg-white text-amber-800 p-2 rounded-full hover:bg-black hover:text-white transition-colors duration-300 border-2 border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                    aria-label="Quick View Product Details"
+                  >
+                    <Eye className="h-5 w-5" />
+                  </button>
+                </Tooltip>
                 <button
                   onClick={() => handleAddToCart(product)}
                   className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
