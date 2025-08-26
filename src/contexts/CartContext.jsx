@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 const CartContext = createContext();
 
@@ -37,47 +38,36 @@ const cartReducer = (state, action) => {
 
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: [...state.items, action.payload],
         total: state.total + action.payload.price,
         itemCount: state.itemCount + 1,
       };
 
     case 'REMOVE_ITEM':
       const itemToRemove = state.items.find(
-        (item) => item.id === action.payload
+        (item) => (item.cartId || item.id) === action.payload
       );
+      if (!itemToRemove) return state;
+      
       return {
         ...state,
-        items: state.items.filter((item) => item.id !== action.payload),
+        items: state.items.filter((item) => (item.cartId || item.id) !== action.payload),
         total: state.total - itemToRemove.price * itemToRemove.quantity,
         itemCount: state.itemCount - itemToRemove.quantity,
       };
 
     case 'UPDATE_QUANTITY':
+      const updatedItems = state.items.map((item) =>
+        (item.cartId || item.id) === action.payload.id
+          ? { ...item, quantity: action.payload.quantity }
+          : item
+      );
+      
       return {
         ...state,
-        items: state.items.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: action.payload.quantity }
-            : item
-        ),
-        total: state.items.reduce(
-          (total, item) =>
-            total +
-            item.price *
-              (item.id === action.payload.id
-                ? action.payload.quantity
-                : item.quantity),
-          0
-        ),
-        itemCount: state.items.reduce(
-          (count, item) =>
-            count +
-            (item.id === action.payload.id
-              ? action.payload.quantity
-              : item.quantity),
-          0
-        ),
+        items: updatedItems,
+        total: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0),
+        itemCount: updatedItems.reduce((count, item) => count + item.quantity, 0),
       };
 
     case 'CLEAR_CART':
@@ -110,19 +100,21 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(state));
   }, [state]);
 
-  const addToCart = async (item) => {
+  const addToCart = async (product) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      // Add unique cart ID for easier management
       const cartItem = {
-        ...item,
-        cartId: `${item.id}-${Date.now()}-${Math.random()}`,
+        ...product,
+        cartId: `${product.id}-${Date.now()}-${Math.random()}`,
+        quantity: 1
       };
       
       dispatch({ type: 'ADD_ITEM', payload: cartItem });
       
       // Simulate async operation (could be API call)
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      toast.success('Item added to cart');
       
     } catch (error) {
       console.error('Failed to add item to cart:', error);

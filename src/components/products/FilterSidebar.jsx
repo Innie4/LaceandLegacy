@@ -74,13 +74,14 @@ const FilterSidebar = ({
       />
 
       {/* Sidebar */}
-      <motion.div
-        initial="initial"
-        animate={isOpen ? 'animate' : 'exit'}
-        variants={sidebarVariants}
-        className="fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-xl z-50 overflow-y-auto lg:relative lg:top-auto lg:left-auto lg:h-auto lg:w-auto lg:max-w-none lg:shadow-none lg:z-auto"
-      >
-        <div className="p-6 lg:p-4 lg:border-2 lg:border-gray-200 lg:rounded-xl lg:bg-white">
+      <div className="lg:relative lg:top-auto lg:left-auto lg:h-auto lg:w-full lg:max-w-none lg:shadow-none lg:z-auto">
+        <motion.div
+          initial="initial"
+          animate={isOpen ? 'animate' : 'exit'}
+          variants={sidebarVariants}
+          className="fixed top-0 left-0 h-full w-full max-w-sm bg-white shadow-xl z-50 overflow-y-auto lg:relative lg:top-auto lg:left-auto lg:h-auto lg:w-full lg:max-w-none lg:shadow-none lg:z-auto lg:transform-none"
+        >
+          <div className="p-6 lg:p-4 lg:border-2 lg:border-gray-200 lg:rounded-xl lg:bg-white">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-amber-900 font-mono lg:text-xl">
@@ -136,8 +137,9 @@ const FilterSidebar = ({
           >
             Clear All Filters
           </button>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      </div>
     </>
   );
 };

@@ -10,41 +10,34 @@ import {
   Loader2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../contexts/CartContext';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const { items: cartItems, total: cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
 
   const [couponCode, setCouponCode] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const subtotal = cartTotal;
   const tax = subtotal * 0.1; // 10% tax
   const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
   const total = subtotal + tax + shipping;
 
   const handleQuantityChange = (itemId, change) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              quantity: Math.max(1, Math.min(10, item.quantity + change)),
-            }
-          : item
-      )
-    );
+    const item = cartItems.find(item => item.cartId === itemId);
+    if (item) {
+      const newQuantity = Math.max(1, Math.min(10, item.quantity + change));
+      updateQuantity(itemId, newQuantity);
+    }
   };
 
   const handleRemoveItem = (itemId) => {
     setRemovingItemId(itemId);
     setTimeout(() => {
-      setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+      removeFromCart(itemId);
       setRemovingItemId(null);
       toast.success('Item removed from cart');
     }, 300);
@@ -52,7 +45,7 @@ const CartPage = () => {
 
   const handleClearCart = () => {
     setShowClearConfirm(false);
-    setCartItems([]);
+    clearCart();
     toast.success('Cart cleared');
   };
 
@@ -93,7 +86,7 @@ const CartPage = () => {
               Discover our vintage collection and find your perfect piece
             </p>
             <button
-              onClick={() => navigate('/products')}
+              onClick={() => navigate('/catalog')}
               className="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition-all duration-200"
             >
               Continue Shopping
@@ -105,7 +98,7 @@ const CartPage = () => {
             <div className="lg:col-span-2 space-y-4">
               {cartItems.map((item) => (
                 <motion.div
-                  key={item.id}
+                  key={item.cartId || item.id}
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -141,8 +134,8 @@ const CartPage = () => {
                           </div>
                         </div>
                         <button
-                          onClick={() => handleRemoveItem(item.id)}
-                          disabled={removingItemId === item.id}
+                          onClick={() => handleRemoveItem(item.cartId || item.id)}
+                          disabled={removingItemId === (item.cartId || item.id)}
                           className="p-2 text-amber-600 hover:bg-black hover:text-white rounded transition-colors duration-300"
                         >
                           <Trash2 className="h-5 w-5" />
@@ -152,7 +145,7 @@ const CartPage = () => {
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <button
-                            onClick={() => handleQuantityChange(item.id, -1)}
+                            onClick={() => handleQuantityChange(item.cartId || item.id, -1)}
                             className="p-1 rounded-lg border-2 border-amber-300 text-amber-600 hover:border-amber-600 transition-colors duration-300"
                           >
                             <Minus className="h-4 w-4" />
@@ -161,7 +154,7 @@ const CartPage = () => {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => handleQuantityChange(item.id, 1)}
+                            onClick={() => handleQuantityChange(item.cartId || item.id, 1)}
                             className="p-1 rounded-lg border-2 border-amber-300 text-amber-600 hover:border-amber-600 transition-colors duration-300"
                           >
                             <Plus className="h-4 w-4" />
@@ -177,7 +170,7 @@ const CartPage = () => {
                       {/* Save for Later Button - Separate Row for Better Spacing */}
                       <div className="mt-3 flex justify-end">
                         <button
-                          onClick={() => handleSaveForLater(item.id)}
+                          onClick={() => handleSaveForLater(item.cartId || item.id)}
                           className="inline-flex items-center text-sm text-amber-600 hover:text-amber-700 transition-colors duration-300 px-2 py-1 rounded-lg hover:bg-amber-50"
                         >
                           <Heart className="h-4 w-4 mr-2" />
@@ -197,7 +190,7 @@ const CartPage = () => {
                   Clear Cart
                 </button>
                 <button
-                  onClick={() => navigate('/products')}
+                  onClick={() => navigate('/catalog')}
                   className="inline-flex items-center text-amber-600 hover:text-amber-700"
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { Mail, Lock, Loader2, Chrome } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../contexts/CartContext';
 
 const pageVariants = {
   initial: {
@@ -32,6 +33,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { addToCart } = useCart();
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -50,6 +52,21 @@ const LoginPage = () => {
       
       if (response.ok) {
         toast.success(message || 'Login successful!');
+        
+        // Check for pending cart item and add it after successful login
+        const pendingCartItem = localStorage.getItem('pendingCartItem');
+        if (pendingCartItem) {
+          try {
+            const cartItem = JSON.parse(pendingCartItem);
+            await addToCart(cartItem);
+            localStorage.removeItem('pendingCartItem');
+            toast.success('Item added to cart after login!');
+          } catch (error) {
+            console.error('Failed to add pending cart item:', error);
+            toast.error('Failed to add item to cart');
+          }
+        }
+        
         navigate('/account/personal-info');
       } else {
         toast.error(message || 'Login failed. Please try again.');

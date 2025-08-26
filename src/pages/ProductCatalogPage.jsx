@@ -207,14 +207,9 @@ const ProductCatalogPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Fixed Filter Header */}
-      <div
-        className="sticky bg-white border-b border-gray-200 shadow-sm z-40"
-        style={{
-          top: `${headerHeight}px`,
-          position: 'sticky'
-        }}
-      >
+      {/* Filter Header */}
+      <div className="w-full bg-white border-b border-gray-200 shadow-sm">
+        
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Search Bar */}
@@ -233,6 +228,22 @@ const ProductCatalogPage = () => {
 
             {/* Filter Controls */}
             <div className="flex items-center gap-4 ml-4">
+              {/* View Mode Toggle - Desktop */}
+              <div className="hidden md:flex border-2 border-gray-300 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 ${viewMode === 'grid' ? 'bg-gray-600 text-white' : 'bg-white text-black hover:bg-gray-100'} transition-colors duration-300`}
+                >
+                  <Grid className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 ${viewMode === 'list' ? 'bg-gray-600 text-white' : 'bg-white text-black hover:bg-gray-100'} transition-colors duration-300`}
+                >
+                  <List className="h-5 w-5" />
+                </button>
+              </div>
+
               {/* Sort Dropdown */}
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-48">
@@ -314,25 +325,22 @@ const ProductCatalogPage = () => {
 
       {/* Main Content with Proper Layout */}
       <div className="container mx-auto px-4 py-6">
-        <div className="flex gap-6">
+        <div className="flex">
           {/* Desktop Sidebar */}
-          <aside
-            className={`hidden lg:block transition-all duration-300 lg:ml-6 ${
-              showFilters ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
-            }`}
-          >
-            <div className="sticky top-4 bg-white rounded-lg shadow-sm p-6">
+          {showFilters && (
+            <aside className="hidden lg:block w-80 ml-4 md:ml-8 lg:ml-12 xl:ml-16 transition-all duration-300 flex-shrink-0">
               <FilterSidebar
+                isOpen={true}
+                onClose={() => {}}
                 filters={filters}
-                activeFilters={activeFilters}
                 onFilterChange={handleFilterChange}
                 onClearFilters={clearAllFilters}
               />
-            </div>
-          </aside>
+            </aside>
+          )}
 
           {/* Product Grid */}
-          <main className="flex-1 min-w-0">
+          <main className={`flex-1 min-w-0 ${showFilters ? 'pl-6 lg:pl-8' : ''}`}>
             {/* Results Count */}
             <div className="mb-6">
               <p className="text-gray-600">
@@ -458,11 +466,11 @@ const ProductCatalogPage = () => {
               </button>
             </div>
             <FilterSidebar
+              isOpen={isMobileFilterOpen}
+              onClose={() => setIsMobileFilterOpen(false)}
               filters={filters}
-              activeFilters={activeFilters}
               onFilterChange={handleFilterChange}
               onClearFilters={clearAllFilters}
-              onClose={() => setIsMobileFilterOpen(false)}
             />
           </div>
         </SheetContent>
