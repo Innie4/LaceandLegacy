@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Loader2, Chrome } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useUser } from '../contexts/UserContext';
 
 const pageVariants = {
   initial: {
@@ -33,15 +32,30 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { login } = useUser();
-
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await login({ email: data.email, password: data.password });
-      navigate('/account/personal-info');
+      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
+      });
+      
+      const message = await response.text();
+      
+      if (response.ok) {
+        toast.success(message || 'Login successful!');
+        navigate('/account/personal-info');
+      } else {
+        toast.error(message || 'Login failed. Please try again.');
+      }
     } catch (error) {
-      // Error toast is handled in context
+      toast.error('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
