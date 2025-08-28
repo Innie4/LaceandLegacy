@@ -8,8 +8,7 @@ import {
   CreditCard,
   Heart,
   Settings,
-  Bell,
-  Globe,
+
   ChevronRight,
   ChevronDown,
   ShoppingBag,
@@ -345,4 +344,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage; 
+export default DashboardPage;

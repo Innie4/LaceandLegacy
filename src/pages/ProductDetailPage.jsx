@@ -6,7 +6,7 @@ import {
   Share2,
   ChevronLeft,
   ChevronRight,
-  Star,
+
   Ruler,
   Info,
   ShoppingCart,

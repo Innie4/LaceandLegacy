@@ -10,7 +10,7 @@ import {
   Mail,
   UserPlus,
   Phone,
-  Clock,
+
   Package,
   Truck,
   Home,
@@ -378,4 +378,4 @@ const OrderConfirmationPage = () => {
   );
 };
 
-export default OrderConfirmationPage; 
+export default OrderConfirmationPage;

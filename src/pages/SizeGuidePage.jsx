@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Ruler,
   ChevronDown,
   ChevronUp,
   Download,
@@ -365,4 +364,4 @@ const SizeGuidePage = () => {
   );
 };
 
-export default SizeGuidePage; 
+export default SizeGuidePage;

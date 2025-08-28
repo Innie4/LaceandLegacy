@@ -7,9 +7,9 @@ import {
   Clock,
   MapPin,
   Send,
-  ChevronRight,
+
   AlertCircle,
-  CheckCircle2,
+
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { contactService } from '../services/api';
@@ -102,12 +102,7 @@ const ContactPage = () => {
     },
   ];
 
-  const faqCategories = [
-    { title: 'Orders', link: '/support/faq#orders' },
-    { title: 'Shipping', link: '/support/faq#shipping' },
-    { title: 'Returns', link: '/support/faq#returns' },
-    { title: 'Sizing', link: '/support/size-guide' },
-  ];
+
 
   return (
     <div className="min-h-screen bg-white py-12">
@@ -357,4 +352,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage; 
+export default ContactPage;

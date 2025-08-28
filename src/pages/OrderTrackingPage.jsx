@@ -4,7 +4,7 @@ import {
   Search,
   Package,
   Truck,
-  Home,
+
   CheckCircle2,
   Clock,
   AlertCircle,
@@ -477,4 +477,4 @@ const OrderTrackingPage = () => {
   );
 };
 
-export default OrderTrackingPage; 
+export default OrderTrackingPage;

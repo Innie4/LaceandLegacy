@@ -37,7 +37,7 @@ const ProductCatalogPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [sortBy, setSortBy] = useState('newest');
-  const [headerHeight, setHeaderHeight] = useState(0);
+
   const { addToCart } = useCart();
   const [filters, setFilters] = useState({
     sizes: [],
@@ -50,13 +50,7 @@ const ProductCatalogPage = () => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  // Calculate header height for proper sticky positioning
-  useEffect(() => {
-    const header = document.querySelector('[data-header]');
-    if (header) {
-      setHeaderHeight(header.offsetHeight);
-    }
-  }, []);
+
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {

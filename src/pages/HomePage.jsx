@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 import { mockProducts } from '../data/mockProducts';
 import ProductCard from '../components/products/ProductCard';
 import QuickViewModal from '../components/products/QuickViewModal';
