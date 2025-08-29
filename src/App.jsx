@@ -6,6 +6,7 @@ import { UserProvider } from './contexts/UserContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { WishlistProvider } from './contexts/WishlistContext';
 
 // Layout Components
 import Layout from './components/layout/Layout';
@@ -101,16 +102,18 @@ const App = () => {
       <ThemeProvider>
         <AuthProvider>
           <UserProvider>
-            <CartProvider>
-              <ToastProvider>
-                <div className="min-h-screen bg-amber-50">
-                  <BreadcrumbNav />
-                  <Layout>
-                    <AnimatedRoutes />
-                  </Layout>
-                </div>
-              </ToastProvider>
-            </CartProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <ToastProvider>
+                  <div className="min-h-screen bg-amber-50">
+                    <BreadcrumbNav />
+                    <Layout>
+                      <AnimatedRoutes />
+                    </Layout>
+                  </div>
+                </ToastProvider>
+              </CartProvider>
+            </WishlistProvider>
           </UserProvider>
         </AuthProvider>
       </ThemeProvider>
@@ -118,4 +121,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;

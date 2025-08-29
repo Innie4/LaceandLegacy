@@ -1,65 +1,83 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Eye, ShoppingCart, Loader2, Info } from 'lucide-react';
+import { Heart, Eye, ShoppingCart, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../contexts/CartContext';
+import { useWishlist } from '../../contexts/WishlistContext';
 import { useUser } from '../../contexts/UserContext';
 import Tooltip from '../ui/Tooltip';
 
 const ProductCard = ({ product, viewMode, onQuickView }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const { addToCart, isLoading } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { isAuthenticated } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const isWishlisted = isInWishlist(product.id);
 
-  const handleWishlist = (e) => {
+  const handleWishlist = async (e) => {
     e.preventDefault();
-    setIsWishlisted(!isWishlisted);
-    toast.success(
-      isWishlisted
-        ? 'Removed from wishlist'
-        : 'Added to wishlist'
-    );
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      toast.error('Please log in to manage your wishlist');
+      navigate('/login', { state: { returnTo: location.pathname } });
+      return;
+    }
+    
+    if (isWishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist(product);
+    }
   };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (isAdding || isLoading) return;
-    
-    const cartItem = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      size: Array.isArray(product.sizes) ? product.sizes[0] : product.size,
-      color: product.color || 'Default',
-      era: product.era,
-      quantity: 1
-    };
-    
-    // Check authentication status
     if (!isAuthenticated) {
-      // Store product for after login
-      localStorage.setItem('pendingCartItem', JSON.stringify(cartItem));
-      toast.info('Please login to add items to cart');
-      navigate('/login');
+      toast.error('Please log in to add items to your cart');
+      navigate('/login', { state: { returnTo: location.pathname } });
       return;
     }
     
-    // User is authenticated, proceed with normal add to cart
+    if (isAdding || isLoading) return;
+    
     setIsAdding(true);
     try {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size,
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      
       await addToCart(cartItem);
+      toast.success(`${product.name} added to cart!`);
     } catch (error) {
       toast.error('Failed to add item to cart');
       console.error('Cart error:', error);
     } finally {
       setIsAdding(false);
+    }
+  };
+  
+  const handleQuickView = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onQuickView) {
+      onQuickView();
+    } else {
+      navigate(`/product/${product.id}`);
     }
   };
 
@@ -130,11 +148,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
                 </Tooltip>
                 <Tooltip content="Quick View Product Details" side="top">
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onQuickView();
-                    }}
+                    onClick={handleQuickView}
                     className="p-2 rounded-lg text-amber-600 hover:bg-black hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                     aria-label="Quick View Product Details"
                   >
@@ -247,11 +261,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
             </Tooltip>
             <Tooltip content="Quick View Product Details" side="left">
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onQuickView();
-                }}
+                onClick={handleQuickView}
                 className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-amber-600 hover:bg-black hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                 aria-label="Quick View Product Details"
               >

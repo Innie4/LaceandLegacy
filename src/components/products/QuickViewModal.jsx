@@ -2,25 +2,47 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, ShoppingCart, Heart, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
+import { useWishlist } from '../../contexts/WishlistContext';
+import { useUser } from '../../contexts/UserContext';
 
 const QuickViewModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const { addToCart, isLoading } = useCart();
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const isWishlisted = isInWishlist(product.id);
 
-  const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast.success(
-      isWishlisted
-        ? 'Removed from wishlist'
-        : 'Added to wishlist'
-    );
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!user) {
+      toast.error('Please log in to manage your wishlist');
+      navigate('/login', { state: { returnTo: location.pathname } });
+      return;
+    }
+    
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   const handleAddToCart = async () => {
+    if (!user) {
+      toast.error('Please log in to add items to your cart');
+      navigate('/login', { state: { returnTo: location.pathname } });
+      return;
+    }
+    
     if (!selectedSize) {
       toast.error('Please select a size');
       return;

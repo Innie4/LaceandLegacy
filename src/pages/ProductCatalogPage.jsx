@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -36,16 +36,16 @@ const ProductCatalogPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
-  const [sortBy, setSortBy] = useState('newest');
+  const [sortBy, setSortBy] = useState('popular');
 
   const { addToCart } = useCart();
   const [filters, setFilters] = useState({
-    sizes: [],
-    colors: [],
-    priceRange: [0, 1000],
-    eras: [],
-    styles: [],
-    conditions: []
+    sizes: null,
+    colors: null,
+    priceRange: null,
+    eras: null,
+    styles: null,
+    conditions: null
   });
 
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -54,15 +54,15 @@ const ProductCatalogPage = () => {
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {
-    return Object.values(filters).reduce((count, filterArray) => count + filterArray.length, 0);
+    return Object.values(filters).filter(value => value !== null).length;
   }, [filters]);
 
   // Get active filters for display
   const activeFilters = useMemo(() => {
     const active = {};
-    Object.entries(filters).forEach(([key, values]) => {
-      if (values.length > 0) {
-        active[key] = values;
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null) {
+        active[key] = [value]; // Convert to array for display compatibility
       }
     });
     return active;
@@ -72,19 +72,19 @@ const ProductCatalogPage = () => {
   const removeFilter = (key, value) => {
     setFilters(prev => ({
       ...prev,
-      [key]: prev[key].filter(item => item !== value)
+      [key]: null
     }));
   };
 
   // Clear all filters
   const clearAllFilters = () => {
     setFilters({
-      eras: [],
-      conditions: [],
-      sizes: [],
-      colors: [],
-      priceRange: [],
-      styles: [],
+      eras: null,
+      conditions: null,
+      sizes: null,
+      colors: null,
+      priceRange: null,
+      styles: null,
     });
   };
 
@@ -102,37 +102,50 @@ const ProductCatalogPage = () => {
       );
     }
 
-    // Apply filters
-    if (filters.sizes.length > 0) {
+    // Apply filters - single selection
+    if (filters.sizes) {
       result = result.filter(product =>
-        filters.sizes.includes(product.size)
+        product.size === filters.sizes
       );
     }
-    if (filters.colors.length > 0) {
+    if (filters.colors) {
       result = result.filter(product =>
-        filters.colors.includes(product.color)
+        product.color === filters.colors
       );
     }
-    if (filters.eras.length > 0) {
+    if (filters.eras) {
       result = result.filter(product =>
-        filters.eras.includes(product.decade)
+        product.decade === filters.eras
       );
     }
-    if (filters.styles.length > 0) {
+    if (filters.styles) {
       result = result.filter(product =>
-        filters.styles.includes(product.style)
+        product.style === filters.styles
       );
     }
-    if (filters.conditions.length > 0) {
+    if (filters.conditions) {
       result = result.filter(product =>
-        filters.conditions.includes(product.condition)
+        product.condition === filters.conditions
       );
     }
-    if (filters.priceRange[0] > 0 || filters.priceRange[1] < 1000) {
-      result = result.filter(product =>
-        product.price >= filters.priceRange[0] &&
-        product.price <= filters.priceRange[1]
-      );
+    if (filters.priceRange) {
+      result = result.filter(product => {
+        const price = product.price;
+        switch (filters.priceRange) {
+          case 'Under $25':
+            return price < 25;
+          case '$25 - $50':
+            return price >= 25 && price <= 50;
+          case '$50 - $100':
+            return price >= 50 && price <= 100;
+          case '$100 - $200':
+            return price >= 100 && price <= 200;
+          case 'Over $200':
+            return price > 200;
+          default:
+            return true;
+        }
+      });
     }
 
     // Apply sorting
@@ -143,17 +156,14 @@ const ProductCatalogPage = () => {
       case 'price_desc':
         result.sort((a, b) => b.price - a.price);
         break;
-      case 'popular':
-        result.sort((a, b) => b.popularity - a.popularity);
-        break;
       case 'era_asc':
         result.sort((a, b) => a.eraYear - b.eraYear);
         break;
       case 'era_desc':
         result.sort((a, b) => b.eraYear - a.eraYear);
         break;
-      default: // newest
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      default: // popular
+        result.sort((a, b) => b.popularity - a.popularity);
     }
 
     return result;
@@ -212,11 +222,19 @@ const ProductCatalogPage = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   type="search"
-                  placeholder="Search products..."
-                  className="pl-10 pr-4 w-full"
+                  placeholder="Search products, styles, eras..."
+                  className="pl-10 pr-10 w-full"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -244,11 +262,11 @@ const ProductCatalogPage = () => {
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-                  <SelectItem value="price-asc">Price (Low to High)</SelectItem>
-                  <SelectItem value="price-desc">Price (High to Low)</SelectItem>
-                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="price_asc">Price (Low to High)</SelectItem>
+                  <SelectItem value="price_desc">Price (High to Low)</SelectItem>
+                  <SelectItem value="popular">Most Popular</SelectItem>
+                  <SelectItem value="era_asc">Era (Oldest First)</SelectItem>
+                  <SelectItem value="era_desc">Era (Newest First)</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -475,6 +493,7 @@ const ProductCatalogPage = () => {
         {selectedProduct && (
           <QuickViewModal
             product={selectedProduct}
+            isOpen={!!selectedProduct}
             onClose={() => setSelectedProduct(null)}
           />
         )}

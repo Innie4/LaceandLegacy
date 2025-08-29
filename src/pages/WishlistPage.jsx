@@ -9,66 +9,60 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useWishlist } from '../contexts/WishlistContext';
+import { useCart } from '../contexts/CartContext';
+import { useUser } from '../contexts/UserContext';
 
 const WishlistPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [removingItemId, setRemovingItemId] = useState(null);
-  const [wishlistItems, setWishlistItems] = useState([
-    {
-      id: 1,
-      name: 'Vintage 70s Rock Band Tee',
-      price: 49.99,
-      image: '/images/products/rock-band-tee.jpg',
-      era: '70s',
-      category: 'T-Shirts',
-      addedDate: '2024-03-15',
-    },
-    {
-      id: 2,
-      name: 'Retro 80s Neon Jacket',
-      price: 89.99,
-      image: '/images/products/neon-jacket.jpg',
-      era: '80s',
-      category: 'Jackets',
-      addedDate: '2024-03-10',
-    },
-    {
-      id: 3,
-      name: '90s Grunge Flannel',
-      price: 89.99,
-      image: '/images/products/grunge-flannel.jpg',
-      era: '90s',
-      category: 'Shirts',
-      addedDate: '2024-03-05',
-    },
-  ]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { items: wishlistItems, removeFromWishlist, isLoading } = useWishlist();
+  const { addToCart } = useCart();
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/login', { state: { returnTo: location.pathname } });
+    }
+  }, [user, navigate, location.pathname]);
 
   const handleRemoveFromWishlist = async (itemId) => {
-    setRemovingItemId(itemId);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setWishlistItems((prev) =>
-        prev.filter((item) => item.id !== itemId)
-      );
-      toast.success('Item removed from wishlist');
+      removeFromWishlist(itemId);
     } catch (error) {
       toast.error('Failed to remove item');
-    } finally {
-      setRemovingItemId(null);
     }
   };
 
-  const handleAddToCart = async (itemId) => {
-    setIsLoading(true);
+  const handleAddToCart = async (item) => {
+    if (!user) {
+      toast.error('Please log in to add items to your cart');
+      navigate('/login', { state: { returnTo: location.pathname } });
+      return;
+    }
+    
+    setIsAddingToCart(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success('Item added to cart');
+      const cartItem = {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        size: item.sizes?.[0] || 'M', // Default to first available size or M
+        color: item.color || 'Default',
+        era: item.era,
+        quantity: 1
+      };
+      
+      await addToCart(cartItem);
+      toast.success(`${item.name} added to cart!`);
     } catch (error) {
       toast.error('Failed to add item to cart');
     } finally {
-      setIsLoading(false);
+      setIsAddingToCart(false);
     }
   };
 
@@ -148,10 +142,10 @@ const WishlistPage = () => {
                   <div className="absolute inset-0 bg-black/10 mix-blend-multiply" />
                   <button
                     onClick={() => handleRemoveFromWishlist(item.id)}
-                    disabled={removingItemId === item.id}
+                    disabled={isLoading}
                     className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-700 hover:text-black transition-colors duration-300"
                   >
-                    {removingItemId === item.id ? (
+                    {isLoading ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <Trash2 className="h-5 w-5" />
@@ -177,11 +171,11 @@ const WishlistPage = () => {
                       ${item.price.toFixed(2)}
                     </p>
                     <button
-                      onClick={() => handleAddToCart(item.id)}
-                      disabled={isLoading}
+                      onClick={() => handleAddToCart(item)}
+                      disabled={isAddingToCart}
                       className="inline-flex items-center px-4 py-2 border-2 border-black rounded-lg text-black hover:bg-black hover:text-white transition-colors duration-300"
                     >
-                      {isLoading ? (
+                      {isAddingToCart ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
                         <>
@@ -193,7 +187,7 @@ const WishlistPage = () => {
                   </div>
 
                   <p className="text-sm text-gray-700 mt-2">
-                    Added on {new Date(item.addedDate).toLocaleDateString()}
+                    Added on {new Date(item.addedDate || Date.now()).toLocaleDateString()}
                   </p>
                 </div>
               </motion.div>

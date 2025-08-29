@@ -11,7 +11,13 @@ export const mockProducts = [
     condition: "Good",
     color: "Black",
     size: "L",
-    isNew: true
+    sizes: ["S", "M", "L", "XL"],
+    isNew: true,
+    inStock: true,
+    popularity: 95,
+    eraYear: 1991,
+    era: "90s",
+    createdAt: "2024-01-15T10:00:00Z"
   },
   {
     id: 2,
@@ -24,7 +30,13 @@ export const mockProducts = [
     condition: "Like New",
     color: "Black",
     size: "M",
-    isNew: false
+    sizes: ["XS", "S", "M", "L"],
+    isNew: false,
+    inStock: true,
+    popularity: 88,
+    eraYear: 1972,
+    era: "70s",
+    createdAt: "2024-01-10T10:00:00Z"
   },
   {
     id: 3,
@@ -38,7 +50,13 @@ export const mockProducts = [
     condition: "Good",
     color: "Red",
     size: "XL",
-    isNew: true
+    sizes: ["M", "L", "XL", "XXL"],
+    isNew: true,
+    inStock: true,
+    popularity: 92,
+    eraYear: 1996,
+    era: "90s",
+    createdAt: "2024-01-12T10:00:00Z"
   },
   {
     id: 4,
@@ -51,7 +69,13 @@ export const mockProducts = [
     condition: "Fair",
     color: "Black",
     size: "L",
-    isNew: false
+    sizes: ["S", "M", "L"],
+    isNew: false,
+    inStock: true,
+    popularity: 85,
+    eraYear: 1973,
+    era: "70s",
+    createdAt: "2024-01-08T10:00:00Z"
   },
   {
     id: 5,
@@ -64,7 +88,13 @@ export const mockProducts = [
     condition: "Good",
     color: "White",
     size: "M",
-    isNew: false
+    sizes: ["XS", "S", "M", "L", "XL"],
+    isNew: false,
+    inStock: true,
+    popularity: 98,
+    eraYear: 1969,
+    era: "60s",
+    createdAt: "2024-01-05T10:00:00Z"
   },
   {
     id: 6,
@@ -78,7 +108,13 @@ export const mockProducts = [
     condition: "Like New",
     color: "Black",
     size: "XL",
-    isNew: true
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    isNew: true,
+    inStock: true,
+    popularity: 90,
+    eraYear: 1986,
+    era: "80s",
+    createdAt: "2024-01-14T10:00:00Z"
   },
   {
     id: 7,
@@ -91,7 +127,13 @@ export const mockProducts = [
     condition: "Good",
     color: "Black",
     size: "L",
-    isNew: false
+    sizes: ["M", "L", "XL"],
+    isNew: false,
+    inStock: true,
+    popularity: 87,
+    eraYear: 1977,
+    era: "70s",
+    createdAt: "2024-01-07T10:00:00Z"
   },
   {
     id: 8,
@@ -105,7 +147,13 @@ export const mockProducts = [
     condition: "Like New",
     color: "Black",
     size: "M",
-    isNew: true
+    sizes: ["XS", "S", "M", "L", "XL"],
+    isNew: true,
+    inStock: true,
+    popularity: 89,
+    eraYear: 1980,
+    era: "80s",
+    createdAt: "2024-01-13T10:00:00Z"
   }
 ];
 
@@ -115,4 +163,4 @@ export const filterOptions = {
   decades: ['50s', '60s', '70s', '80s', '90s'],
   styles: ['Band Tees', 'Sports', 'Surf & Skate', 'Movie Classics', 'Retro Graphics'],
   conditions: ['Mint', 'Excellent', 'Very Good', 'Good', 'Fair']
-}; 
+};
