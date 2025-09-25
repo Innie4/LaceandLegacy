@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingCart, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { itemCount } = useCart();
-  const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
   const location = useLocation();
 

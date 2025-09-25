@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
@@ -7,7 +6,6 @@ import Breadcrumbs from './Breadcrumbs';
 import { useTheme } from '../../contexts/ThemeContext';
 
 const Layout = ({ children }) => {
-  const location = useLocation();
   const { theme } = useTheme();
 
   const pageVariants = {

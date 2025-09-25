@@ -16,13 +16,13 @@ const Footer = () => {
               Your destination for authentic vintage t-shirts from the most iconic moments in history.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-black hover:text-black transition-colors duration-300">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-black hover:text-black transition-colors duration-300">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-black hover:text-black transition-colors duration-300">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-black hover:text-black transition-colors duration-300">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-black hover:text-black transition-colors duration-300">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-black hover:text-black transition-colors duration-300">
                 <Instagram className="w-5 h-5" />
               </a>
               <a href="mailto:contact@lace-legacy.com" className="text-black hover:text-black transition-colors duration-300">

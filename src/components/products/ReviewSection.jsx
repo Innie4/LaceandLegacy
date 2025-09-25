@@ -17,6 +17,7 @@ const ReviewSection = ({ productId }) => {
 
   useEffect(() => {
     fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   const fetchReviews = async () => {
@@ -89,6 +90,10 @@ const ReviewSection = ({ productId }) => {
           </span>
         </div>
       </div>
+
+      {isLoading && (
+        <div className="text-amber-700">Loading reviews...</div>
+      )}
 
       {/* Review Form */}
       <div className="bg-white rounded-xl border-2 border-amber-200 p-6">

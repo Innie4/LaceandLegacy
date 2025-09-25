@@ -10,7 +10,6 @@ import { WishlistProvider } from './contexts/WishlistContext';
 
 // Layout Components
 import Layout from './components/layout/Layout';
-import ProtectedRoute from './components/auth/ProtectedRoute';
 import BreadcrumbNav from './components/layout/BreadcrumbNav';
 
 // Page Components
@@ -42,6 +41,7 @@ import PaymentPage from './pages/PaymentPage';
 import ShippingReturnsPage from './pages/ShippingReturnsPage';
 import CareGuidePage from './pages/CareGuidePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import EditProfilePage from './pages/EditProfilePage';
 
 // Global Styles
 import './styles/global.css';
@@ -80,6 +80,7 @@ const AnimatedRoutes = () => {
         <Route path="/order-tracking" element={<OrderTrackingPage />} />
         <Route path="/account" element={<DashboardPage />} />
         <Route path="/account/personal-info" element={<PersonalInfoPage />} />
+        <Route path="/account/edit-profile" element={<EditProfilePage />} />
         <Route path="/account/wishlist" element={<WishlistPage />} />
         <Route path="/account/orders" element={<OrderHistoryPage />} />
         <Route path="/payment" element={<PaymentPage />} />

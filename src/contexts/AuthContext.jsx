@@ -51,14 +51,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, password) => {
-    try {
-      // Here you would typically make an API call to your backend
-      // For now, we'll just simulate a successful registration
-      return true;
-    } catch (error) {
-      console.error('Registration failed:', error);
-      return false;
-    }
+    // Simulate API call success
+    return true;
   };
 
   const value = {

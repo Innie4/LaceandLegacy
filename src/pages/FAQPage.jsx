@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -27,7 +27,7 @@ const FAQPage = () => {
     { id: 'sizing', name: 'Sizing', icon: <Ruler className="h-5 w-5" /> },
   ];
 
-  const faqs = [
+  const faqs = useMemo(() => [
     {
       id: 1,
       category: 'orders',
@@ -76,7 +76,7 @@ const FAQPage = () => {
       question: 'Do your sizes run true to size?',
       answer: 'Our vintage-inspired pieces are designed to fit true to size. However, we recommend checking the specific measurements for each item as some styles may have a more relaxed or fitted silhouette.',
     },
-  ];
+  ], []);
 
   const relatedArticles = [
     {
@@ -115,7 +115,7 @@ const FAQPage = () => {
     }
     
     setFilteredFaqs(filtered);
-  }, [searchQuery, activeCategory]);
+  }, [searchQuery, activeCategory, faqs]);
 
   const toggleFaq = (id) => {
     setExpandedFaqs((prev) => ({
