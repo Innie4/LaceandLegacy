@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
 
 const pageVariants = {
   initial: {
@@ -89,7 +90,7 @@ const RegisterPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/registration/register', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

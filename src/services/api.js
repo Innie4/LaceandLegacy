@@ -1,5 +1,5 @@
 // Centralized Fetch API Service for Lace and Legacy
-const API_BASE_URL = 'https://likwapu-ecommerce-backend.fly.dev/';
+import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
@@ -105,19 +105,19 @@ export function normalizeProducts(items) {
 // Auth services
 export const authService = {
   register: (data) =>
-    fetch(`${API_BASE_URL}/api/registration/register`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse),
   login: (data) =>
-    fetch(`${API_BASE_URL}/api/login`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse),
   logout: () =>
-    fetch(`${API_BASE_URL}/api/registration/logout`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.logout}`, {
       method: 'POST',
       headers: getAuthHeaders(),
     }).then(handleResponse),
@@ -126,17 +126,17 @@ export const authService = {
 // User services
 export const userService = {
   getProfile: () =>
-    fetch(`${API_BASE_URL}/api/user/profile`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.profile}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   updateProfile: (data) =>
-    fetch(`${API_BASE_URL}/api/user/profile`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateProfile}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse),
   updatePreferences: (data) =>
-    fetch(`${API_BASE_URL}/api/user/preferences`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.preferences}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -147,24 +147,24 @@ export const userService = {
 export const productService = {
   getProducts: (params) => {
     const query = params ? '?' + new URLSearchParams(params).toString() : '';
-    return fetch(`${API_BASE_URL}/api/products${query}`, {
+    return fetch(`${API_BASE_URL}${API_ENDPOINTS.products}${query}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse);
   },
   getProduct: (id) =>
-    fetch(`${API_BASE_URL}/api/products/${id}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.product(id)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   searchProducts: (query) =>
-    fetch(`${API_BASE_URL}/api/products/search?q=${encodeURIComponent(query)}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.search}?q=${encodeURIComponent(query)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   getCategories: () =>
-    fetch(`${API_BASE_URL}/api/products/categories`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.categories}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   getFilters: () =>
-    fetch(`${API_BASE_URL}/api/products/filters`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.filters}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
 };
@@ -172,11 +172,11 @@ export const productService = {
 // Review services
 export const reviewService = {
   getReviews: (productId) =>
-    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.reviews(productId)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   addReview: (productId, data) =>
-    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.addReview(productId)}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -186,23 +186,23 @@ export const reviewService = {
 // Cart services
 export const cartService = {
   getCart: () =>
-    fetch(`${API_BASE_URL}/api/cart`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.cart}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   addToCart: (data) =>
-    fetch(`${API_BASE_URL}/api/cart/add`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse),
   updateCart: (data) =>
-    fetch(`${API_BASE_URL}/api/cart/update`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateCart}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse),
   removeFromCart: (itemId) =>
-    fetch(`${API_BASE_URL}/api/cart/remove/${itemId}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.removeFromCart(itemId)}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     }).then(handleResponse),
@@ -211,15 +211,15 @@ export const cartService = {
 // Order services
 export const orderService = {
   getOrders: () =>
-    fetch(`${API_BASE_URL}/api/orders`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.orders}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   getOrder: (id) =>
-    fetch(`${API_BASE_URL}/api/orders/${id}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.order(id)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse),
   createOrder: (data) =>
-    fetch(`${API_BASE_URL}/api/orders`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.createOrder}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -229,7 +229,7 @@ export const orderService = {
 // Contact services
 export const contactService = {
   sendMessage: (data) =>
-    fetch(`${API_BASE_URL}/api/contact`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.contact}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),

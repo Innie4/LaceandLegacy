@@ -1,10 +1,11 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8090';
+// Unified API base URL (defaults to Fly.io backend, allows env override)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://likwapu-ecommerce-backend.fly.dev';
 
 export const API_ENDPOINTS = {
-  // Auth
-  register: '/api/auth/register',
-  login: '/api/auth/login',
-  logout: '/api/auth/logout',
+  // Auth (aligned to backend routes)
+  login: '/api/login',
+  register: '/api/registration/register',
+  logout: '/api/registration/logout',
   
   // User
   profile: '/api/user/profile',
@@ -21,12 +22,17 @@ export const API_ENDPOINTS = {
   // Reviews
   reviews: (productId) => `/api/products/${productId}/reviews`,
   addReview: (productId) => `/api/products/${productId}/reviews`,
+
+  // Wishlist
+  wishlist: '/api/wishlist',
+  wishlistAdd: '/api/wishlist/add',
+  wishlistRemove: '/api/wishlist/remove',
   
   // Cart
   cart: '/api/cart',
   addToCart: '/api/cart/add',
   updateCart: '/api/cart/update',
-  removeFromCart: '/api/cart/remove',
+  removeFromCart: (itemId) => `/api/cart/remove/${itemId}`,
   
   // Orders
   orders: '/api/orders',
@@ -37,4 +43,4 @@ export const API_ENDPOINTS = {
   contact: '/api/contact',
 };
 
-export default API_BASE_URL; 
+export default API_BASE_URL;

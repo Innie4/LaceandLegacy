@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../contexts/CartContext';
+import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
 
 const pageVariants = {
   initial: {
@@ -37,7 +38,7 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/login', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

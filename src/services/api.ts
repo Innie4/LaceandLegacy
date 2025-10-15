@@ -11,8 +11,7 @@ import {
   WishlistItem,
   ApiError
 } from '../types/api';
-
-const API_BASE_URL = 'https://likwapuecommerce.fly.dev';
+import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
 
 function getAuthHeaders(): HeadersInit {
   const token = localStorage.getItem('token');
@@ -39,98 +38,98 @@ export const apiService = {
   // Product methods
   getProducts: (params: ProductFilters = {}): Promise<ApiResponse<Product[]>> => {
     const query = Object.keys(params).length ? '?' + new URLSearchParams(params as any).toString() : '';
-    return fetch(`${API_BASE_URL}/api/products${query}`, {
+    return fetch(`${API_BASE_URL}${API_ENDPOINTS.products}${query}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<Product[]>);
   },
   getProduct: (id: string): Promise<ApiResponse<Product>> =>
-    fetch(`${API_BASE_URL}/api/products/${id}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.product(id)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<Product>),
   // Order methods
   getOrders: (): Promise<ApiResponse<Order[]>> =>
-    fetch(`${API_BASE_URL}/api/orders`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.orders}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<Order[]>),
   createOrder: (orderData: CreateOrderRequest): Promise<ApiResponse<Order>> =>
-    fetch(`${API_BASE_URL}/api/orders`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.createOrder}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(orderData),
     }).then(handleResponse<Order>),
   // Auth methods
   login: (credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> =>
-    fetch(`${API_BASE_URL}/api/registration/login`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(credentials),
     }).then(handleResponse<AuthResponse>),
   register: (userData: RegisterRequest): Promise<ApiResponse<AuthResponse>> =>
-    fetch(`${API_BASE_URL}/api/registration/register`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(userData),
     }).then(handleResponse<AuthResponse>),
   // User methods
   updateProfile: (userData: Partial<User>): Promise<ApiResponse<User>> =>
-    fetch(`${API_BASE_URL}/api/user/profile`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateProfile}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(userData),
     }).then(handleResponse<User>),
   // Wishlist methods
   getWishlist: (): Promise<ApiResponse<Product[]>> =>
-    fetch(`${API_BASE_URL}/api/wishlist`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlist}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<Product[]>),
   addToWishlist: (productId: string): Promise<ApiResponse<{ success: boolean }>> =>
-    fetch(`${API_BASE_URL}/api/wishlist/add`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlistAdd}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ productId }),
     }).then(handleResponse<{ success: boolean }>),
   removeFromWishlist: (productId: string): Promise<ApiResponse<{ success: boolean }>> =>
-    fetch(`${API_BASE_URL}/api/wishlist/remove`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlistRemove}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ productId }),
     }).then(handleResponse<{ success: boolean }>),
   // Cart methods
   getCart: (): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/cart`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.cart}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<any>),
   addToCart: (data: any): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/cart/add`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse<any>),
   updateCart: (data: any): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/cart/update`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateCart}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse<any>),
   removeFromCart: (itemId: string): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/cart/remove/${itemId}`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.removeFromCart(itemId)}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     }).then(handleResponse<any>),
   // Review methods
   getReviews: (productId: string): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.reviews(productId)}`, {
       headers: getAuthHeaders(),
     }).then(handleResponse<any>),
   addReview: (productId: string, data: any): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.addReview(productId)}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     }).then(handleResponse<any>),
   // Contact
   sendMessage: (data: any): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}/api/contact`, {
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.contact}`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
