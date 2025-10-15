@@ -17,7 +17,7 @@ import ImageGallery from '../components/products/ImageGallery';
 import SizeGuideModal from '../components/products/SizeGuideModal';
 import ReviewSection from '../components/products/ReviewSection';
 import ProductRecommendations from '../components/products/ProductRecommendations';
-import { mockProducts } from '../data/mockProducts';
+import { productService, normalizeProduct } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 
 const ProductDetailPage = () => {
@@ -33,18 +33,18 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    // Simulate API call
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        // In a real app, this would be an API call
-        const foundProduct = mockProducts.find(p => p.id === id);
-        if (foundProduct) {
-          setProduct(foundProduct);
-          setSelectedColor(foundProduct.colors[0]);
-        }
+        const apiProduct = await productService.getProduct(id);
+        const normalized = normalizeProduct(apiProduct);
+        setProduct(normalized);
+        setSelectedColor(Array.isArray(normalized.colors) ? normalized.colors[0] : normalized.color);
+        setSelectedSize(Array.isArray(normalized.sizes) ? normalized.sizes[0] : normalized.size);
       } catch (error) {
+        console.error('Failed to load product details:', error);
         toast.error('Failed to load product details');
+        setProduct(null);
       } finally {
         setLoading(false);
       }

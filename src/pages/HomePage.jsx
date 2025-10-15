@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import { mockProducts } from '../data/mockProducts';
+import { toast } from 'react-hot-toast';
 import ProductCard from '../components/products/ProductCard';
 import QuickViewModal from '../components/products/QuickViewModal';
+import { productService, normalizeProducts } from '../services/api';
 
 const HomePage = () => {
   const [typewriterText, setTypewriterText] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
   // Typewriter effect for hero section
   useEffect(() => {
@@ -55,6 +58,26 @@ const HomePage = () => {
       setCurrentSlide((prev) => (prev + 1) % 3);
     }, 5000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Fetch latest products for the home page
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const res = await productService.getProducts();
+        // Some APIs return `{ products: [...] }`; handle both array and object shapes
+        const items = Array.isArray(res) ? res : res?.products || [];
+        setProducts(normalizeProducts(items));
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        toast.error('Failed to load latest products');
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const heroSlides = [
@@ -163,16 +186,26 @@ const HomePage = () => {
           <h2 className="text-4xl font-bold text-black mb-12 text-center font-mono">
               Latest Throwback Finds
             </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {mockProducts.slice(0, 4).map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                viewMode="grid"
-                onQuickView={() => setSelectedProduct(product)}
-              />
-            ))}
-          </div>
+          {loadingProducts ? (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="h-8 w-8 text-gray-700 animate-spin" />
+            </div>
+          ) : products.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {products.slice(0, 4).map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  viewMode="grid"
+                  onQuickView={() => setSelectedProduct(product)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-700 py-10">
+              No products available at the moment.
+            </div>
+          )}
         </div>
       </section>
 

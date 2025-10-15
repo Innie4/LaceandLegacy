@@ -20,6 +20,88 @@ function handleResponse(response) {
   return response.json();
 }
 
+// Product data normalizers
+export function normalizeProduct(p) {
+  if (!p || typeof p !== 'object') {
+    return {
+      id: String(Math.random()),
+      name: 'Untitled Product',
+      description: '',
+      price: 0,
+      images: ['https://via.placeholder.com/800x800?text=Product'],
+      image: 'https://via.placeholder.com/800x800?text=Product',
+      era: 'Vintage',
+      decade: 'Vintage',
+      style: 'Vintage',
+      condition: 'Good',
+      colors: ['Black'],
+      color: 'Black',
+      sizes: ['M'],
+      size: 'M',
+      isNew: false,
+      inStock: true,
+      popularity: 0,
+      eraYear: 1970,
+      createdAt: new Date().toISOString(),
+    };
+  }
+
+  const imagesArr = Array.isArray(p.images)
+    ? p.images
+    : p.gallery
+    ? p.gallery
+    : p.image
+    ? [p.image]
+    : [];
+
+  const primaryImage = imagesArr.length > 0
+    ? imagesArr[0]
+    : (p.thumbnail || 'https://via.placeholder.com/800x800?text=Product');
+
+  const colorsArr = Array.isArray(p.colors)
+    ? p.colors
+    : p.color
+    ? [p.color]
+    : ['Black'];
+
+  const sizesArr = Array.isArray(p.sizes)
+    ? p.sizes
+    : p.size
+    ? [p.size]
+    : ['M'];
+
+  const priceNum = typeof p.price === 'number' ? p.price : parseFloat(p.price);
+  const eraYr = p.eraYear || p.year || (p.createdAt ? new Date(p.createdAt).getFullYear() : undefined) || 1970;
+
+  return {
+    id: p.id || p._id || p.productId || p.slug || String(Math.random()),
+    name: p.name || p.title || 'Untitled Product',
+    description: p.description || p.desc || '',
+    price: Number.isFinite(priceNum) ? priceNum : 0,
+    images: imagesArr.length > 0 ? imagesArr : [primaryImage],
+    image: primaryImage,
+    era: p.era || p.decade || p.category || 'Vintage',
+    decade: p.decade || p.era || 'Vintage',
+    style: p.style || p.category || 'Vintage',
+    condition: p.condition || 'Good',
+    colors: colorsArr,
+    color: colorsArr[0],
+    sizes: sizesArr,
+    size: sizesArr[0],
+    isNew: !!p.isNew,
+    inStock: p.inStock !== undefined ? !!p.inStock : true,
+    popularity: p.popularity || 0,
+    eraYear: eraYr,
+    createdAt: p.createdAt || new Date().toISOString(),
+    category: p.category || p.style || undefined,
+  };
+}
+
+export function normalizeProducts(items) {
+  if (!Array.isArray(items)) return [];
+  return items.map(normalizeProduct);
+}
+
 // Auth services
 export const authService = {
   register: (data) =>

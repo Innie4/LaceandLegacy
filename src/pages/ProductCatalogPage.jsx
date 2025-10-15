@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -15,7 +15,7 @@ import ProductCard from '../components/products/ProductCard';
 import FilterSidebar from '../components/products/FilterSidebar';
 import QuickViewModal from '../components/products/QuickViewModal';
 import useDebounce from '../hooks/useDebounce';
-import { mockProducts } from '../data/mockProducts';
+import { productService, normalizeProducts } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
@@ -49,6 +49,29 @@ const ProductCatalogPage = () => {
   });
 
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  // Load products from API
+  const [allProducts, setAllProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const apiResult = await productService.getProducts();
+        const items = Array.isArray(apiResult) ? apiResult : (apiResult?.products || []);
+        if (isMounted) setAllProducts(normalizeProducts(items));
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        toast.error('Failed to load products');
+      } finally {
+        if (isMounted) setLoadingProducts(false);
+      }
+    };
+    loadProducts();
+    return () => { isMounted = false; };
+  }, []);
 
 
 
@@ -92,7 +115,7 @@ const ProductCatalogPage = () => {
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let result = [...mockProducts];
+    let result = [...allProducts];
 
     // Apply search
     if (debouncedSearchQuery) {
@@ -167,7 +190,7 @@ const ProductCatalogPage = () => {
     }
 
     return result;
-  }, [debouncedSearchQuery, filters, sortBy]);
+  }, [debouncedSearchQuery, filters, sortBy, allProducts]);
 
   const products = filteredProducts;
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -356,7 +379,7 @@ const ProductCatalogPage = () => {
             {/* Results Count */}
             <div className="mb-6">
               <p className="text-gray-600">
-                Showing {products.length} of {mockProducts.length} products
+                Showing {products.length} of {allProducts.length} products
               </p>
             </div>
 
@@ -379,7 +402,14 @@ const ProductCatalogPage = () => {
             </div>
 
             {/* Products */}
-            {paginatedProducts.length === 0 ? (
+            {loadingProducts ? (
+              <div className="w-full flex justify-center items-center py-16">
+                <svg className="animate-spin h-8 w-8 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+              </div>
+            ) : paginatedProducts.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
                 <Button
