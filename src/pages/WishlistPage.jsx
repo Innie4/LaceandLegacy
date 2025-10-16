@@ -39,6 +39,19 @@ const WishlistPage = () => {
 
   const handleAddToCart = async (item) => {
     if (!user) {
+      const cartItem = {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        size: item.sizes?.[0] || 'M',
+        color: item.color || 'Default',
+        era: item.era,
+        quantity: 1
+      };
+      try {
+        localStorage.setItem('pendingCartItem', JSON.stringify(cartItem));
+      } catch {}
       toast.error('Please log in to add items to your cart');
       navigate('/login', { state: { returnTo: location.pathname } });
       return;

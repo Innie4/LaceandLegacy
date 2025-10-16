@@ -8,17 +8,38 @@ import Heading from '../components/typography/Heading';
 import Text from '../components/typography/Text';
 import Button from '../components/buttons/Button';
 import Spinner from '../components/loaders/Spinner';
-import { mockProducts } from '../data/mockProducts';
+import Input from '../components/forms/Input';
+import { productService, normalizeProducts } from '../services/api';
 
 const PersonalInfoPage = () => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, updateProfile } = useUser();
   const { addToCart, isLoading: isCartLoading } = useCart();
   const navigate = useNavigate();
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [activityLoading, setActivityLoading] = useState(false);
+  const [profileProducts, setProfileProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState('');
   
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setProductsLoading(true);
+      try {
+        const apiProducts = await productService.getProducts();
+        const normalized = normalizeProducts(apiProducts?.data || apiProducts || []);
+        setProfileProducts(normalized.slice(0, 12));
+      } catch (error) {
+        console.error('Failed to load products for profile page:', error);
+        toast.error('Failed to load products');
+        setProfileProducts([]);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    fetchProducts();
+    setAvatarUrl(user?.avatar || '');
+  }, [user]);
 
   
 
@@ -29,10 +50,33 @@ const PersonalInfoPage = () => {
     if (file.size > 5 * 1024 * 1024) return toast.error('Image size should be less than 5MB');
     setAvatarLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const toBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const dataUrl = await toBase64(file);
+      await updateProfile({ avatar: dataUrl });
       toast.success('Profile picture updated successfully');
     } catch {
       toast.error('Failed to update profile picture');
+    } finally {
+      setAvatarLoading(false);
+    }
+  };
+
+  const handleAvatarUrlSave = async () => {
+    if (!avatarUrl) {
+      toast.error('Please enter a valid avatar URL');
+      return;
+    }
+    setAvatarLoading(true);
+    try {
+      await updateProfile({ avatar: avatarUrl });
+      toast.success('Avatar updated');
+    } catch {
+      toast.error('Failed to update avatar');
     } finally {
       setAvatarLoading(false);
     }
@@ -42,6 +86,17 @@ const PersonalInfoPage = () => {
 
   const handleGetProduct = async (product) => {
     if (!isAuthenticated) {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      try { localStorage.setItem('pendingCartItem', JSON.stringify(cartItem)); } catch {}
       toast.error('Please log in to add items to your cart');
       navigate('/login', { state: { returnTo: '/account/personal-info' } });
       return;
@@ -131,20 +186,31 @@ const PersonalInfoPage = () => {
           </div>
           <Text variant="small">Click a product to add it to your cart and go straight to payment.</Text>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {mockProducts.slice(0, 4).map((p) => (
-              <div key={p.id} className="flex items-center justify-between border-2 border-amber-200 rounded-lg p-3">
-                <div className="flex items-center gap-3">
-                  <img src={p.image} alt={p.name} className="w-14 h-14 object-cover rounded" />
-                  <div>
-                    <div className="text-amber-900 font-mono text-sm line-clamp-1">{p.name}</div>
-                    <div className="text-amber-700 text-sm">${p.price.toFixed(2)}</div>
+            {productsLoading ? (
+              <div className="flex items-center justify-center py-6"><Spinner size="sm" /></div>
+            ) : profileProducts.length > 0 ? (
+              profileProducts.slice(0, 4).map((p) => (
+                <div key={p.id} className="flex items-center justify-between border-2 border-amber-200 rounded-lg p-3">
+                  <div className="flex items-center gap-3">
+                    <img src={p.image} alt={p.name} className="w-14 h-14 object-cover rounded" />
+                    <div>
+                      <div className="text-amber-900 font-mono text-sm line-clamp-1">{p.name}</div>
+                      <div className="text-amber-700 text-sm">${p.price.toFixed(2)}</div>
+                    </div>
                   </div>
+                  <Button onClick={() => handleGetProduct(p)} disabled={isCartLoading || p.inStock === false}>
+                    {isCartLoading ? <Spinner size="sm" /> : 'Get it'}
+                  </Button>
                 </div>
-                <Button onClick={() => handleGetProduct(p)} disabled={isCartLoading || p.inStock === false}>
-                  {isCartLoading ? <Spinner size="sm" /> : 'Get it'}
-                </Button>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="text-center text-gray-700 py-4">No products available</div>
+            )}
+          </div>
+          <div className="flex justify-end">
+            <Link to="/payment">
+              <Button variant="secondary">Proceed to Checkout</Button>
+            </Link>
           </div>
         </div>
 
@@ -158,9 +224,30 @@ const PersonalInfoPage = () => {
           </div>
           <Text variant="small">Recent activity and stats will appear here.</Text>
         </div>
+
+        {/* Avatar URL Update */}
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-4">
+          <Heading level={3}>Update Avatar via URL</Heading>
+          <Text variant="small">Paste an image URL to update your profile picture.</Text>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Avatar URL"
+              id="avatarUrl"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="https://example.com/avatar.jpg"
+              type="url"
+            />
+            <div className="flex items-end">
+              <Button onClick={handleAvatarUrlSave} disabled={avatarLoading}>
+                {avatarLoading ? <Spinner size="sm" /> : 'Save Avatar'}
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default PersonalInfoPage; 
+export default PersonalInfoPage;

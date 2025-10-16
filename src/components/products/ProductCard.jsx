@@ -41,6 +41,20 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
     e.stopPropagation();
     
     if (!isAuthenticated) {
+      // Persist pending cart item so it can be added after login
+      const pendingItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      try {
+        localStorage.setItem('pendingCartItem', JSON.stringify(pendingItem));
+      } catch {}
       toast.error('Please log in to add items to your cart');
       navigate('/login', { state: { returnTo: location.pathname } });
       return;

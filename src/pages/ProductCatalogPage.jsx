@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -17,6 +18,7 @@ import QuickViewModal from '../components/products/QuickViewModal';
 import useDebounce from '../hooks/useDebounce';
 import { productService, normalizeProducts } from '../services/api';
 import { useCart } from '../contexts/CartContext';
+import { useUser } from '../contexts/UserContext';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/Sheet';
@@ -39,6 +41,9 @@ const ProductCatalogPage = () => {
   const [sortBy, setSortBy] = useState('popular');
 
   const { addToCart } = useCart();
+  const { isAuthenticated } = useUser();
+  const navigate = useNavigate();
+  const loc = useLocation();
   const [filters, setFilters] = useState({
     sizes: null,
     colors: null,
@@ -212,18 +217,23 @@ const ProductCatalogPage = () => {
   };
 
   const handleAddToCart = async (product) => {
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+      color: product.color || 'Default',
+      era: product.era,
+      quantity: 1
+    };
+    if (!isAuthenticated) {
+      try { localStorage.setItem('pendingCartItem', JSON.stringify(cartItem)); } catch {}
+      toast.error('Please log in to add items to your cart');
+      navigate('/login', { state: { returnTo: loc.pathname } });
+      return;
+    }
     try {
-      const cartItem = {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
-        color: product.color || 'Default',
-        era: product.era,
-        quantity: 1
-      };
-      
       await addToCart(cartItem);
       toast.success(`${product.name} added to cart!`);
     } catch (error) {

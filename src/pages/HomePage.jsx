@@ -191,8 +191,9 @@ const HomePage = () => {
               <Loader2 className="h-8 w-8 text-gray-700 animate-spin" />
             </div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {products.slice(0, 4).map((product) => (
+            <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {products.slice(0, 10).map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -201,6 +202,14 @@ const HomePage = () => {
                 />
               ))}
             </div>
+            <div className="flex justify-center mt-8">
+              <Link to="/payment" className="inline-block">
+                <span className="px-8 py-3 bg-black text-white rounded-lg font-bold hover:bg-gray-900 transition-colors duration-300">
+                  Proceed to Checkout
+                </span>
+              </Link>
+            </div>
+            </>
           ) : (
             <div className="text-center text-gray-700 py-10">
               No products available at the moment.
@@ -287,6 +296,7 @@ const HomePage = () => {
         {selectedProduct && (
           <QuickViewModal
             product={selectedProduct}
+            isOpen={!!selectedProduct}
             onClose={() => setSelectedProduct(null)}
           />
         )}

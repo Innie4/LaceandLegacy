@@ -1,19 +1,52 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Heart, ShoppingCart, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
+import { useUser } from '../../contexts/UserContext';
 import QuickViewModal from '../products/QuickViewModal';
 import Tooltip from '../ui/Tooltip';
 
 const ProductGrid = ({ products }) => {
   const { addToCart } = useCart();
   const { addToast } = useToast();
+  const { isAuthenticated } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const handleAddToCart = (product) => {
-    addToCart(product);
+    if (!isAuthenticated) {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: 1
+      };
+      try {
+        localStorage.setItem('pendingCartItem', JSON.stringify(cartItem));
+      } catch {}
+      addToast({ message: 'Please log in to add items to your cart', type: 'error' });
+      navigate('/login', { state: { returnTo: location.pathname } });
+      return;
+    }
+
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+      color: product.color || 'Default',
+      era: product.era,
+      quantity: 1
+    };
+    addToCart(cartItem);
     addToast({
       message: `${product.name} added to cart`,
       type: 'success'

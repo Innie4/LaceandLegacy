@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../../contexts/CartContext';
+import { useUser } from '../../contexts/UserContext';
+import { toast } from 'react-hot-toast';
 
 const ProductGrid = ({ products, onLoadMore }) => {
   const [visibleProducts, setVisibleProducts] = useState([]);
@@ -9,6 +12,10 @@ const ProductGrid = ({ products, onLoadMore }) => {
   const [page, setPage] = useState(1);
   const observerRef = useRef(null);
   const loadingRef = useRef(null);
+  const { addToCart } = useCart();
+  const { isAuthenticated } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Initialize intersection observer for infinite scroll
   useEffect(() => {
@@ -90,7 +97,24 @@ const ProductGrid = ({ products, onLoadMore }) => {
                       className="bg-white text-amber-800 p-3 rounded-full hover:bg-black hover:text-white transition-colors duration-300 touch-manipulation"
                       onClick={(e) => {
                         e.preventDefault();
-                        // Add to cart logic
+                        const cartItem = {
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                          size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+                          color: product.color || 'Default',
+                          era: product.era,
+                          quantity: 1
+                        };
+                        if (!isAuthenticated) {
+                          try { localStorage.setItem('pendingCartItem', JSON.stringify(cartItem)); } catch {}
+                          toast.error('Please log in to add items to your cart');
+                          navigate('/login', { state: { returnTo: location.pathname } });
+                          return;
+                        }
+                        addToCart(cartItem);
+                        toast.success(`${product.name} added to cart!`);
                       }}
                     >
                       <ShoppingCart className="h-5 w-5" />

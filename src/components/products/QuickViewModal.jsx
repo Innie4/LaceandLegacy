@@ -38,6 +38,19 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
 
   const handleAddToCart = async () => {
     if (!user) {
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        size: selectedSize || (Array.isArray(product.sizes) ? product.sizes[0] : 'M'),
+        color: product.color || 'Default',
+        era: product.era,
+        quantity: quantity
+      };
+      try {
+        localStorage.setItem('pendingCartItem', JSON.stringify(cartItem));
+      } catch {}
       toast.error('Please log in to add items to your cart');
       navigate('/login', { state: { returnTo: location.pathname } });
       return;

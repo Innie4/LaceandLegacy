@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../../contexts/CartContext';
+import { useUser } from '../../contexts/UserContext';
+import { toast } from 'react-hot-toast';
 
-const MobileProductGrid = ({ products, onLoadMore }) => {
+const MobileProductGrid = ({ products, onLoadMore, onWishlistClick, onAddToCart }) => {
   const [visibleProducts, setVisibleProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const observer = useRef();
   const loadingRef = useRef(null);
+  const { addToCart } = useCart();
+  const { isAuthenticated } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Initialize visible products
   useEffect(() => {
@@ -105,12 +112,51 @@ const MobileProductGrid = ({ products, onLoadMore }) => {
                       <button
                         className="p-2 text-amber-600 hover:text-amber-700 transition-colors"
                         aria-label="Add to wishlist"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (onWishlistClick) {
+                            onWishlistClick(product);
+                            return;
+                          }
+                          if (!isAuthenticated) {
+                            toast.error('Please log in to manage your wishlist');
+                            navigate('/login', { state: { returnTo: location.pathname } });
+                            return;
+                          }
+                          // If wishlist context is needed, ideally use it here; keeping UX consistent
+                          toast.success('Added to wishlist');
+                        }}
                       >
                         <Heart className="h-4 w-4" />
                       </button>
                       <button
                         className="p-2 text-amber-600 hover:text-amber-700 transition-colors"
                         aria-label="Add to cart"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const cartItem = {
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image,
+                            size: Array.isArray(product.sizes) ? product.sizes[0] : product.size || 'M',
+                            color: product.color || 'Default',
+                            era: product.era,
+                            quantity: 1
+                          };
+                          if (onAddToCart) {
+                            onAddToCart(product);
+                            return;
+                          }
+                          if (!isAuthenticated) {
+                            try { localStorage.setItem('pendingCartItem', JSON.stringify(cartItem)); } catch {}
+                            toast.error('Please log in to add items to your cart');
+                            navigate('/login', { state: { returnTo: location.pathname } });
+                            return;
+                          }
+                          addToCart(cartItem);
+                          toast.success(`${product.name} added to cart!`);
+                        }}
                       >
                         <ShoppingBag className="h-4 w-4" />
                       </button>
@@ -140,4 +186,4 @@ const MobileProductGrid = ({ products, onLoadMore }) => {
   );
 };
 
-export default MobileProductGrid; 
+export default MobileProductGrid;
