@@ -5,6 +5,7 @@ import Input from '../components/forms/Input';
 import Button from '../components/buttons/Button';
 import Spinner from '../components/loaders/Spinner';
 import { CreditCard, Lock } from 'lucide-react';
+import { useCart } from '../contexts/CartContext';
 
 const PaymentPage = () => {
   const [form, setForm] = useState({
@@ -16,6 +17,15 @@ const PaymentPage = () => {
   const [errors, setErrors] = useState({});
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
+  const { items, total } = useCart();
+
+  const subtotal = items?.reduce((sum, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.quantity) || 1;
+    return sum + price * qty;
+  }, 0) || 0;
+  const shipping = 0;
+  const grandTotal = subtotal + shipping;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,11 +62,55 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white py-12">
-      <Card className="max-w-md w-full p-8 rounded-xl shadow-lg border-2 border-black bg-white">
-        <h1 className="text-3xl font-bold text-black font-mono mb-6 flex items-center gap-2">
-          <CreditCard className="h-7 w-7" /> Payment
-        </h1>
+    <div className="min-h-screen flex items-start justify-center bg-white py-12">
+      <div className="w-full max-w-2xl space-y-6">
+        {/* Order Summary */}
+        <Card className="w-full p-6 rounded-xl shadow-lg border-2 border-black bg-white">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-black font-mono">Order Summary</h2>
+            <Button variant="secondary" onClick={() => navigate('/cart')}>Edit Cart</Button>
+          </div>
+          {items && items.length > 0 ? (
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div key={item.id || item._id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {item.image && (
+                      <img src={item.image} alt={item.name} className="h-12 w-12 object-cover rounded-md border" />
+                    )}
+                    <div>
+                      <p className="text-black font-medium">{item.name}</p>
+                      <p className="text-gray-600 text-sm">Qty: {item.quantity || 1}</p>
+                    </div>
+                  </div>
+                  <p className="text-black font-medium">${((Number(item.price) || 0) * (Number(item.quantity) || 1)).toFixed(2)}</p>
+                </div>
+              ))}
+              <div className="border-t pt-4 space-y-2">
+                <div className="flex justify-between text-gray-700">
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-700">
+                  <span>Shipping</span>
+                  <span>${shipping.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-black font-bold text-lg">
+                  <span>Total</span>
+                  <span>${grandTotal.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-700">Your cart is empty.</p>
+          )}
+        </Card>
+
+        {/* Payment Form */}
+        <Card className="w-full p-8 rounded-xl shadow-lg border-2 border-black bg-white">
+          <h1 className="text-3xl font-bold text-black font-mono mb-6 flex items-center gap-2">
+            <CreditCard className="h-7 w-7" /> Payment
+          </h1>
         <form onSubmit={handleSubmit} className="space-y-5">
           <Input
             label="Card Number"
@@ -111,9 +165,10 @@ const PaymentPage = () => {
             {processing ? <Spinner size="sm" color="black" /> : 'Pay Now'}
           </Button>
         </form>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default PaymentPage; 
+export default PaymentPage;

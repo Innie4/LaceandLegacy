@@ -332,9 +332,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
 
       {/* Add to Cart Button */}
       <div
-        className={`absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-sm transition-transform duration-300 ${
-          isHovered ? 'translate-y-0' : 'translate-y-0 md:translate-y-full md:group-hover:translate-y-0'
-        }`}
+        className={`absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-sm transition-transform duration-300 translate-y-full md:translate-y-0`}
       >
         <button
           onClick={handleAddToCart}

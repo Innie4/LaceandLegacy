@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../contexts/CartContext';
-import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
+import { useUser } from '../contexts/UserContext';
 
 const pageVariants = {
   initial: {
@@ -33,47 +33,38 @@ const pageVariants = {
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { addToCart } = useCart();
+  const { login } = useUser();
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password
-        })
-      });
-      
-      const message = await response.text();
-      
-      if (response.ok) {
-        toast.success(message || 'Login successful!');
-        
-        // Check for pending cart item and add it after successful login
-        const pendingCartItem = localStorage.getItem('pendingCartItem');
-        if (pendingCartItem) {
-          try {
-            const cartItem = JSON.parse(pendingCartItem);
-            await addToCart(cartItem);
-            localStorage.removeItem('pendingCartItem');
-            toast.success('Item added to cart after login!');
-          } catch (error) {
-            console.error('Failed to add pending cart item:', error);
-            toast.error('Failed to add item to cart');
-          }
+      // Use UserContext to perform login and set auth state/token
+      await login({ email: data.email, password: data.password });
+      toast.success('Login successful!');
+
+      // Consume any pending cart item saved pre-login
+      const pendingCartItem = localStorage.getItem('pendingCartItem');
+      if (pendingCartItem) {
+        try {
+          const cartItem = JSON.parse(pendingCartItem);
+          await addToCart(cartItem);
+          localStorage.removeItem('pendingCartItem');
+          toast.success('Item added to cart after login!');
+        } catch (error) {
+          console.error('Failed to add pending cart item:', error);
+          toast.error('Failed to add item to cart');
         }
-        
-        navigate('/account/personal-info');
-      } else {
-        toast.error(message || 'Login failed. Please try again.');
       }
+
+      // Redirect to return path if present, else personal info
+      const returnTo = location.state?.returnTo || '/account/personal-info';
+      navigate(returnTo);
     } catch (error) {
-      toast.error('Network error. Please check your connection and try again.');
+      const message = error?.response?.data?.message || 'Login failed. Please try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

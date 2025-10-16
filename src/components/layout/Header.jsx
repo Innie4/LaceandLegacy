@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useUser } from '../../contexts/UserContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { itemCount } = useCart();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useUser();
   const location = useLocation();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Header = () => {
 
           {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
-            {user ? (
+            {isAuthenticated ? (
               <Link
                 to="/account"
                 className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
@@ -140,7 +140,7 @@ const Header = () => {
               
               {/* Authentication Links */}
               <div className="pt-4 mt-4 border-t border-amber-200">
-                {user ? (
+                {isAuthenticated ? (
                   <Link
                     to="/account"
                     onClick={() => setIsMenuOpen(false)}

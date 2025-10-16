@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
+import { useUser } from '../contexts/UserContext';
+import { useCart } from '../contexts/CartContext';
 
 const pageVariants = {
   initial: {
@@ -84,38 +85,44 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('US');
   const navigate = useNavigate();
+  const location = useLocation();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const password = watch('password', '');
+  const { register: registerUser } = useUser();
+  const { addToCart } = useCart();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          repeatedPassword: data.confirmPassword,  // <-- THIS LINE ADDED!
-          country: selectedCountry
-        })
+      await registerUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        repeatedPassword: data.confirmPassword,
+        country: selectedCountry
       });
 
-      const message = await response.text();
-      console.log('API message:', message, 'Response:', response);
-
-      if (response.ok) {
-        toast.success(message || 'Account created successfully!');
-        setTimeout(() => navigate('/verify-email'), 1000);
-      } else {
-        toast.error(message || 'Registration failed. Please try again.');
+      // After successful registration, consume any pending cart item
+      const pendingCartItem = localStorage.getItem('pendingCartItem');
+      if (pendingCartItem) {
+        try {
+          const cartItem = JSON.parse(pendingCartItem);
+          await addToCart(cartItem);
+          localStorage.removeItem('pendingCartItem');
+          toast.success('Item added to cart after registration!');
+        } catch (error) {
+          console.error('Failed to add pending cart item:', error);
+          toast.error('Failed to add item to cart');
+        }
       }
+
+      // Navigate to return path if present, else personal info
+      const returnTo = location.state?.returnTo || '/account/personal-info';
+      navigate(returnTo);
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      const message = error?.response?.data?.message || 'Registration failed. Please try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

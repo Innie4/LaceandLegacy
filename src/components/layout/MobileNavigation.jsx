@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShoppingBag, Heart, User, Search, Home } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useUser } from '../../contexts/UserContext';
 
 const MobileNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useUser();
 
   // Handle scroll events
   useEffect(() => {
@@ -114,7 +114,7 @@ const MobileNavigation = () => {
                 </div>
 
                 {/* Auth Buttons */}
-                {user ? (
+                {isAuthenticated ? (
                   <Link
                     to="/account"
                     onClick={() => setIsOpen(false)}
