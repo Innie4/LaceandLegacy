@@ -252,9 +252,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
 
           {/* Quick Actions */}
           <div
-            className={`absolute top-2 right-2 flex flex-col gap-2 transition-opacity duration-300 ${
-              isHovered ? 'opacity-100' : 'opacity-100 md:opacity-0 md:group-hover:opacity-100'
-            }`}
+            className="absolute top-2 right-2 flex flex-col gap-2 transition-opacity duration-300 opacity-100"
           >
             <Tooltip content={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"} side="left">
               <button
@@ -332,7 +330,7 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
 
       {/* Add to Cart Button */}
       <div
-        className={`absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-sm transition-transform duration-300 translate-y-full md:translate-y-0`}
+        className="absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-sm transition-transform duration-300 translate-y-0"
       >
         <button
           onClick={handleAddToCart}
