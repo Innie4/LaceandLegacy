@@ -62,10 +62,10 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-white py-12">
-      <div className="w-full max-w-2xl space-y-6">
+    <div className="min-h-screen flex items-start justify-center bg-repeat py-12" style={{ backgroundImage: "url('/laces.png')" }}>
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Order Summary */}
-        <Card className="w-full p-6 rounded-xl shadow-lg border-2 border-black bg-white">
+        <Card className="w-full p-6 rounded-xl shadow-lg border-2 border-black bg-white/95 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold text-black font-mono">Order Summary</h2>
             <Button variant="secondary" onClick={() => navigate('/cart')}>Edit Cart</Button>
@@ -107,7 +107,7 @@ const PaymentPage = () => {
         </Card>
 
         {/* Payment Form */}
-        <Card className="w-full p-8 rounded-xl shadow-lg border-2 border-black bg-white">
+        <Card className="w-full p-8 rounded-xl shadow-lg border-2 border-black bg-white/95 backdrop-blur-sm">
           <h1 className="text-3xl font-bold text-black font-mono mb-6 flex items-center gap-2">
             <CreditCard className="h-7 w-7" /> Payment
           </h1>
@@ -164,6 +164,9 @@ const PaymentPage = () => {
           <Button type="submit" className="w-full mt-4" disabled={processing}>
             {processing ? <Spinner size="sm" color="black" /> : 'Pay Now'}
           </Button>
+          <div className="mt-3">
+            <Button type="button" variant="secondary" className="w-full">Pay with Paystack (coming soon)</Button>
+          </div>
         </form>
         </Card>
       </div>

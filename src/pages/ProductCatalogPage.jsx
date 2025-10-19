@@ -37,7 +37,7 @@ const ProductCatalogPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(48);
   const [sortBy, setSortBy] = useState('popular');
 
   const { addToCart } = useCart();
@@ -243,7 +243,7 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-repeat" style={{ backgroundImage: "url('/laces.png')" }}>
       {/* Filter Header */}
       <div className="w-full bg-white border-b border-gray-200 shadow-sm">
         
@@ -431,9 +431,9 @@ const ProductCatalogPage = () => {
               </div>
             ) : (
               <>
-                <div className={`grid gap-6 ${
+                <div className={`grid gap-4 ${
                   viewMode === 'grid'
-                    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                    ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8'
                     : 'grid-cols-1'
                 }`}>
                   {paginatedProducts.map((product) => (
@@ -466,6 +466,8 @@ const ProductCatalogPage = () => {
                           <SelectItem value="12">12</SelectItem>
                           <SelectItem value="24">24</SelectItem>
                           <SelectItem value="48">48</SelectItem>
+                          <SelectItem value="96">96</SelectItem>
+                          <SelectItem value="100">100</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

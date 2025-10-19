@@ -134,7 +134,7 @@ const EditProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white py-8">
+    <div className="min-h-screen bg-repeat py-8" style={{ backgroundImage: "url('/laces.png')" }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Personal Info Section */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
