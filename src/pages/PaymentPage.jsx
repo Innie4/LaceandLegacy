@@ -17,7 +17,7 @@ const PaymentPage = () => {
   const [errors, setErrors] = useState({});
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
-  const { items } = useCart();
+  const { items, total } = useCart();
 
   const subtotal = items?.reduce((sum, item) => {
     const price = Number(item.price) || 0;
