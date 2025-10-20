@@ -6,6 +6,7 @@ import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useUser } from '../contexts/UserContext';
 import { useCart } from '../contexts/CartContext';
+ import ErrorBanner from '../components/feedback/ErrorBanner';
 
 const pageVariants = {
   initial: {
@@ -31,16 +32,60 @@ const pageVariants = {
 };
 
 const countries = [
-  { code: 'US', name: 'United States', language: 'en' },
-  { code: 'GB', name: 'United Kingdom', language: 'en' },
-  { code: 'CA', name: 'Canada', language: 'en' },
-  { code: 'AU', name: 'Australia', language: 'en' },
-  { code: 'FR', name: 'France', language: 'fr' },
-  { code: 'DE', name: 'Germany', language: 'de' },
-  { code: 'ES', name: 'Spain', language: 'es' },
-  { code: 'IT', name: 'Italy', language: 'it' },
-  { code: 'JP', name: 'Japan', language: 'ja' },
-  { code: 'CN', name: 'China', language: 'zh' }
+  { code: 'DZ', name: 'Algeria', language: 'en' },
+  { code: 'AO', name: 'Angola', language: 'en' },
+  { code: 'BJ', name: 'Benin', language: 'en' },
+  { code: 'BW', name: 'Botswana', language: 'en' },
+  { code: 'BF', name: 'Burkina Faso', language: 'en' },
+  { code: 'BI', name: 'Burundi', language: 'en' },
+  { code: 'CV', name: 'Cabo Verde', language: 'en' },
+  { code: 'CM', name: 'Cameroon', language: 'en' },
+  { code: 'CF', name: 'Central African Republic', language: 'en' },
+  { code: 'TD', name: 'Chad', language: 'en' },
+  { code: 'KM', name: 'Comoros', language: 'en' },
+  { code: 'CD', name: 'Democratic Republic of the Congo', language: 'en' },
+  { code: 'CG', name: 'Republic of the Congo', language: 'en' },
+  { code: 'DJ', name: 'Djibouti', language: 'en' },
+  { code: 'EG', name: 'Egypt', language: 'en' },
+  { code: 'GQ', name: 'Equatorial Guinea', language: 'en' },
+  { code: 'ER', name: 'Eritrea', language: 'en' },
+  { code: 'SZ', name: 'Eswatini', language: 'en' },
+  { code: 'ET', name: 'Ethiopia', language: 'en' },
+  { code: 'GA', name: 'Gabon', language: 'en' },
+  { code: 'GM', name: 'Gambia', language: 'en' },
+  { code: 'GH', name: 'Ghana', language: 'en' },
+  { code: 'GN', name: 'Guinea', language: 'en' },
+  { code: 'GW', name: 'Guinea-Bissau', language: 'en' },
+  { code: 'CI', name: 'Ivory Coast', language: 'en' },
+  { code: 'KE', name: 'Kenya', language: 'en' },
+  { code: 'LS', name: 'Lesotho', language: 'en' },
+  { code: 'LR', name: 'Liberia', language: 'en' },
+  { code: 'LY', name: 'Libya', language: 'en' },
+  { code: 'MG', name: 'Madagascar', language: 'en' },
+  { code: 'MW', name: 'Malawi', language: 'en' },
+  { code: 'ML', name: 'Mali', language: 'en' },
+  { code: 'MR', name: 'Mauritania', language: 'en' },
+  { code: 'MU', name: 'Mauritius', language: 'en' },
+  { code: 'MA', name: 'Morocco', language: 'en' },
+  { code: 'MZ', name: 'Mozambique', language: 'en' },
+  { code: 'NA', name: 'Namibia', language: 'en' },
+  { code: 'NE', name: 'Niger', language: 'en' },
+  { code: 'NG', name: 'Nigeria', language: 'en' },
+  { code: 'RW', name: 'Rwanda', language: 'en' },
+  { code: 'ST', name: 'São Tomé and Príncipe', language: 'en' },
+  { code: 'SN', name: 'Senegal', language: 'en' },
+  { code: 'SC', name: 'Seychelles', language: 'en' },
+  { code: 'SL', name: 'Sierra Leone', language: 'en' },
+  { code: 'SO', name: 'Somalia', language: 'en' },
+  { code: 'ZA', name: 'South Africa', language: 'en' },
+  { code: 'SS', name: 'South Sudan', language: 'en' },
+  { code: 'SD', name: 'Sudan', language: 'en' },
+  { code: 'TZ', name: 'Tanzania', language: 'en' },
+  { code: 'TG', name: 'Togo', language: 'en' },
+  { code: 'TN', name: 'Tunisia', language: 'en' },
+  { code: 'UG', name: 'Uganda', language: 'en' },
+  { code: 'ZM', name: 'Zambia', language: 'en' },
+  { code: 'ZW', name: 'Zimbabwe', language: 'en' }
 ];
 
 const PasswordStrengthIndicator = ({ password }) => {
@@ -83,7 +128,8 @@ const PasswordStrengthIndicator = ({ password }) => {
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState('US');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('NG');
   const navigate = useNavigate();
   const location = useLocation();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -118,11 +164,15 @@ const RegisterPage = () => {
       }
 
       // Navigate to return path if present, else personal info
-      const returnTo = location.state?.returnTo || '/account/personal-info';
-      navigate(returnTo);
+      const returnTo =
+        location.state?.returnTo ||
+        (location.state?.from?.pathname ?? null) ||
+        '/account/personal-info';
+      navigate(returnTo, { replace: true });
     } catch (error) {
       const message = error?.response?.data?.message || 'Registration failed. Please try again.';
       toast.error(message);
+      setErrorMessage(message);
     } finally {
       setIsLoading(false);
     }
@@ -137,6 +187,9 @@ const RegisterPage = () => {
       className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
+        {errorMessage && (
+          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage('')} />
+        )}
         <div className="text-center">
           <h2 className="text-3xl font-bold text-black font-mono">
             Create Account

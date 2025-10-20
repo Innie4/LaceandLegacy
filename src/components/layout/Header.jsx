@@ -8,7 +8,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { itemCount } = useCart();
-  const { user, isAuthenticated } = useUser();
+  const { isAuthenticated } = useUser();
   const location = useLocation();
 
   useEffect(() => {

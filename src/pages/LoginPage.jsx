@@ -6,6 +6,7 @@ import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../contexts/UserContext';
+import ErrorBanner from '../components/feedback/ErrorBanner';
 
 const pageVariants = {
   initial: {
@@ -32,6 +33,7 @@ const pageVariants = {
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -60,11 +62,15 @@ const LoginPage = () => {
       }
 
       // Redirect to return path if present, else personal info
-      const returnTo = location.state?.returnTo || '/account/personal-info';
-      navigate(returnTo);
+      const returnTo =
+        location.state?.returnTo ||
+        (location.state?.from?.pathname ?? null) ||
+        '/account/personal-info';
+      navigate(returnTo, { replace: true });
     } catch (error) {
       const message = error?.response?.data?.message || 'Login failed. Please try again.';
       toast.error(message);
+      setErrorMessage(message);
     } finally {
       setIsLoading(false);
     }
@@ -83,6 +89,9 @@ const LoginPage = () => {
       className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
+        {errorMessage && (
+          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage('')} />
+        )}
         <div className="text-center">
           <h2 className="text-3xl font-bold text-black font-mono">
             Welcome Back

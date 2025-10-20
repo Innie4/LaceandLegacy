@@ -94,13 +94,20 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: 'LOGIN_START' });
     try {
       const response = await authService.login(credentials);
-      const { user, token } = response.data;
+      const payload = response?.data ?? response;
+      const user = payload?.user;
+      const token = payload?.token;
+      if (!token || !user) {
+        const message = payload?.message || 'Login failed';
+        throw new Error(message);
+      }
       localStorage.setItem('token', token);
+      localStorage.setItem('authToken', token);
       dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
       toast.success('Login successful!');
       return user;
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
+      const message = error.response?.data?.message || error.message || 'Login failed';
       dispatch({ type: 'LOGIN_FAILURE', payload: message });
       toast.error(message);
       throw error;
@@ -111,13 +118,20 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: 'LOGIN_START' });
     try {
       const response = await authService.register(userData);
-      const { user, token } = response.data;
+      const payload = response?.data ?? response;
+      const user = payload?.user;
+      const token = payload?.token;
+      if (!token || !user) {
+        const message = payload?.message || 'Registration failed';
+        throw new Error(message);
+      }
       localStorage.setItem('token', token);
+      localStorage.setItem('authToken', token);
       dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
       toast.success('Registration successful!');
       return user;
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed';
+      const message = error.response?.data?.message || error.message || 'Registration failed';
       dispatch({ type: 'LOGIN_FAILURE', payload: message });
       toast.error(message);
       throw error;
@@ -187,4 +201,4 @@ export const useUser = () => {
   return context;
 };
 
-export default UserContext; 
+export default UserContext;
