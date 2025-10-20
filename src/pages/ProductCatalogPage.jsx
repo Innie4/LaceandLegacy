@@ -245,9 +245,9 @@ const ProductCatalogPage = () => {
   return (
     <div className="min-h-screen bg-repeat" style={{ backgroundImage: "url('/laces.png')" }}>
       {/* Filter Header */}
-      <div className="w-full bg-white border-b border-gray-200 shadow-sm">
+      <div className="w-full bg-white border-b border-gray-200 shadow-md">
         
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Search Bar */}
             <div className="flex-1 max-w-md">
@@ -256,7 +256,7 @@ const ProductCatalogPage = () => {
                 <Input
                   type="search"
                   placeholder="Search products, styles, eras..."
-                  className="pl-10 pr-10 w-full"
+                  className="pl-10 pr-10 w-full rounded-lg shadow-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />

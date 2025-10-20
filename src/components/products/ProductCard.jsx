@@ -9,7 +9,7 @@ import { useUser } from '../../contexts/UserContext';
 import Tooltip from '../ui/Tooltip';
 
 const ProductCard = ({ product, viewMode, onQuickView }) => {
-  const [isHovered, setIsHovered] = useState(false);
+
   const [isAdding, setIsAdding] = useState(false);
   const { addToCart, isLoading } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -113,8 +113,6 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
         animate="animate"
         whileHover="hover"
         variants={cardVariants}
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
         className="group relative bg-white rounded-xl shadow-lg border-2 border-amber-200 overflow-hidden"
       >
         <Link to={`/products/${product.id}`} className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4">
@@ -232,8 +230,6 @@ const ProductCard = ({ product, viewMode, onQuickView }) => {
       animate="animate"
       whileHover="hover"
       variants={cardVariants}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
       className="group relative bg-white rounded-xl shadow-lg border-2 border-amber-200 overflow-hidden"
     >
       <Link to={`/products/${product.id}`}>
