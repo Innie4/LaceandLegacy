@@ -38,7 +38,7 @@ const ProductCatalogPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(48);
-  const [sortBy, setSortBy] = useState('popular');
+  const [sortBy, setSortBy] = useState('price_asc');
 
   const { addToCart } = useCart();
   const { isAuthenticated } = useUser();
@@ -190,8 +190,8 @@ const ProductCatalogPage = () => {
       case 'era_desc':
         result.sort((a, b) => b.eraYear - a.eraYear);
         break;
-      default: // popular
-        result.sort((a, b) => b.popularity - a.popularity);
+      default:
+        result.sort((a, b) => a.price - b.price);
     }
 
     return result;
@@ -243,7 +243,7 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-repeat" style={{ backgroundImage: "url('/laces.png')" }}>
+    <div className="min-h-screen bg-white">
       {/* Filter Header */}
       <div className="w-full bg-white border-b border-gray-200 shadow-sm">
         
@@ -297,7 +297,6 @@ const ProductCatalogPage = () => {
                 <SelectContent>
                   <SelectItem value="price_asc">Price (Low to High)</SelectItem>
                   <SelectItem value="price_desc">Price (High to Low)</SelectItem>
-                  <SelectItem value="popular">Most Popular</SelectItem>
                   <SelectItem value="era_asc">Era (Oldest First)</SelectItem>
                   <SelectItem value="era_desc">Era (Newest First)</SelectItem>
                 </SelectContent>

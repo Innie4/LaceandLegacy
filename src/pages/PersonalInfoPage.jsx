@@ -134,7 +134,7 @@ const PersonalInfoPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-repeat py-8" style={{ backgroundImage: "url('/laces.png')" }}>
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Summary Card */}
         <div className="bg-white rounded-xl border-2 border-gray-200 p-6 flex items-center gap-6">
@@ -169,7 +169,7 @@ const PersonalInfoPage = () => {
         </div>
 
         {/* Edit Profile CTA moved sections */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-2">
+        <div className="hidden bg-white rounded-xl border-2 border-gray-200 p-6 space-y-2">
           <Heading level={3}>Profile Settings</Heading>
           <Text variant="small">Manage your personal info, security, addresses and preferences.</Text>
           <div className="flex justify-end">
@@ -180,7 +180,7 @@ const PersonalInfoPage = () => {
         </div>
 
         {/* Get the Product You Want */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
+        <div className="hidden bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
           <div className="flex items-center justify-between">
             <Heading level={3}>Get the product you want</Heading>
           </div>
@@ -215,7 +215,7 @@ const PersonalInfoPage = () => {
         </div>
 
         {/* Activity Summary Section (Stub) */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
+        <div className="hidden bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
           <div className="flex items-center justify-between">
             <Heading level={3}>Activity Summary</Heading>
             <Button variant="secondary" size="sm" onClick={handleActivityRefresh} disabled={activityLoading}>
@@ -226,7 +226,7 @@ const PersonalInfoPage = () => {
         </div>
 
         {/* Avatar URL Update */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-4">
+        <div className="hidden bg-white rounded-xl border-2 border-gray-200 p-6 space-y-4">
           <Heading level={3}>Update Avatar via URL</Heading>
           <Text variant="small">Paste an image URL to update your profile picture.</Text>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

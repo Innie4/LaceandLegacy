@@ -34,6 +34,7 @@ const pageVariants = {
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -144,19 +145,27 @@ const LoginPage = () => {
                 </div>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   {...register('password', {
-                    required: 'Password is required',
-                    minLength: {
-                      value: 8,
-                      message: 'Password must be at least 8 characters'
-                    }
+                    required: 'Password is required'
                   })}
-                  className={`block w-full pl-10 pr-3 py-2 border-2 ${
+                  className={`block w-full pl-10 pr-10 py-2 border-2 ${
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? (
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-5-10-7s4.477-7 10-7c1.245 0 2.438.214 3.555.6M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  ) : (
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.477 10.477A3 3 0 1013.5 13.5M6.36 6.36A9.993 9.993 0 012 12c0 2 4.477 7 10 7 1.836 0 3.556-.42 5.03-1.175"/></svg>
+                  )}
+                </button>
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600 font-mono">
                     {errors.password.message}

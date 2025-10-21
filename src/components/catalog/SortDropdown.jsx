@@ -3,7 +3,6 @@ import { ChevronDown, ArrowUp, ArrowDown } from 'lucide-react';
 
 const sortOptions = [
   { label: 'Price', value: 'price' },
-  { label: 'Popularity', value: 'popularity' },
   { label: 'Newest', value: 'dateAdded' },
   { label: 'Era', value: 'decade' },
 ];
@@ -73,4 +72,4 @@ const SortDropdown = ({ value, onChange, className = '' }) => {
   );
 };
 
-export default SortDropdown; 
+export default SortDropdown;
