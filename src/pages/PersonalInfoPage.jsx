@@ -13,7 +13,7 @@ import { productService, normalizeProducts } from '../services/api';
 
 const PersonalInfoPage = () => {
   const { user, isAuthenticated, updateProfile } = useUser();
-  const { addToCart, isLoading: isCartLoading } = useCart();
+  const { addToCart, isLoading: isCartLoading, items, itemCount, total } = useCart();
   const navigate = useNavigate();
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [activityLoading, setActivityLoading] = useState(false);
@@ -162,9 +162,40 @@ const PersonalInfoPage = () => {
             </div>
             <div className="mt-4">
               <Link to="/account/edit-profile">
-                <Button>Edit Profile</Button>
+                <Button className="!bg-black !text-white hover:!bg-black/90">Edit Profile</Button>
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Cart Summary */}
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <Heading level={3}>Cart</Heading>
+            <Text variant="small">{(itemCount ?? 0)} items · ${Number(total ?? 0).toFixed(2)}</Text>
+          </div>
+          {Array.isArray(items) && items.length > 0 ? (
+            <div className="divide-y divide-gray-200">
+              {items.slice(0, 3).map((item) => (
+                <div key={item.cartId || item.id} className="py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src={item.image} alt={item.name} className="w-12 h-12 rounded object-cover" />
+                    <div>
+                      <div className="text-brown-darkest text-sm line-clamp-1">{item.name}</div>
+                      <div className="text-gray-600 text-sm">Qty {item.quantity} · ${Number(item.price).toFixed(2)}</div>
+                    </div>
+                  </div>
+                  <div className="text-brown-darkest font-medium">${(Number(item.price) * item.quantity).toFixed(2)}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Text variant="small" className="text-gray-600">Your cart is empty.</Text>
+          )}
+          <div className="flex justify-end">
+            <Link to="/cart">
+              <Button variant="secondary">See more</Button>
+            </Link>
           </div>
         </div>
 
@@ -174,7 +205,7 @@ const PersonalInfoPage = () => {
           <Text variant="small">Manage your personal info, security, addresses and preferences.</Text>
           <div className="flex justify-end">
             <Link to="/account/edit-profile">
-              <Button>Open Edit Profile</Button>
+              <Button className="!bg-black !text-white hover:!bg-black/90">Open Edit Profile</Button>
             </Link>
           </div>
         </div>
