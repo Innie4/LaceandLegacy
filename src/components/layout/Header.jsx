@@ -7,7 +7,7 @@ import { useUser } from '../../contexts/UserContext';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { itemCount } = useCart();
+  const { itemCount, toggleCart } = useCart();
   const { isAuthenticated } = useUser();
   const location = useLocation();
 
@@ -80,14 +80,18 @@ const Header = () => {
                 </Link>
               </div>
             )}
-            <Link to="/cart" className="text-amber-900 hover:text-amber-600 transition-colors duration-300 relative">
+            <button
+              onClick={toggleCart}
+              className="text-amber-900 hover:text-amber-600 transition-colors duration-300 relative"
+              aria-label="Open cart"
+            >
               <ShoppingCart className="w-6 h-6" />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {itemCount}
                 </span>
               )}
-            </Link>
+            </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden text-amber-900 hover:text-amber-600 transition-colors duration-300"

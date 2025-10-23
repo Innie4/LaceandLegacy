@@ -4,6 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import { useTheme } from '../../contexts/ThemeContext';
+import CartDrawer from '../cart/CartDrawer';
 
 const Layout = ({ children }) => {
   const { theme } = useTheme();
@@ -23,6 +24,7 @@ const Layout = ({ children }) => {
   return (
     <div className={`min-h-screen flex flex-col bg-${theme === 'light' ? 'amber-50' : 'gray-900'}`}>
       <Header />
+      <CartDrawer />
       <motion.main
         className="flex-1 pt-20"
         initial="initial"
