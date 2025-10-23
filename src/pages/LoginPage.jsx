@@ -1,0 +1,257 @@
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { motion } from 'framer-motion';
+import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { useCart } from '../contexts/CartContext';
+import { useUser } from '../contexts/UserContext';
+import ErrorBanner from '../components/feedback/ErrorBanner';
+
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 20
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut'
+    }
+  }, 
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.3,
+      ease: 'easeIn'
+    }
+  }
+};
+
+const LoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { addToCart } = useCart();
+  const { login } = useUser();
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      // Use UserContext to perform login and set auth state/token
+      await login({ email: data.email, password: data.password });
+      toast.success('Login successful!');
+
+      // Consume any pending cart item saved pre-login
+      const pendingCartItem = localStorage.getItem('pendingCartItem');
+      if (pendingCartItem) {
+        try {
+          const cartItem = JSON.parse(pendingCartItem);
+          await addToCart(cartItem);
+          localStorage.removeItem('pendingCartItem');
+          toast.success('Item added to cart after login!');
+        } catch (error) {
+          console.error('Failed to add pending cart item:', error);
+          toast.error('Failed to add item to cart');
+        }
+      }
+
+      // Redirect to return path if present, else personal info
+      const returnTo =
+        location.state?.returnTo ||
+        (location.state?.from?.pathname ?? null) ||
+        '/account/personal-info';
+      navigate(returnTo, { replace: true });
+    } catch (error) {
+      const message = error?.response?.data?.message || 'Login failed. Please try again.';
+      toast.error(message);
+      setErrorMessage(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = (provider) => {
+    toast.loading(`Connecting to ${provider}...`);
+    // TODO: Implement social login
+  };
+
+  return (    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-amber-100 flex items-center justify-center px-4 py-12"
+    >
+      <div className="max-w-md w-full space-y-8 bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-gray-200">
+        {errorMessage && (
+          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage('')} />
+        )}
+        <div className="text-center">
+          <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-black text-white flex items-center justify-center shadow-md">LL</div>
+          <h2 className="text-3xl font-semibold text-gray-900 tracking-tight">
+            Welcome Back
+          </h2>
+          <p className="mt-2 text-gray-600">
+            Sign in to your account to continue
+          </p>
+        </div>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-black">
+                Email Address
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address'
+                    }
+                  })}
+                  className={`block w-full pl-10 pr-3 py-2 border ${
+                    errors.email ? 'border-red-400' : 'border-gray-300'
+                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black placeholder-gray-400 bg-white/95`}
+                  placeholder="you@example.com"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600 font-mono">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-black">
+                Password
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  {...register('password', {
+                    required: 'Password is required'
+                  })}
+                  className={`block w-full pl-10 pr-10 py-2 border ${
+                    errors.password ? 'border-red-400' : 'border-gray-300'
+                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black placeholder-gray-400 bg-white/95`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? (
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-5-10-7s4.477-7 10-7c1.245 0 2.438.214 3.555.6M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  ) : (
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.477 10.477A3 3 0 1013.5 13.5M6.36 6.36A9.993 9.993 0 012 12c0 2 4.477 7 10 7 1.836 0 3.556-.42 5.03-1.175"/></svg>
+                  )}
+                </button>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600 font-mono">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                {...register('rememberMe')}
+                className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-black">
+                Remember me
+              </label>
+            </div>
+
+            <div className="text-sm">
+              <Link
+                to="/forgot-password"
+                className="font-medium text-black hover:text-gray-900 transition-colors duration-300"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex justify-center py-3 px-4 rounded-xl shadow-md text-sm font-semibold text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white/90 text-gray-600">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <button
+              onClick={() => handleSocialLogin('Google')}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-md bg-white/95 text-sm font-medium text-black hover:bg-white transition-colors duration-300"
+            >
+              <Chrome className="h-5 w-5" />
+              <span className="ml-2">Google</span>
+            </button>
+            <button
+              onClick={() => handleSocialLogin('Facebook')}
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-md bg-white/95 text-sm font-medium text-black hover:bg-white transition-colors duration-300"
+            >
+              <Mail className="h-5 w-5" />
+              <span className="ml-2">Facebook</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-700">
+            Don't have an account?{' '}
+            <Link
+              to="/register"
+              className="font-medium text-black hover:text-gray-900 transition-colors duration-300"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default LoginPage;
