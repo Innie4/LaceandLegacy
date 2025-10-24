@@ -15,9 +15,27 @@ function handleResponse(response) {
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
-    return response.json().then(err => { throw err; });
+    return response.text().then(text => {
+      try {
+        return Promise.reject(text ? JSON.parse(text) : { message: 'Request failed', status: response.status });
+      } catch (e) {
+        return Promise.reject({ message: text || 'Request failed', status: response.status });
+      }
+    });
   }
-  return response.json();
+  // Gracefully handle empty-body 200 OK responses
+  return response.text().then(text => {
+    if (!text) {
+      // Return a normalized success payload so callers can treat it as success
+      return { success: true, status: 'success' };
+    }
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      // Non-JSON success responses
+      return { success: true, data: text };
+    }
+  });
 }
 
 // Product data normalizers

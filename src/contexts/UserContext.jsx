@@ -129,7 +129,10 @@ export const UserProvider = ({ children }) => {
       const isSuccess =
         payload?.success === true ||
         String(payload?.status || '').toLowerCase() === 'success' ||
-        (typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success'));
+        (typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success')) ||
+        payload === true ||
+        payload?.status === 200 ||
+        payload?.statusCode === 200;
 
       // If backend uses cookie-based sessions and doesn't return a user, try fetching profile
       if (!user) {
@@ -140,6 +143,11 @@ export const UserProvider = ({ children }) => {
         } catch (_) {
           // graceful fallback; leave user as undefined
         }
+      }
+
+      // Fallback: if success with no user data, synthesize minimal user from credentials
+      if (!user && isSuccess && reqCredentials.email) {
+        user = { email: reqCredentials.email };
       }
 
       // Require either a token or user or a success indicator
