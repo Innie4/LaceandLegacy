@@ -55,7 +55,7 @@ const HomePage = () => {
   // Hero carousel
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 3);
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
   }, []);
@@ -80,23 +80,15 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  const heroSlides = [
-    {
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-      title: "70s Rock Collection",
-      description: "Iconic band tees from the golden era of rock"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-      title: "80s Sports Classics",
-      description: "Vintage sports memorabilia and team wear"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-      title: "90s Grunge Revival",
-      description: "Authentic grunge style from the Seattle scene"
-    }
-  ];
+  const heroImageIndices = Array.from({ length: 19 }, (_, i) => i + 11);
+  const heroSlides = heroImageIndices.map((num) => {
+    const imagePath = `/IMG-20251024-WA${String(num).padStart(4, '0')}.jpg`;
+    return {
+      image: imagePath,
+      title: 'Lace and Legacy',
+      description: 'Discover authentic vintage fashion'
+    };
+  });
 
   const categories = [
     { name: "Band Tees", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "70s" },
