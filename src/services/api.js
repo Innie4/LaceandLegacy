@@ -210,8 +210,12 @@ export const userService = {
 export const productService = {
   getProducts: (params) => {
     const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}`, Accept: 'application/json' } : { Accept: 'application/json' };
     return fetch(`${API_BASE_URL}${API_ENDPOINTS.products}${query}`, {
-      headers: getAuthHeaders(),
+      headers,
+      mode: 'cors',
+      credentials: 'omit',
     }).then(handleResponse);
   },
   getProduct: (id) =>
