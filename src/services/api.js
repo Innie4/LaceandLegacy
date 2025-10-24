@@ -122,13 +122,54 @@ export function normalizeProducts(items) {
 
 // Auth services
 export const authService = {
-  register: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  // Try both payload formats to maximize compatibility with backend
+  register: async (data) => {
+    const token = localStorage.getItem('token');
+
+    // Helper to build FormData with common field aliases
+    const buildFormData = (src) => {
+      const form = new FormData();
+      const firstname = src.firstName ?? src.firstname;
+      const lastname = src.lastName ?? src.lastname;
+      const email = src.email ?? src.username;
+      const password = src.password;
+      const password_confirmation = src.repeatedPassword ?? src.confirmPassword ?? src.password_confirmation ?? src.password;
+      if (firstname) form.append('firstname', firstname);
+      if (lastname) form.append('lastname', lastname);
+      if (email) form.append('email', email);
+      if (password) form.append('password', password);
+      if (password_confirmation) form.append('password_confirmation', password_confirmation);
+      return form;
+    };
+
+    const jsonHeaders = token ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } : { 'Content-Type': 'application/json' };
+    const authHeaderOnly = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+    // Attempt 1: FormData (covers servers that reject JSON with 415)
+    try {
+      const fdResp = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
+        method: 'POST',
+        headers: authHeaderOnly,
+        credentials: 'include',
+        body: buildFormData(data),
+      });
+      return await handleResponse(fdResp);
+    } catch (err1) {
+      // Attempt 2: JSON (covers servers that expect application/json)
+      try {
+        const jsonResp = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
+          method: 'POST',
+          headers: jsonHeaders,
+          credentials: 'include',
+          body: JSON.stringify(data),
+        });
+        return await handleResponse(jsonResp);
+      } catch (err2) {
+        // Surface the first error by default if both fail
+        throw err1?.status ? err1 : err2;
+      }
+    }
+  },
   login: (data) =>
     fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
       method: 'POST',
