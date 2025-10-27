@@ -134,11 +134,13 @@ export const authService = {
       const email = src.email ?? src.username;
       const password = src.password;
       const password_confirmation = src.repeatedPassword ?? src.confirmPassword ?? src.password_confirmation ?? src.password;
+      const country = src.country ?? src.countryCode ?? src.selectedCountry;
       if (firstname) form.append('firstname', firstname);
       if (lastname) form.append('lastname', lastname);
       if (email) form.append('email', email);
       if (password) form.append('password', password);
       if (password_confirmation) form.append('password_confirmation', password_confirmation);
+      if (country) form.append('country', country);
       return form;
     };
 

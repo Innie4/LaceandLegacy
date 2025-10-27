@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
@@ -102,11 +102,11 @@ const PasswordStrengthIndicator = ({ password }) => {
   const strength = getStrength(password);
   const strengthText = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
   const strengthColors = [
-    'gray-400', // Very Weak
-    'gray-500', // Weak
-    'gray-600', // Medium
-    'gray-700', // Strong
-    'gray-900', // Very Strong
+    'red-400', // Very Weak
+    'red-500', // Weak
+    'red-600', // Medium
+    'red-700', // Strong
+    'red-900', // Very Strong
   ];
 
   return (
@@ -133,7 +133,6 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const password = watch('password', '');
   const { register: registerUser } = useUser();
@@ -165,12 +164,8 @@ const RegisterPage = () => {
         }
       }
 
-      // Navigate to return path if present, else personal info
-      const returnTo =
-        location.state?.returnTo ||
-        (location.state?.from?.pathname ?? null) ||
-        '/account/personal-info';
-      navigate(returnTo, { replace: true });
+      // After registration, direct users to email verification step
+      navigate('/verify-email', { replace: true });
     } catch (error) {
       const message = error?.response?.data?.message || 'Registration failed. Please try again.';
       toast.error(message);
