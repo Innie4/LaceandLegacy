@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Loader2, ArrowLeft, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { authService } from '../services/api';
+import { useUser } from '../contexts/UserContext';
 
 const pageVariants = {
   initial: {
@@ -34,17 +36,38 @@ const EmailVerificationPage = () => {
   const [resendCountdown, setResendCountdown] = useState(0);
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { user } = useUser();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // TODO: Implement verification logic
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+      const emailFromStorage = (() => {
+        try {
+          const lsUser = localStorage.getItem('user');
+          return lsUser ? JSON.parse(lsUser)?.email : undefined;
+        } catch (_) {
+          return undefined;
+        }
+      })();
+
+      const payload = { code: data.code, email: user?.email || emailFromStorage };
+      const resp = await authService.verifyEmail(payload);
+      const result = resp?.data ?? resp;
+      const isSuccess =
+        result?.success === true ||
+        String(result?.status || '').toLowerCase() === 'success' ||
+        (typeof result?.message === 'string' && result.message.toLowerCase().includes('success')) ||
+        result?.verified === true ||
+        result?.status === 200 || result?.statusCode === 200;
+
+      if (!isSuccess) throw new Error(result?.message || 'Verification failed');
+
       setIsVerified(true);
-      toast.success('Email verified successfully!');
+      toast.success(result?.message || 'Email verified successfully!');
       setTimeout(() => navigate('/login'), 2000);
     } catch (error) {
-      toast.error('Verification failed. Please try again.');
+      const message = error.response?.data?.message || error.message || 'Verification failed. Please try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -52,10 +75,33 @@ const EmailVerificationPage = () => {
 
   const handleResendCode = async () => {
     if (resendCountdown > 0) return;
-    
+
+    const emailFromStorage = (() => {
+      try {
+        const lsUser = localStorage.getItem('user');
+        return lsUser ? JSON.parse(lsUser)?.email : undefined;
+      } catch (_) {
+        return undefined;
+      }
+    })();
+
+    const email = user?.email || emailFromStorage;
+    if (!email) {
+      toast.error('Missing email for verification. Please register or login.');
+      return;
+    }
+
     try {
-      // TODO: Implement resend logic
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      const resp = await authService.resendVerification({ email });
+      const result = resp?.data ?? resp;
+      const isSuccess =
+        result?.success === true ||
+        String(result?.status || '').toLowerCase() === 'success' ||
+        (typeof result?.message === 'string' && result.message.toLowerCase().includes('sent')) ||
+        result?.status === 200 || result?.statusCode === 200;
+
+      if (!isSuccess) throw new Error(result?.message || 'Failed to resend code');
+
       setResendCountdown(60);
       const timer = setInterval(() => {
         setResendCountdown((prev) => {
@@ -66,9 +112,10 @@ const EmailVerificationPage = () => {
           return prev - 1;
         });
       }, 1000);
-      toast.success('Verification code resent!');
+      toast.success(result?.message || 'Verification code resent!');
     } catch (error) {
-      toast.error('Failed to resend code. Please try again.');
+      const message = error.response?.data?.message || error.message || 'Failed to resend code. Please try again.';
+      toast.error(message);
     }
   };
 
@@ -180,4 +227,4 @@ const EmailVerificationPage = () => {
   );
 };
 
-export default EmailVerificationPage; 
+export default EmailVerificationPage;

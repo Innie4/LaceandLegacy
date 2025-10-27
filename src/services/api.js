@@ -185,6 +185,20 @@ export const authService = {
       headers: getAuthHeaders(),
       credentials: 'include',
     }).then(handleResponse),
+  verifyEmail: (data) =>
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.verifyEmail}`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(data),
+    }).then(handleResponse),
+  resendVerification: (data) =>
+    fetch(`${API_BASE_URL}${API_ENDPOINTS.resendVerification}`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
 
 // User services

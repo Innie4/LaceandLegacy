@@ -6,6 +6,8 @@ export const API_ENDPOINTS = {
   login: '/api/login',
   register: '/api/registration/register',
   logout: '/api/registration/logout',
+  verifyEmail: '/api/registration/verify',
+  resendVerification: '/api/registration/resend-code',
   
   // User
   profile: '/api/user/profile',

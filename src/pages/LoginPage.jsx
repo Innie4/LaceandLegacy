@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Chrome, Loader2 } from 'lucide-react';
+import { Mail, Lock, Chrome } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../contexts/UserContext';

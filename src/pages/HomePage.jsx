@@ -14,6 +14,17 @@ const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
+  // Prepare hero slides before effects so dependencies can reference length safely
+  const heroImageIndices = Array.from({ length: 19 }, (_, i) => i + 11);
+  const heroSlides = heroImageIndices.map((num) => {
+    const imagePath = `/IMG-20251024-WA${String(num).padStart(4, '0')}.jpg`;
+    return {
+      image: imagePath,
+      title: 'Lace and Legacy',
+      description: 'Discover authentic vintage fashion'
+    };
+  });
+
   // Typewriter effect for hero section
   useEffect(() => {
     const texts = [
@@ -58,7 +69,7 @@ const HomePage = () => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   // Fetch latest products for the home page
   useEffect(() => {
@@ -80,15 +91,7 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  const heroImageIndices = Array.from({ length: 19 }, (_, i) => i + 11);
-  const heroSlides = heroImageIndices.map((num) => {
-    const imagePath = `/IMG-20251024-WA${String(num).padStart(4, '0')}.jpg`;
-    return {
-      image: imagePath,
-      title: 'Lace and Legacy',
-      description: 'Discover authentic vintage fashion'
-    };
-  });
+  
 
   const categories = [
     { name: "Band Tees", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80", decade: "70s" },
