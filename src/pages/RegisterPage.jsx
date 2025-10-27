@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useUser } from '../contexts/UserContext';
 
 const pageVariants = {
   initial: {
@@ -128,38 +129,25 @@ const RegisterPage = () => {
   const [selectedCountry, setSelectedCountry] = useState('US');
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register: registerUser } = useUser();
   const password = watch('password', '');
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/registration/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          repeatedPassword: data.confirmPassword,  // <-- THIS LINE ADDED!
-          country: selectedCountry
-        })
+      await registerUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        repeatedPassword: data.confirmPassword,
+        country: selectedCountry,
       });
-
-      const message = await response.text();
-      console.log('API message:', message, 'Response:', response);
-
-      if (response.ok) {
-        toast.success(message || 'Account created successfully!');
-        navigate('/verify-email');
-        setTimeout(() => navigate('/verify-email'), 1000);
-      } else {
-        toast.error(message || 'Registration failed. Please try again.');
-      }
+      toast.success('Account created successfully!');
+      navigate('/verify-email');
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      const message = error?.message || 'Registration failed. Please try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -410,3 +398,5 @@ const RegisterPage = () => {
     </motion.div>
   );
 };
+
+export default RegisterPage;

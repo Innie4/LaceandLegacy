@@ -38,15 +38,11 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // TODO: Implement actual login logic
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-      toast.success('Welcome back!');
-      navigate('/');
       await login({ email: data.email, password: data.password });
+      toast.success('Welcome back!');
       navigate('/account/personal-info');
     } catch (error) {
       toast.error('Invalid credentials');
-      // Error toast is handled in context
     } finally {
       setIsLoading(false);
     }
@@ -221,3 +217,5 @@ const LoginPage = () => {
     </motion.div>
   );
 };
+
+export default LoginPage;

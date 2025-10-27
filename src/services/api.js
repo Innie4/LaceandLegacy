@@ -172,13 +172,53 @@ export const authService = {
       }
     }
   },
-  login: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.login}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  login: async (data) => {
+    const pathsToTry = [
+      API_ENDPOINTS.login,
+      '/api/auth/login',
+      '/api/registration/login',
+    ];
+
+    let lastError;
+    for (const path of pathsToTry) {
+      try {
+        const resp = await fetch(`${API_BASE_URL}${path}`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          credentials: 'include',
+          body: JSON.stringify(data),
+        });
+
+        // Extract potential token from headers
+        const headerAuth =
+          resp.headers.get('authorization') ||
+          resp.headers.get('Authorization') ||
+          resp.headers.get('x-access-token') ||
+          resp.headers.get('x-auth-token');
+
+        const parsed = await handleResponse(resp);
+
+        if (headerAuth) {
+          const cleaned = headerAuth.replace(/^Bearer\s+/i, '');
+          try {
+            localStorage.setItem('token', cleaned);
+            localStorage.setItem('authToken', cleaned);
+          } catch (_) {}
+          if (parsed && typeof parsed === 'object') {
+            parsed.authorization = headerAuth;
+            if (!parsed.token) parsed.token = cleaned;
+          }
+        }
+
+        return parsed;
+      } catch (err) {
+        lastError = err;
+        // continue trying other paths on 404/Not Found-like errors
+        if (err && (err.status === 404 || err.statusCode === 404)) continue;
+      }
+    }
+    throw lastError || new Error('Login request failed');
+  },
   logout: () =>
     fetch(`${API_BASE_URL}${API_ENDPOINTS.logout}`, {
       method: 'POST',
@@ -203,11 +243,33 @@ export const authService = {
 
 // User services
 export const userService = {
-  getProfile: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.profile}`, {
-      headers: getAuthHeaders(),
-      credentials: 'include',
-    }).then(handleResponse),
+  getProfile: async () => {
+    const pathsToTry = [
+      API_ENDPOINTS.profile,
+      '/api/auth/profile',
+      '/api/profile',
+      '/api/users/me',
+      '/api/user/me',
+      '/api/me',
+    ];
+
+    let lastError;
+    for (const path of pathsToTry) {
+      try {
+        const resp = await fetch(`${API_BASE_URL}${path}`, {
+          headers: getAuthHeaders(),
+          credentials: 'include',
+        });
+        return await handleResponse(resp);
+      } catch (err) {
+        lastError = err;
+        if (err && (err.status === 404 || err.statusCode === 404)) {
+          continue; // try next path on 404
+        }
+      }
+    }
+    throw lastError || { message: 'Profile endpoint not found', status: 404 };
+  },
   updateProfile: (data) =>
     fetch(`${API_BASE_URL}${API_ENDPOINTS.updateProfile}`, {
       method: 'PUT',
