@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Chrome } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { Mail, Lock, Loader2, Github, Twitter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useCart } from '../contexts/CartContext';
 import { useUser } from '../contexts/UserContext';
-import ErrorBanner from '../components/feedback/ErrorBanner';
 
 const pageVariants = {
   initial: {
@@ -20,7 +18,7 @@ const pageVariants = {
       duration: 0.5,
       ease: 'easeOut'
     }
-  }, 
+  },
   exit: {
     opacity: 0,
     y: -20,
@@ -33,45 +31,22 @@ const pageVariants = {
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { addToCart } = useCart();
   const { login } = useUser();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // Use UserContext to perform login and set auth state/token
+      // TODO: Implement actual login logic
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+      toast.success('Welcome back!');
+      navigate('/');
       await login({ email: data.email, password: data.password });
-      toast.success('Login successful!');
-
-      // Consume any pending cart item saved pre-login
-      const pendingCartItem = localStorage.getItem('pendingCartItem');
-      if (pendingCartItem) {
-        try {
-          const cartItem = JSON.parse(pendingCartItem);
-          await addToCart(cartItem);
-          localStorage.removeItem('pendingCartItem');
-          toast.success('Item added to cart after login!');
-        } catch (error) {
-          console.error('Failed to add pending cart item:', error);
-          toast.error('Failed to add item to cart');
-        }
-      }
-
-      // Redirect to return path if present, else personal info
-      const returnTo =
-        location.state?.returnTo ||
-        (location.state?.from?.pathname ?? null) ||
-        '/account/personal-info';
-      navigate(returnTo, { replace: true });
+      navigate('/account/personal-info');
     } catch (error) {
-      const message = error?.response?.data?.message || 'Login failed. Please try again.';
-      toast.error(message);
-      setErrorMessage(message);
+      toast.error('Invalid credentials');
+      // Error toast is handled in context
     } finally {
       setIsLoading(false);
     }
@@ -82,23 +57,20 @@ const LoginPage = () => {
     // TODO: Implement social login
   };
 
-  return (    <motion.div
+  return (
+    <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
-      className="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-amber-100 flex items-center justify-center px-4 py-12"
+      className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
-      <div className="max-w-md w-full space-y-8 bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-gray-200">
-        {errorMessage && (
-          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage('')} />
-        )}
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
         <div className="text-center">
-          <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-black text-white flex items-center justify-center shadow-md">LL</div>
-          <h2 className="text-3xl font-semibold text-gray-900 tracking-tight">
+          <h2 className="text-3xl font-bold text-black font-mono">
             Welcome Back
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-gray-700">
             Sign in to your account to continue
           </p>
         </div>
@@ -123,9 +95,9 @@ const LoginPage = () => {
                       message: 'Invalid email address'
                     }
                   })}
-                  className={`block w-full pl-10 pr-3 py-2 border ${
-                    errors.email ? 'border-red-400' : 'border-gray-300'
-                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black placeholder-gray-400 bg-white/95`}
+                  className={`block w-full pl-10 pr-3 py-2 border-2 ${
+                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
                   placeholder="you@example.com"
                 />
                 {errors.email && (
@@ -146,27 +118,19 @@ const LoginPage = () => {
                 </div>
                 <input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   {...register('password', {
-                    required: 'Password is required'
+                    required: 'Password is required',
+                    minLength: {
+                      value: 8,
+                      message: 'Password must be at least 8 characters'
+                    }
                   })}
-                  className={`block w-full pl-10 pr-10 py-2 border ${
-                    errors.password ? 'border-red-400' : 'border-gray-300'
-                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black placeholder-gray-400 bg-white/95`}
+                  className={`block w-full pl-10 pr-3 py-2 border-2 ${
+                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
                   placeholder="••••••••"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                  aria-label="Toggle password visibility"
-                >
-                  {showPassword ? (
-                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-5-10-7s4.477-7 10-7c1.245 0 2.438.214 3.555.6M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  ) : (
-                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.477 10.477A3 3 0 1013.5 13.5M6.36 6.36A9.993 9.993 0 012 12c0 2 4.477 7 10 7 1.836 0 3.556-.42 5.03-1.175"/></svg>
-                  )}
-                </button>
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600 font-mono">
                     {errors.password.message}
@@ -203,9 +167,13 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center py-3 px-4 rounded-xl shadow-md text-sm font-semibold text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                'Sign In'
+              )}
             </button>
           </div>
         </form>
@@ -216,24 +184,24 @@ const LoginPage = () => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white/90 text-gray-600">Or continue with</span>
+              <span className="px-2 bg-white text-gray-700">Or continue with</span>
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button
-              onClick={() => handleSocialLogin('Google')}
-              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-md bg-white/95 text-sm font-medium text-black hover:bg-white transition-colors duration-300"
+              onClick={() => handleSocialLogin('GitHub')}
+              className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
-              <Chrome className="h-5 w-5" />
-              <span className="ml-2">Google</span>
+              <Github className="h-5 w-5" />
+              <span className="ml-2">GitHub</span>
             </button>
             <button
-              onClick={() => handleSocialLogin('Facebook')}
-              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-md bg-white/95 text-sm font-medium text-black hover:bg-white transition-colors duration-300"
+              onClick={() => handleSocialLogin('Twitter')}
+              className="w-full inline-flex justify-center py-2 px-4 border-2 border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-black hover:bg-gray-100 transition-colors duration-300"
             >
-              <Mail className="h-5 w-5" />
-              <span className="ml-2">Facebook</span>
+              <Twitter className="h-5 w-5" />
+              <span className="ml-2">Twitter</span>
             </button>
           </div>
         </div>
@@ -253,5 +221,3 @@ const LoginPage = () => {
     </motion.div>
   );
 };
-
-export default LoginPage;

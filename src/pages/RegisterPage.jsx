@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, User, Loader2, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useUser } from '../contexts/UserContext';
-import { useCart } from '../contexts/CartContext';
- import ErrorBanner from '../components/feedback/ErrorBanner';
 
 const pageVariants = {
   initial: {
@@ -102,11 +99,11 @@ const PasswordStrengthIndicator = ({ password }) => {
   const strength = getStrength(password);
   const strengthText = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
   const strengthColors = [
-    'red-400', // Very Weak
-    'red-500', // Weak
-    'red-600', // Medium
-    'red-700', // Strong
-    'red-900', // Very Strong
+    'gray-400', // Very Weak
+    'gray-500', // Weak
+    'gray-600', // Medium
+    'gray-700', // Strong
+    'gray-900', // Very Strong
   ];
 
   return (
@@ -128,48 +125,41 @@ const PasswordStrengthIndicator = ({ password }) => {
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('NG');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState('US');
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const password = watch('password', '');
-  const { register: registerUser } = useUser();
-  const { addToCart } = useCart();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await registerUser({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password,
-        repeatedPassword: data.confirmPassword,
-        country: selectedCountry
+      const response = await fetch('https://likwapu-ecommerce-backend.fly.dev/api/registration/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          repeatedPassword: data.confirmPassword,  // <-- THIS LINE ADDED!
+          country: selectedCountry
+        })
       });
 
-      // After successful registration, consume any pending cart item
-      const pendingCartItem = localStorage.getItem('pendingCartItem');
-      if (pendingCartItem) {
-        try {
-          const cartItem = JSON.parse(pendingCartItem);
-          await addToCart(cartItem);
-          localStorage.removeItem('pendingCartItem');
-          toast.success('Item added to cart after registration!');
-        } catch (error) {
-          console.error('Failed to add pending cart item:', error);
-          toast.error('Failed to add item to cart');
-        }
-      }
+      const message = await response.text();
+      console.log('API message:', message, 'Response:', response);
 
-      // After registration, direct users to email verification step
-      navigate('/verify-email', { replace: true });
+      if (response.ok) {
+        toast.success(message || 'Account created successfully!');
+        navigate('/verify-email');
+        setTimeout(() => navigate('/verify-email'), 1000);
+      } else {
+        toast.error(message || 'Registration failed. Please try again.');
+      }
     } catch (error) {
-      const message = error?.response?.data?.message || 'Registration failed. Please try again.';
-      toast.error(message);
-      setErrorMessage(message);
+      toast.error('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -184,9 +174,6 @@ const RegisterPage = () => {
       className="min-h-screen bg-white flex items-center justify-center px-4 py-12"
     >
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200">
-        {errorMessage && (
-          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage('')} />
-        )}
         <div className="text-center">
           <h2 className="text-3xl font-bold text-black font-mono">
             Create Account
@@ -213,12 +200,12 @@ const RegisterPage = () => {
                     required: 'First name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.firstName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
+                    errors.firstName ? 'border-gray-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                   placeholder="John"
                 />
                 {errors.firstName && (
-                  <p className="mt-1 text-sm text-red-600 font-mono">
+                  <p className="mt-1 text-sm text-gray-600 font-mono">
                     {errors.firstName.message}
                   </p>
                 )}
@@ -240,12 +227,12 @@ const RegisterPage = () => {
                     required: 'Last name is required'
                   })}
                   className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                    errors.lastName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
+                    errors.lastName ? 'border-gray-300' : 'border-gray-300'
+                  } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
-                  <p className="mt-1 text-sm text-red-600 font-mono">
+                  <p className="mt-1 text-sm text-gray-600 font-mono">
                     {errors.lastName.message}
                   </p>
                 )}
@@ -272,12 +259,12 @@ const RegisterPage = () => {
                   }
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border-2 ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
+                  errors.email ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="you@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.email.message}
                 </p>
               )}
@@ -317,7 +304,7 @@ const RegisterPage = () => {
               </div>
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
+                type="password"
                 {...register('password', {
                   required: 'Password is required',
                   minLength: {
@@ -325,25 +312,13 @@ const RegisterPage = () => {
                     message: 'Password must be at least 8 characters'
                   }
                 })}
-                className={`block w-full pl-10 pr-10 py-2 border-2 ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
+                className={`block w-full pl-10 pr-3 py-2 border-2 ${
+                  errors.password ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="••••••••"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                aria-label="Toggle password visibility"
-              >
-                {showPassword ? (
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-5-10-7s4.477-7 10-7c1.245 0 2.438.214 3.555.6M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                ) : (
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.477 10.477A3 3 0 1013.5 13.5M6.36 6.36A9.993 9.993 0 012 12c0 2 4.477 7 10 7 1.836 0 3.556-.42 5.03-1.175"/></svg>
-                )}
-              </button>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.password.message}
                 </p>
               )}
@@ -361,30 +336,18 @@ const RegisterPage = () => {
               </div>
               <input
                 id="confirmPassword"
-                type={showConfirm ? 'text' : 'password'}
+                type="password"
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',
                   validate: value => value === password || 'Passwords do not match'
                 })}
-                className={`block w-full pl-10 pr-10 py-2 border-2 ${
-                  errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                } rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-400`}
+                className={`block w-full pl-10 pr-3 py-2 border-2 ${
+                  errors.confirmPassword ? 'border-gray-300' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:border-gray-600 text-black placeholder-gray-400`}
                 placeholder="••••••••"
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                aria-label="Toggle confirm password visibility"
-              >
-                {showConfirm ? (
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-5-10-7s4.477-7 10-7c1.245 0 2.438.214 3.555.6M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                ) : (
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.477 10.477A3 3 0 1013.5 13.5M6.36 6.36A9.993 9.993 0 012 12c0 2 4.477 7 10 7 1.836 0 3.556-.42 5.03-1.175"/></svg>
-                )}
-              </button>
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600 font-mono">
+                <p className="mt-1 text-sm text-gray-600 font-mono">
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -412,7 +375,7 @@ const RegisterPage = () => {
             </label>
           </div>
           {errors.terms && (
-            <p className="text-sm text-red-600 font-mono">
+            <p className="text-sm text-gray-600 font-mono">
               {errors.terms.message}
             </p>
           )}
@@ -447,5 +410,3 @@ const RegisterPage = () => {
     </motion.div>
   );
 };
-
-export default RegisterPage;

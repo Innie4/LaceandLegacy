@@ -34,6 +34,7 @@
     "eject": "react-scripts eject",
     "type-check": "tsc --noEmit"
   },
+  "proxy": "https://likwapu-ecommerce-backend.fly.dev",
   "eslintConfig": {
     "extends": [
       "react-app",
