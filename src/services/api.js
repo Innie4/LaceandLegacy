@@ -8,6 +8,103 @@ function getAuthHeaders() {
     : { 'Content-Type': 'application/json' };
 }
 
+// CSRF handling (best-effort across common frameworks)
+let __CSRF_TOKEN = null;
+let __CSRF_HEADER_NAME = null; // 'X-XSRF-TOKEN' | 'X-CSRFToken' | 'X-CSRF-Token'
+
+function readCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+async function ensureCsrfToken() {
+  // If already cached, skip network
+  if (__CSRF_TOKEN) return __CSRF_TOKEN;
+
+  const candidates = [
+    '/sanctum/csrf-cookie', // Laravel Sanctum
+    '/api/csrf-token',
+    '/csrf-token',
+    '/csrf',
+  ];
+
+  // Try to set cookies via GET and then read them
+  for (const path of candidates) {
+    try {
+      await fetch(`${API_BASE_URL}${path}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      // Check common cookie names
+      const xsrf = readCookie('XSRF-TOKEN');
+      const django = readCookie('csrftoken');
+      const generic = readCookie('CSRF-TOKEN') || readCookie('csrfToken');
+      const token = xsrf || django || generic;
+      if (token) {
+        __CSRF_TOKEN = token;
+        __CSRF_HEADER_NAME = xsrf ? 'X-XSRF-TOKEN' : django ? 'X-CSRFToken' : 'X-CSRF-Token';
+        return __CSRF_TOKEN;
+      }
+    } catch (_) {
+      // ignore and try next
+    }
+  }
+  return null;
+}
+
+function withCsrf(headers) {
+  const next = { ...(headers || {}) };
+  if (__CSRF_TOKEN && __CSRF_HEADER_NAME) {
+    next[__CSRF_HEADER_NAME] = __CSRF_TOKEN;
+  }
+  return next;
+}
+
+// Normalize various backend auth payload shapes to a consistent contract
+// { success: boolean, token?: string, user?: object, message?: string, data?: any }
+function normalizeAuthPayload(raw) {
+  const payload = raw?.data ?? raw;
+
+  // Detect success using common patterns
+  const successIndicators = [
+    payload?.success === true,
+    String(payload?.status || '').toLowerCase() === 'success',
+    typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success'),
+    payload === true,
+  ];
+  const success = successIndicators.some(Boolean);
+
+  // Extract token candidates
+  const tokenCandidates = [
+    payload?.token,
+    payload?.accessToken,
+    payload?.access_token,
+    payload?.jwt,
+    typeof payload?.authorization === 'string' ? payload?.authorization.replace(/^Bearer\s+/i, '') : undefined,
+    payload?.data?.token,
+    payload?.data?.accessToken,
+    payload?.data?.access_token,
+  ].filter(Boolean);
+  const token = tokenCandidates[0];
+
+  // Extract user candidates
+  const userCandidates = [
+    payload?.user,
+    payload?.data?.user,
+    payload?.userData,
+    payload?.data?.userInfo,
+    payload?.profile,
+    payload?.data?.profile,
+  ].filter(Boolean);
+  const user = userCandidates[0];
+
+  const message = payload?.message || payload?.error || undefined;
+
+  return { success, token, user, message, data: payload };
+}
+
 function handleResponse(response) {
   if (!response.ok) {
     if (response.status === 401) {
@@ -125,6 +222,13 @@ export const authService = {
   // Try both payload formats to maximize compatibility with backend
   register: async (data) => {
     const token = localStorage.getItem('token');
+    const pathsToTry = [
+      API_ENDPOINTS.register,
+      '/api/register',
+      '/api/auth/register',
+      '/register',
+      '/auth/register',
+    ];
 
     // Helper to build FormData with common field aliases
     const buildFormData = (src) => {
@@ -147,30 +251,47 @@ export const authService = {
     const jsonHeaders = token ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } : { 'Content-Type': 'application/json' };
     const authHeaderOnly = token ? { Authorization: `Bearer ${token}` } : undefined;
 
-    // Attempt 1: FormData (covers servers that reject JSON with 415)
-    try {
-      const fdResp = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
-        method: 'POST',
-        headers: authHeaderOnly,
-        credentials: 'include',
-        body: buildFormData(data),
-      });
-      return await handleResponse(fdResp);
-    } catch (err1) {
-      // Attempt 2: JSON (covers servers that expect application/json)
+    let lastError;
+    // Best-effort: establish CSRF token prior to POSTs (if backend requires it)
+    try { await ensureCsrfToken(); } catch (_) {}
+    for (const path of pathsToTry) {
+      // Attempt 1: FormData (covers servers that reject JSON with 415)
       try {
-        const jsonResp = await fetch(`${API_BASE_URL}${API_ENDPOINTS.register}`, {
+        const fdUrl = `${API_BASE_URL}${path}`;
+        const fdResp = await fetch(fdUrl, {
           method: 'POST',
-          headers: jsonHeaders,
+          headers: withCsrf(authHeaderOnly),
           credentials: 'include',
-          body: JSON.stringify(data),
+          body: buildFormData(data),
         });
-        return await handleResponse(jsonResp);
-      } catch (err2) {
-        // Surface the first error by default if both fail
-        throw err1?.status ? err1 : err2;
+        try { console.debug('[auth:register]', 'POST', fdUrl, 'status=', fdResp.status); } catch (_) {}
+        const parsed = await handleResponse(fdResp);
+        return normalizeAuthPayload(parsed);
+      } catch (err1) {
+        lastError = err1;
+        // Attempt 2: JSON (covers servers that expect application/json)
+        try {
+          const jsonUrl = `${API_BASE_URL}${path}`;
+          const jsonResp = await fetch(jsonUrl, {
+            method: 'POST',
+            headers: withCsrf(jsonHeaders),
+            credentials: 'include',
+            body: JSON.stringify(data),
+          });
+          try { console.debug('[auth:register]', 'POST', jsonUrl, 'status=', jsonResp.status); } catch (_) {}
+          const parsed = await handleResponse(jsonResp);
+          return normalizeAuthPayload(parsed);
+        } catch (err2) {
+          lastError = err2;
+          // Continue on 404-like errors; otherwise, keep lastError and try next path
+          if (!(err2 && (err2.status === 404 || err2.statusCode === 404))) {
+            // For 401/403, still try the next candidate path
+            continue;
+          }
+        }
       }
     }
+    throw lastError || new Error('Registration request failed');
   },
   login: async (data) => {
     const pathsToTry = [
@@ -180,14 +301,17 @@ export const authService = {
     ];
 
     let lastError;
+    try { await ensureCsrfToken(); } catch (_) {}
     for (const path of pathsToTry) {
       try {
-        const resp = await fetch(`${API_BASE_URL}${path}`, {
+        const url = `${API_BASE_URL}${path}`;
+        const resp = await fetch(url, {
           method: 'POST',
-          headers: getAuthHeaders(),
+          headers: withCsrf(getAuthHeaders()),
           credentials: 'include',
           body: JSON.stringify(data),
         });
+        try { console.debug('[auth:login]', 'POST', url, 'status=', resp.status); } catch (_) {}
 
         // Extract potential token from headers
         const headerAuth =
@@ -210,7 +334,18 @@ export const authService = {
           }
         }
 
-        return parsed;
+        const normalized = normalizeAuthPayload(parsed);
+        if (headerAuth) {
+          // Preserve raw header and cleaned token if available
+          const cleaned = headerAuth.replace(/^Bearer\s+/i, '');
+          try {
+            localStorage.setItem('token', cleaned);
+            localStorage.setItem('authToken', cleaned);
+          } catch (_) {}
+          normalized.authorization = headerAuth;
+          if (!normalized.token) normalized.token = cleaned;
+        }
+        return normalized;
       } catch (err) {
         lastError = err;
         // continue trying other paths on 404/Not Found-like errors

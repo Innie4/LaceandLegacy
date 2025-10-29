@@ -1,10 +1,10 @@
 // Unified API base URL
-// In development, use relative base to leverage CRA proxy and avoid CORS.
-// In production, default to Fly.io backend or use REACT_APP_API_URL override.
+// Development: prefer REACT_APP_API_URL if provided, otherwise use relative base to leverage CRA proxy.
+// Production: default to Fly.io backend or use REACT_APP_API_URL override.
 const API_BASE_URL =
   process.env.NODE_ENV === 'development'
-    ? ''
-    : process.env.REACT_APP_API_URL || 'https://likwapu-ecommerce-backend.fly.dev';
+    ? (process.env.REACT_APP_API_URL || '')
+    : (process.env.REACT_APP_API_URL || 'https://likwapu-ecommerce-backend.fly.dev');
 
 export const API_ENDPOINTS = {
   // Auth (aligned to backend routes)

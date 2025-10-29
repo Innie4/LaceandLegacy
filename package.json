@@ -32,7 +32,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "postinstall": "patch-package"
   },
   "proxy": "https://likwapu-ecommerce-backend.fly.dev",
   "eslintConfig": {
@@ -52,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.1"
   }
 }
