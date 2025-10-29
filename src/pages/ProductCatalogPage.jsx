@@ -58,15 +58,26 @@ const ProductCatalogPage = () => {
   // Load products from API
   const [allProducts, setAllProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [offlineFallback, setOfflineFallback] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    const offlineHandler = () => setOfflineFallback(true);
+    window.addEventListener('likwapu:offline-fallback', offlineHandler);
     const loadProducts = async () => {
       setLoadingProducts(true);
       try {
         const apiResult = await productService.getProducts();
         const items = Array.isArray(apiResult) ? apiResult : (apiResult?.products || []);
-        if (isMounted) setAllProducts(normalizeProducts(items));
+        if (isMounted) {
+          const normalized = normalizeProducts(items);
+          setAllProducts(normalized);
+          try {
+            const buf = Array.isArray(window.__LIK_MONITOR_BUFFER) ? window.__LIK_MONITOR_BUFFER : [];
+            const sawFallback = buf.some(e => e && e.event === 'productService.getProducts fallback to mockProducts');
+            if (sawFallback) setOfflineFallback(true);
+          } catch (_) {}
+        }
       } catch (error) {
         console.error('Failed to fetch products:', error);
         toast.error('Failed to load products');
@@ -75,8 +86,22 @@ const ProductCatalogPage = () => {
       }
     };
     loadProducts();
-    return () => { isMounted = false; };
+    return () => { 
+      isMounted = false; 
+      window.removeEventListener('likwapu:offline-fallback', offlineHandler);
+    };
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.__LIK_OFFLINE_PRODUCTS__) {
+      setOfflineFallback(true);
+    }
+    // Heuristic: if no products loaded and no filters/search applied after load, treat as offline fallback
+    const noFilters = Object.values(filters).every(v => v === null);
+    if (!loadingProducts && allProducts.length === 0 && noFilters && !debouncedSearchQuery) {
+      setOfflineFallback(true);
+    }
+  }, [allProducts, loadingProducts, filters, debouncedSearchQuery]);
 
 
 
@@ -369,6 +394,11 @@ const ProductCatalogPage = () => {
 
       {/* Main Content with Proper Layout */}
       <div className="container mx-auto px-4 py-6">
+        {offlineFallback && (
+          <div id="offline-banner" className="mb-4 rounded-md border-2 border-yellow-300 bg-yellow-50 text-yellow-800 px-4 py-3" role="alert">
+            Showing offline products. Some features may be unavailable.
+          </div>
+        )}
         <div className="flex">
           {/* Desktop Sidebar */}
           {showFilters && (

@@ -66,7 +66,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle API requests
+  // Do not intercept cross-origin requests (let browser handle CORS/network errors)
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // Handle same-origin API requests
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
@@ -198,4 +203,4 @@ self.addEventListener('notificationclick', (event) => {
       clients.openWindow('/')
     );
   }
-}); 
+});

@@ -1,5 +1,7 @@
 // Centralized Fetch API Service for Lace and Legacy
 import API_BASE_URL, { API_ENDPOINTS } from '../config/api';
+import { mockProducts } from '../data/mockProducts';
+import * as monitor from './monitor';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
@@ -217,6 +219,40 @@ export function normalizeProducts(items) {
   return items.map(normalizeProduct);
 }
 
+// Attempt to extract an array of products from diverse API payload shapes
+function extractProductsArray(payload) {
+  if (Array.isArray(payload)) return payload;
+  // Common top-level keys
+  const topCandidates = [
+    payload?.products,
+    payload?.data,
+    payload?.items,
+    payload?.results,
+    payload?.records,
+    payload?.docs,
+    payload?.list,
+  ];
+  for (const cand of topCandidates) {
+    if (Array.isArray(cand)) return cand;
+  }
+  // Nested under data
+  const dataObj = payload?.data;
+  if (dataObj && typeof dataObj === 'object') {
+    const nestedCandidates = [
+      dataObj.products,
+      dataObj.items,
+      dataObj.results,
+      dataObj.records,
+      dataObj.docs,
+      dataObj.list,
+    ];
+    for (const cand of nestedCandidates) {
+      if (Array.isArray(cand)) return cand;
+    }
+  }
+  return null;
+}
+
 // Auth services
 export const authService = {
   // Try both payload formats to maximize compatibility with backend
@@ -421,15 +457,116 @@ export const userService = {
 
 // Product services
 export const productService = {
-  getProducts: (params) => {
+  getProducts: async (params) => {
     const query = params ? '?' + new URLSearchParams(params).toString() : '';
     const token = localStorage.getItem('token');
     const headers = token ? { Authorization: `Bearer ${token}`, Accept: 'application/json' } : { Accept: 'application/json' };
-    return fetch(`${API_BASE_URL}${API_ENDPOINTS.products}${query}`, {
-      headers,
-      mode: 'cors',
-      credentials: 'omit',
-    }).then(handleResponse);
+
+    const primaryUrl = `${API_BASE_URL}${API_ENDPOINTS.products}${query}`;
+    const aliasPaths = [
+      API_ENDPOINTS.products,
+      '/api/products',
+      // Avoid non-API front-end routes that may return HTML
+    ];
+
+    const startTime = Date.now();
+    const isNetworkError = (err) => {
+      if (!err) return false;
+      const msg = String(err.message || '').toLowerCase();
+      return (
+        err.name === 'TypeError' ||
+        msg.includes('failed to fetch') ||
+        msg.includes('networkerror') ||
+        msg.includes('net::err_failed') ||
+        msg.includes('aborted') ||
+        msg.includes('request was aborted')
+      );
+    };
+
+    try {
+      const resp = await fetch(primaryUrl, {
+        headers,
+        mode: 'cors',
+        credentials: 'omit',
+      });
+      const data = await handleResponse(resp);
+      const productsArr = extractProductsArray(data);
+      if (productsArr) {
+        monitor.logInfo('productService.getProducts success', {
+          url: primaryUrl,
+          duration_ms: Date.now() - startTime,
+          count: productsArr.length,
+        });
+        return productsArr;
+      }
+      // Invalid payload that cannot be parsed into products -> offline fallback
+      try {
+        window.dispatchEvent(new CustomEvent('likwapu:offline-fallback', { detail: { resource: 'products' } }));
+      } catch (_) {}
+      try { window.__LIK_OFFLINE_PRODUCTS__ = true; } catch (_) {}
+      monitor.logWarn('productService.getProducts invalid payload fallback', {
+        url: primaryUrl,
+        duration_ms: Date.now() - startTime,
+        payload_keys: Object.keys(data || {}),
+      });
+      return mockProducts;
+    } catch (err) {
+      monitor.logError('productService.getProducts error', {
+        url: primaryUrl,
+        duration_ms: Date.now() - startTime,
+        error_message: err?.message,
+        error_name: err?.name,
+        online: typeof navigator !== 'undefined' ? navigator.onLine : undefined,
+      });
+
+      // Try alias endpoints on network errors or 404s
+      let lastError = err;
+      for (const path of aliasPaths) {
+        const altUrl = `${API_BASE_URL}${path}${query}`;
+        try {
+          const altStart = Date.now();
+          const r = await fetch(altUrl, { headers, mode: 'cors', credentials: 'omit' });
+          const d = await handleResponse(r);
+          const arr = extractProductsArray(d);
+          if (arr) {
+            monitor.logWarn('productService.getProducts alias success', {
+              url: altUrl,
+              duration_ms: Date.now() - altStart,
+              count: arr.length,
+            });
+            return arr;
+          }
+          // Alias returned a non-product payload -> fallback
+          try {
+            window.dispatchEvent(new CustomEvent('likwapu:offline-fallback', { detail: { resource: 'products' } }));
+          } catch (_) {}
+          try { window.__LIK_OFFLINE_PRODUCTS__ = true; } catch (_) {}
+          monitor.logWarn('productService.getProducts alias invalid payload fallback', {
+            url: altUrl,
+            duration_ms: Date.now() - altStart,
+            payload_keys: Object.keys(d || {}),
+          });
+          return mockProducts;
+        } catch (err2) {
+          lastError = err2;
+          // Continue trying other aliases only for network-like failures
+          if (!(isNetworkError(err2) || (err2 && (err2.status === 404 || err2.statusCode === 404)))) {
+            break;
+          }
+        }
+      }
+
+      // Fallback to local mock products for any fetch failure to keep UX resilient
+      try {
+        window.dispatchEvent(new CustomEvent('likwapu:offline-fallback', { detail: { resource: 'products' } }));
+      } catch (_) {}
+      try { window.__LIK_OFFLINE_PRODUCTS__ = true; } catch (_) {}
+      monitor.logWarn('productService.getProducts fallback to mockProducts', {
+        reason: (lastError?.status || lastError?.name || lastError?.message || 'unknown'),
+        count: Array.isArray(mockProducts) ? mockProducts.length : 0,
+      });
+      return mockProducts;
+    }
   },
   getProduct: (id) =>
     fetch(`${API_BASE_URL}${API_ENDPOINTS.product(id)}`, {

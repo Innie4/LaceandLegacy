@@ -100,39 +100,16 @@ export const UserProvider = ({ children }) => {
         username: credentials.email || credentials.username,
       };
       const response = await authService.login(reqCredentials);
-      const payload = response?.data ?? response;
+      const payload = response; // normalized by authService
 
-      // Robust token extraction from multiple possible response shapes
-      const tokenCandidates = [
-        payload?.token,
-        payload?.accessToken,
-        payload?.access_token,
-        payload?.jwt,
-        typeof payload?.authorization === 'string' ? payload?.authorization.replace(/^Bearer\s+/i, '') : undefined,
-        payload?.data?.token,
-        payload?.data?.accessToken,
-        payload?.data?.access_token,
-      ].filter(Boolean);
-      let token = tokenCandidates[0];
+      // Short-circuit on explicit failure per backend contract
+      if (payload?.success === false) {
+        const message = payload?.message || 'Login failed';
+        throw new Error(message);
+      }
 
-      // Robust user extraction from multiple possible response shapes
-      const userCandidates = [
-        payload?.user,
-        payload?.data?.user,
-        payload?.userData,
-        payload?.data?.userInfo,
-        payload?.profile,
-        payload?.data?.profile,
-      ].filter(Boolean);
-      let user = userCandidates[0];
-
-      const isSuccess =
-        payload?.success === true ||
-        String(payload?.status || '').toLowerCase() === 'success' ||
-        (typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success')) ||
-        payload === true ||
-        payload?.status === 200 ||
-        payload?.statusCode === 200;
+      let token = payload?.token;
+      let user = payload?.user;
 
       // If backend uses cookie-based sessions and doesn't return a user, try fetching profile
       if (!user) {
@@ -146,12 +123,12 @@ export const UserProvider = ({ children }) => {
       }
 
       // Fallback: if success with no user data, synthesize minimal user from credentials
-      if (!user && isSuccess && reqCredentials.email) {
+      if (!user && (payload?.success || token) && reqCredentials.email) {
         user = { email: reqCredentials.email };
       }
 
       // Require either a token or user or a success indicator
-      if (!token && !user && !isSuccess) {
+      if (!token && !user && !payload?.success) {
         const message = payload?.message || 'Login failed';
         throw new Error(message);
       }
@@ -185,34 +162,15 @@ export const UserProvider = ({ children }) => {
         username: userData.email,
       };
       const response = await authService.register(reqData);
-      const payload = response?.data ?? response;
+      const payload = response; // normalized by authService
 
-      const tokenCandidates = [
-        payload?.token,
-        payload?.accessToken,
-        payload?.access_token,
-        payload?.jwt,
-        typeof payload?.authorization === 'string' ? payload?.authorization.replace(/^Bearer\s+/i, '') : undefined,
-        payload?.data?.token,
-        payload?.data?.accessToken,
-        payload?.data?.access_token,
-      ].filter(Boolean);
-      let token = tokenCandidates[0];
+      if (payload?.success === false) {
+        const message = payload?.message || 'Registration failed';
+        throw new Error(message);
+      }
 
-      const userCandidates = [
-        payload?.user,
-        payload?.data?.user,
-        payload?.userData,
-        payload?.data?.userInfo,
-        payload?.profile,
-        payload?.data?.profile,
-      ].filter(Boolean);
-      let user = userCandidates[0];
-
-      const isSuccess =
-        payload?.success === true ||
-        String(payload?.status || '').toLowerCase() === 'success' ||
-        (typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success'));
+      let token = payload?.token;
+      let user = payload?.user;
 
       // Try to fetch profile if not present in response
       if (!user) {
@@ -223,7 +181,7 @@ export const UserProvider = ({ children }) => {
         } catch (_) {}
       }
 
-      if (!token && !user && !isSuccess) {
+      if (!token && !user && !payload?.success) {
         const message = payload?.message || 'Registration failed';
         throw new Error(message);
       }
