@@ -16,7 +16,7 @@ import ProductCard from '../components/products/ProductCard';
 import FilterSidebar from '../components/products/FilterSidebar';
 import QuickViewModal from '../components/products/QuickViewModal';
 import useDebounce from '../hooks/useDebounce';
-import { productService, normalizeProducts } from '../services/api';
+import { productService } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../contexts/UserContext';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../components/forms/Select';
@@ -67,11 +67,10 @@ const ProductCatalogPage = () => {
     const loadProducts = async () => {
       setLoadingProducts(true);
       try {
-        const apiResult = await productService.getProducts();
-        const items = Array.isArray(apiResult) ? apiResult : (apiResult?.products || []);
+        // getProducts already returns normalized products array
+        const normalized = await productService.getProducts();
         if (isMounted) {
-          const normalized = normalizeProducts(items);
-          setAllProducts(normalized);
+          setAllProducts(Array.isArray(normalized) ? normalized : []);
           try {
             const buf = Array.isArray(window.__LIK_MONITOR_BUFFER) ? window.__LIK_MONITOR_BUFFER : [];
             const sawFallback = buf.some(e => e && e.event === 'productService.getProducts fallback to mockProducts');

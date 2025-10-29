@@ -3,7 +3,7 @@
 // Production: default to Fly.io backend or use REACT_APP_API_URL override.
 const API_BASE_URL =
   process.env.NODE_ENV === 'development'
-    ? (process.env.REACT_APP_API_URL || '')
+    ? (process.env.REACT_APP_API_URL || '')  // Empty string uses proxy from package.json
     : (process.env.REACT_APP_API_URL || 'https://likwapu-ecommerce-backend.fly.dev');
 
 export const API_ENDPOINTS = {

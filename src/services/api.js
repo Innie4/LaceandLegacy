@@ -38,6 +38,7 @@ async function ensureCsrfToken() {
       await fetch(`${API_BASE_URL}${path}`, {
         method: 'GET',
         credentials: 'include',
+        mode: 'cors',
       });
       // Check common cookie names
       const xsrf = readCookie('XSRF-TOKEN');
@@ -107,16 +108,54 @@ function normalizeAuthPayload(raw) {
   return { success, token, user, message, data: payload };
 }
 
+// Helper to extract data from various response formats
+function extractDataFromResponse(responseData) {
+  // Handle null or undefined
+  if (!responseData) return null;
+  
+  // If it's already an array or object (direct response)
+  if (Array.isArray(responseData)) return responseData;
+  if (typeof responseData === 'object' && !responseData.data && !responseData.product && !responseData.products) {
+    // Check if it's a single object response (like a product)
+    if (responseData.id || responseData._id || responseData.productId || responseData.name) {
+      return responseData;
+    }
+  }
+  
+  // Try common response wrapper patterns
+  const candidates = [
+    responseData.data,
+    responseData.product,
+    responseData.products,
+    responseData.items,
+    responseData.results,
+    responseData.payload,
+    responseData.content,
+    responseData.body,
+  ];
+  
+  for (const candidate of candidates) {
+    if (candidate !== undefined && candidate !== null) {
+      return candidate;
+    }
+  }
+  
+  // Return the original if nothing found
+  return responseData;
+}
+
 function handleResponse(response) {
   if (!response.ok) {
     if (response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('authToken');
       window.location.href = '/login';
     }
     return response.text().then(text => {
       try {
-        return Promise.reject(text ? JSON.parse(text) : { message: 'Request failed', status: response.status });
+        const error = text ? JSON.parse(text) : { message: 'Request failed', status: response.status };
+        return Promise.reject(error);
       } catch (e) {
         return Promise.reject({ message: text || 'Request failed', status: response.status });
       }
@@ -129,7 +168,9 @@ function handleResponse(response) {
       return { success: true, status: 'success' };
     }
     try {
-      return JSON.parse(text);
+      const parsed = JSON.parse(text);
+      // Extract actual data from response wrappers
+      return extractDataFromResponse(parsed);
     } catch (e) {
       // Non-JSON success responses
       return { success: true, data: text };
@@ -298,6 +339,7 @@ export const authService = {
           method: 'POST',
           headers: withCsrf(authHeaderOnly),
           credentials: 'include',
+          mode: 'cors',
           body: buildFormData(data),
         });
         try { console.debug('[auth:register]', 'POST', fdUrl, 'status=', fdResp.status); } catch (_) {}
@@ -312,6 +354,7 @@ export const authService = {
             method: 'POST',
             headers: withCsrf(jsonHeaders),
             credentials: 'include',
+            mode: 'cors',
             body: JSON.stringify(data),
           });
           try { console.debug('[auth:register]', 'POST', jsonUrl, 'status=', jsonResp.status); } catch (_) {}
@@ -345,6 +388,7 @@ export const authService = {
           method: 'POST',
           headers: withCsrf(getAuthHeaders()),
           credentials: 'include',
+          mode: 'cors',
           body: JSON.stringify(data),
         });
         try { console.debug('[auth:login]', 'POST', url, 'status=', resp.status); } catch (_) {}
@@ -390,26 +434,60 @@ export const authService = {
     }
     throw lastError || new Error('Login request failed');
   },
-  logout: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.logout}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include',
-    }).then(handleResponse),
-  verifyEmail: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.verifyEmail}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      body: JSON.stringify(data),
-    }).then(handleResponse),
-  resendVerification: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.resendVerification}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  logout: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.logout}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const result = await handleResponse(response);
+      localStorage.removeItem('token');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Clear auth even on error
+      localStorage.removeItem('token');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      return { success: true };
+    }
+  },
+  verifyEmail: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.verifyEmail}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Email verification failed:', error);
+      throw error;
+    }
+  },
+  resendVerification: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.resendVerification}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Resend verification failed:', error);
+      throw error;
+    }
+  },
 };
 
 // User services
@@ -430,8 +508,11 @@ export const userService = {
         const resp = await fetch(`${API_BASE_URL}${path}`, {
           headers: getAuthHeaders(),
           credentials: 'include',
+          mode: 'cors',
         });
-        return await handleResponse(resp);
+        const data = await handleResponse(resp);
+        const profile = extractDataFromResponse(data);
+        return profile || data;
       } catch (err) {
         lastError = err;
         if (err && (err.status === 404 || err.statusCode === 404)) {
@@ -441,18 +522,38 @@ export const userService = {
     }
     throw lastError || { message: 'Profile endpoint not found', status: 404 };
   },
-  updateProfile: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateProfile}`, {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
-  updatePreferences: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.preferences}`, {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  updateProfile: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.updateProfile}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      throw error;
+    }
+  },
+  updatePreferences: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.preferences}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to update preferences:', error);
+      throw error;
+    }
+  },
 };
 
 // Product services
@@ -487,17 +588,18 @@ export const productService = {
       const resp = await fetch(primaryUrl, {
         headers,
         mode: 'cors',
-        credentials: 'omit',
+        credentials: 'include',
       });
       const data = await handleResponse(resp);
       const productsArr = extractProductsArray(data);
       if (productsArr) {
+        const normalized = normalizeProducts(productsArr);
         monitor.logInfo('productService.getProducts success', {
           url: primaryUrl,
           duration_ms: Date.now() - startTime,
-          count: productsArr.length,
+          count: normalized.length,
         });
-        return productsArr;
+        return normalized;
       }
       // Invalid payload that cannot be parsed into products -> offline fallback
       try {
@@ -525,16 +627,17 @@ export const productService = {
         const altUrl = `${API_BASE_URL}${path}${query}`;
         try {
           const altStart = Date.now();
-          const r = await fetch(altUrl, { headers, mode: 'cors', credentials: 'omit' });
+          const r = await fetch(altUrl, { headers, mode: 'cors', credentials: 'include' });
           const d = await handleResponse(r);
           const arr = extractProductsArray(d);
           if (arr) {
+            const normalized = normalizeProducts(arr);
             monitor.logWarn('productService.getProducts alias success', {
               url: altUrl,
               duration_ms: Date.now() - altStart,
-              count: arr.length,
+              count: normalized.length,
             });
-            return arr;
+            return normalized;
           }
           // Alias returned a non-product payload -> fallback
           try {
@@ -568,87 +671,281 @@ export const productService = {
       return mockProducts;
     }
   },
-  getProduct: (id) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.product(id)}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  searchProducts: (query) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.search}?q=${encodeURIComponent(query)}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  getCategories: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.categories}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  getFilters: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.filters}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
+  getProduct: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.product(id)}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      // Extract product from response if wrapped
+      const product = extractDataFromResponse(data);
+      return normalizeProduct(product || data);
+    } catch (error) {
+      console.error('Failed to fetch product:', error);
+      throw error;
+    }
+  },
+  searchProducts: async (query) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.search}?q=${encodeURIComponent(query)}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      const products = extractDataFromResponse(data);
+      return normalizeProducts(Array.isArray(products) ? products : []);
+    } catch (error) {
+      console.error('Failed to search products:', error);
+      return [];
+    }
+  },
+  getCategories: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.categories}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || [];
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+      return [];
+    }
+  },
+  getFilters: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.filters}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || {};
+    } catch (error) {
+      console.error('Failed to fetch filters:', error);
+      return {};
+    }
+  },
 };
 
 // Review services
 export const reviewService = {
-  getReviews: (productId) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.reviews(productId)}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  addReview: (productId, data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.addReview(productId)}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  getReviews: async (productId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.reviews(productId)}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || [];
+    } catch (error) {
+      console.error('Failed to fetch reviews:', error);
+      return [];
+    }
+  },
+  addReview: async (productId, data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.addReview(productId)}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to add review:', error);
+      throw error;
+    }
+  },
+};
+
+// Wishlist services
+export const wishlistService = {
+  getWishlist: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlist}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      const products = extractDataFromResponse(data);
+      return normalizeProducts(Array.isArray(products) ? products : []);
+    } catch (error) {
+      console.error('Failed to fetch wishlist:', error);
+      return [];
+    }
+  },
+  addToWishlist: async (productId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlistAdd}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify({ productId }),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to add to wishlist:', error);
+      throw error;
+    }
+  },
+  removeFromWishlist: async (productId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.wishlistRemove}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify({ productId }),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to remove from wishlist:', error);
+      throw error;
+    }
+  },
 };
 
 // Cart services
 export const cartService = {
-  getCart: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.cart}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  addToCart: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
-  updateCart: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.updateCart}`, {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
-  removeFromCart: (itemId) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.removeFromCart(itemId)}`, {
-      method: 'DELETE',
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
+  getCart: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.cart}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || { items: [], total: 0 };
+    } catch (error) {
+      console.error('Failed to fetch cart:', error);
+      return { items: [], total: 0 };
+    }
+  },
+  addToCart: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      throw error;
+    }
+  },
+  updateCart: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.updateCart}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to update cart:', error);
+      throw error;
+    }
+  },
+  removeFromCart: async (itemId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.removeFromCart(itemId)}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to remove from cart:', error);
+      throw error;
+    }
+  },
 };
 
 // Order services
 export const orderService = {
-  getOrders: () =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.orders}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  getOrder: (id) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.order(id)}`, {
-      headers: getAuthHeaders(),
-    }).then(handleResponse),
-  createOrder: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.createOrder}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  getOrders: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.orders}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || [];
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+      return [];
+    }
+  },
+  getOrder: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.order(id)}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+      });
+      const data = await handleResponse(response);
+      return extractDataFromResponse(data) || null;
+    } catch (error) {
+      console.error('Failed to fetch order:', error);
+      throw error;
+    }
+  },
+  createOrder: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.createOrder}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      throw error;
+    }
+  },
 };
 
 // Contact services
 export const contactService = {
-  sendMessage: (data) =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.contact}`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(data),
-    }).then(handleResponse),
+  sendMessage: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.contact}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify(data),
+      });
+      const result = await handleResponse(response);
+      return extractDataFromResponse(result) || result;
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      throw error;
+    }
+  },
 };

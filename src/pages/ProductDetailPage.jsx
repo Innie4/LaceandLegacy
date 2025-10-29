@@ -17,7 +17,7 @@ import ImageGallery from '../components/products/ImageGallery';
 import SizeGuideModal from '../components/products/SizeGuideModal';
 import ReviewSection from '../components/products/ReviewSection';
 import ProductRecommendations from '../components/products/ProductRecommendations';
-import { productService, normalizeProduct } from '../services/api';
+import { productService } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 
 const ProductDetailPage = () => {
@@ -36,8 +36,8 @@ const ProductDetailPage = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const apiProduct = await productService.getProduct(id);
-        const normalized = normalizeProduct(apiProduct);
+        // getProduct already returns normalized product
+        const normalized = await productService.getProduct(id);
         setProduct(normalized);
         setSelectedColor(Array.isArray(normalized.colors) ? normalized.colors[0] : normalized.color);
         setSelectedSize(Array.isArray(normalized.sizes) ? normalized.sizes[0] : normalized.size);
