@@ -70,14 +70,12 @@ function withCsrf(headers) {
 function normalizeAuthPayload(raw) {
   const payload = raw?.data ?? raw;
 
-  // Detect success using common patterns
-  const successIndicators = [
-    payload?.success === true,
-    String(payload?.status || '').toLowerCase() === 'success',
-    typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success'),
-    payload === true,
-  ];
-  const success = successIndicators.some(Boolean);
+  // Detect if payload itself looks like a user object (common for simple backends)
+  const looksLikeUser = (
+    payload && typeof payload === 'object' && !Array.isArray(payload) && !payload.user && (
+      payload.id || payload.email || (payload.firstName && payload.lastName)
+    )
+  );
 
   // Extract token candidates
   const tokenCandidates = [
@@ -92,7 +90,18 @@ function normalizeAuthPayload(raw) {
   ].filter(Boolean);
   const token = tokenCandidates[0];
 
-  // Extract user candidates
+  // Detect success using common patterns and presence of token/user
+  const successIndicators = [
+    payload?.success === true,
+    String(payload?.status || '').toLowerCase() === 'success',
+    typeof payload?.message === 'string' && payload.message.toLowerCase().includes('success'),
+    payload === true,
+    Boolean(token),
+    Boolean(looksLikeUser),
+  ];
+  const success = successIndicators.some(Boolean);
+
+  // Extract user candidates, fall back to payload if it looks like a user
   const userCandidates = [
     payload?.user,
     payload?.data?.user,
@@ -100,6 +109,7 @@ function normalizeAuthPayload(raw) {
     payload?.data?.userInfo,
     payload?.profile,
     payload?.data?.profile,
+    looksLikeUser ? payload : undefined,
   ].filter(Boolean);
   const user = userCandidates[0];
 
@@ -301,73 +311,32 @@ export const authService = {
     const token = localStorage.getItem('token');
     const pathsToTry = [
       API_ENDPOINTS.register,
-      '/api/register',
-      '/api/auth/register',
-      '/register',
-      '/auth/register',
     ];
 
-    // Helper to build FormData with common field aliases
-    const buildFormData = (src) => {
-      const form = new FormData();
-      const firstname = src.firstName ?? src.firstname;
-      const lastname = src.lastName ?? src.lastname;
-      const email = src.email ?? src.username;
-      const password = src.password;
-      const password_confirmation = src.repeatedPassword ?? src.confirmPassword ?? src.password_confirmation ?? src.password;
-      const country = src.country ?? src.countryCode ?? src.selectedCountry;
-      if (firstname) form.append('firstname', firstname);
-      if (lastname) form.append('lastname', lastname);
-      if (email) form.append('email', email);
-      if (password) form.append('password', password);
-      if (password_confirmation) form.append('password_confirmation', password_confirmation);
-      if (country) form.append('country', country);
-      return form;
-    };
-
-    const jsonHeaders = token ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } : { 'Content-Type': 'application/json' };
-    const authHeaderOnly = token ? { Authorization: `Bearer ${token}` } : undefined;
+    const jsonHeaders = token
+      ? { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${token}` }
+      : { 'Content-Type': 'application/json', Accept: 'application/json' };
 
     let lastError;
     // Best-effort: establish CSRF token prior to POSTs (if backend requires it)
     try { await ensureCsrfToken(); } catch (_) {}
     for (const path of pathsToTry) {
-      // Attempt 1: FormData (covers servers that reject JSON with 415)
       try {
-        const fdUrl = `${API_BASE_URL}${path}`;
-        const fdResp = await fetch(fdUrl, {
+        const url = `${API_BASE_URL}${path}`;
+        const resp = await fetch(url, {
           method: 'POST',
-          headers: withCsrf(authHeaderOnly),
+          headers: withCsrf(jsonHeaders),
           credentials: 'include',
           mode: 'cors',
-          body: buildFormData(data),
+          body: JSON.stringify(data),
         });
-        try { console.debug('[auth:register]', 'POST', fdUrl, 'status=', fdResp.status); } catch (_) {}
-        const parsed = await handleResponse(fdResp);
+        try { console.debug('[auth:register]', 'POST', url, 'status=', resp.status); } catch (_) {}
+        const parsed = await handleResponse(resp);
         return normalizeAuthPayload(parsed);
-      } catch (err1) {
-        lastError = err1;
-        // Attempt 2: JSON (covers servers that expect application/json)
-        try {
-          const jsonUrl = `${API_BASE_URL}${path}`;
-          const jsonResp = await fetch(jsonUrl, {
-            method: 'POST',
-            headers: withCsrf(jsonHeaders),
-            credentials: 'include',
-            mode: 'cors',
-            body: JSON.stringify(data),
-          });
-          try { console.debug('[auth:register]', 'POST', jsonUrl, 'status=', jsonResp.status); } catch (_) {}
-          const parsed = await handleResponse(jsonResp);
-          return normalizeAuthPayload(parsed);
-        } catch (err2) {
-          lastError = err2;
-          // Continue on 404-like errors; otherwise, keep lastError and try next path
-          if (!(err2 && (err2.status === 404 || err2.statusCode === 404))) {
-            // For 401/403, still try the next candidate path
-            continue;
-          }
-        }
+      } catch (err) {
+        lastError = err;
+        // continue trying other paths on 404/Not Found-like errors
+        if (err && (err.status === 404 || err.statusCode === 404)) continue;
       }
     }
     throw lastError || new Error('Registration request failed');

@@ -143,8 +143,8 @@ const RegisterPage = () => {
         repeatedPassword: data.confirmPassword,
         country: selectedCountry,
       });
-      toast.success('Account created successfully!');
-      navigate('/verify-email');
+      toast.success('User registered successfully');
+      navigate('/login');
     } catch (error) {
       const message = error?.message || 'Registration failed. Please try again.';
       toast.error(message);

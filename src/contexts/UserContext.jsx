@@ -152,7 +152,6 @@ export const UserProvider = ({ children }) => {
   const register = async (userData) => {
     dispatch({ type: 'LOGIN_START' });
     try {
-      // Include common field aliases to maximize backend compatibility
       const reqData = {
         ...userData,
         firstname: userData.firstName ?? userData.firstname,
@@ -162,38 +161,17 @@ export const UserProvider = ({ children }) => {
         username: userData.email,
       };
       const response = await authService.register(reqData);
-      const payload = response; // normalized by authService
+      const payload = response;
 
       if (payload?.success === false) {
         const message = payload?.message || 'Registration failed';
         throw new Error(message);
       }
 
-      let token = payload?.token;
-      let user = payload?.user;
-
-      // Try to fetch profile if not present in response
-      if (!user) {
-        try {
-          const profileResp = await userService.getProfile();
-          const p = profileResp?.data ?? profileResp;
-          user = p?.user || p?.data || p?.profile || p;
-        } catch (_) {}
-      }
-
-      if (!token && !user && !payload?.success) {
-        const message = payload?.message || 'Registration failed';
-        throw new Error(message);
-      }
-
-      if (token) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('authToken', token);
-      }
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
-      toast.success('Registration successful!');
-      return user;
+      // Do not auto-login after registration; keep user unauthenticated
+      dispatch({ type: 'LOGOUT' });
+      toast.success('User registered successfully');
+      return payload;
     } catch (error) {
       const message = error.response?.data?.message || error.message || 'Registration failed';
       dispatch({ type: 'LOGIN_FAILURE', payload: message });

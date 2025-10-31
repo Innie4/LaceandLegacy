@@ -40,7 +40,7 @@ const LoginPage = () => {
     try {
       await login({ email: data.email, password: data.password });
       toast.success('Welcome back!');
-      navigate('/account/personal-info');
+      navigate('/');
     } catch (error) {
       toast.error('Invalid credentials');
     } finally {
