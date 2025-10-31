@@ -2,19 +2,34 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useUser } from '../../contexts/UserContext';
 
 const Breadcrumbs = () => {
   const location = useLocation();
   const { theme } = useTheme();
+  const { user } = useUser();
+
+  const getPrimaryName = () =>
+    user?.firstName ||
+    user?.firstname ||
+    user?.name ||
+    user?.username ||
+    (user?.email ? user.email.split('@')[0] : null);
 
   const generateBreadcrumbs = () => {
     const paths = location.pathname.split('/').filter(Boolean);
     const breadcrumbs = paths.map((path, index) => {
       const url = `/${paths.slice(0, index + 1).join('/')}`;
-      const label = path
+      let label = path
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
+
+      if (path === 'account') {
+        const primaryName = getPrimaryName();
+        label = primaryName || 'Account';
+      }
+
       return { url, label };
     });
 

@@ -8,8 +8,22 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { itemCount, toggleCart } = useCart();
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, user } = useUser();
   const location = useLocation();
+
+  const getAccountLabel = () => {
+    const primaryName =
+      user?.firstName ||
+      user?.firstname ||
+      user?.name ||
+      user?.username ||
+      (user?.email ? user.email.split('@')[0] : null);
+
+    if (primaryName) {
+      return `Hi, ${primaryName}`;
+    }
+    return 'My Account';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,7 +75,7 @@ const Header = () => {
                 to="/account"
                 className="text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono"
               >
-                My Account
+                {getAccountLabel()}
               </Link>
             ) : (
               <div className="hidden lg:flex items-center space-x-4">
@@ -150,7 +164,7 @@ const Header = () => {
                     onClick={() => setIsMenuOpen(false)}
                     className="block text-amber-900 hover:text-amber-600 transition-colors duration-300 font-mono py-2"
                   >
-                    My Account
+                    {getAccountLabel()}
                   </Link>
                 ) : (
                   <div className="space-y-3">

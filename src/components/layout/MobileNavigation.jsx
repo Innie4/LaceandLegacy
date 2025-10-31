@@ -10,6 +10,17 @@ const MobileNavigation = () => {
   const location = useLocation();
   const { user, isAuthenticated } = useUser();
 
+  const getAccountLabel = () => {
+    const primaryName =
+      user?.firstName ||
+      user?.firstname ||
+      user?.name ||
+      user?.username ||
+      (user?.email ? user.email.split('@')[0] : null);
+
+    return primaryName ? `Hi, ${primaryName}` : 'My Account';
+  };
+
   // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +53,7 @@ const MobileNavigation = () => {
     { icon: <Search className="h-6 w-6" />, label: 'Search', path: '/search' },
     { icon: <ShoppingBag className="h-6 w-6" />, label: 'Cart', path: '/cart' },
     { icon: <Heart className="h-6 w-6" />, label: 'Wishlist', path: '/wishlist' },
-    { icon: <User className="h-6 w-6" />, label: 'Account', path: '/account' },
+    { icon: <User className="h-6 w-6" />, label: isAuthenticated ? getAccountLabel() : 'Account', path: '/account' },
   ];
 
   return (
@@ -121,7 +132,7 @@ const MobileNavigation = () => {
                     className="flex items-center gap-3 p-3 text-black hover:bg-gray-100 rounded-lg transition-colors mb-4"
                   >
                     <User className="h-6 w-6" />
-                    <span className="font-medium">My Account</span>
+                    <span className="font-medium">{getAccountLabel()}</span>
                   </Link>
                 ) : (
                   <div className="space-y-2 mb-4">
