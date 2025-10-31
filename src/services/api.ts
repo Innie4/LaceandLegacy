@@ -100,7 +100,11 @@ export const apiService = {
       headers: getAuthHeaders(),
     }).then(handleResponse<any>),
   addToCart: (data: any): Promise<ApiResponse<any>> =>
-    fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
+    fetch((typeof API_ENDPOINTS.addToCart === 'string'
+      ? (API_ENDPOINTS.addToCart.startsWith('http://') || API_ENDPOINTS.addToCart.startsWith('https://')
+        ? API_ENDPOINTS.addToCart
+        : `${API_BASE_URL}${API_ENDPOINTS.addToCart}`)
+      : `${API_BASE_URL}${API_ENDPOINTS.addToCart}`), {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(data),

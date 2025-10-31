@@ -804,7 +804,13 @@ export const cartService = {
   },
   addToCart: async (data) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.addToCart}`, {
+      const addToCartEndpoint = typeof API_ENDPOINTS.addToCart === 'string'
+        ? (API_ENDPOINTS.addToCart.startsWith('http://') || API_ENDPOINTS.addToCart.startsWith('https://')
+            ? API_ENDPOINTS.addToCart
+            : `${API_BASE_URL}${API_ENDPOINTS.addToCart}`)
+        : `${API_BASE_URL}${API_ENDPOINTS.addToCart}`;
+
+      const response = await fetch(addToCartEndpoint, {
         method: 'POST',
         headers: getAuthHeaders(),
         credentials: 'include',

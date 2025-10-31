@@ -144,7 +144,7 @@ const RegisterPage = () => {
         country: selectedCountry,
       });
       toast.success('User registered successfully');
-      navigate('/login');
+      navigate('/login', { replace: true });
     } catch (error) {
       const message = error?.message || 'Registration failed. Please try again.';
       toast.error(message);

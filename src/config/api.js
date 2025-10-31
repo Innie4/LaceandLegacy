@@ -37,7 +37,7 @@ export const API_ENDPOINTS = {
   
   // Cart
   cart: '/api/cart',
-  addToCart: '/api/cart/add',
+  addToCart: 'https://likwapu-ecommerce-backend.fly.dev/add',
   updateCart: '/api/cart/update',
   removeFromCart: (itemId) => `/api/cart/remove/${itemId}`,
   
